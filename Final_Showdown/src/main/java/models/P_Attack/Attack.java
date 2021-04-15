@@ -1,5 +1,8 @@
 package models.P_Attack;
-public class Attack {
+
+import java.io.Serializable;
+
+public class Attack implements Serializable{
 
 	private String name;
 	private int power;
@@ -60,4 +63,33 @@ public class Attack {
 	public void setHit_rate(int hit_rate) {
 		this.hit_rate=hit_rate;
 	}
+
+	@Override
+	public String toString() {
+		return this.name;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + id;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!(obj instanceof Attack))
+			return false;
+		Attack other = (Attack) obj;
+		if (id != other.id)
+			return false;
+		return true;
+	}
+	
+	
+	
+	
 }

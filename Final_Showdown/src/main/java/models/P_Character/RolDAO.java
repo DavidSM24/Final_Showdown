@@ -18,6 +18,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableArray;
@@ -25,8 +26,10 @@ import javafx.collections.ObservableList;
 
 @XmlRootElement(name = "repository")
 @XmlAccessorType(XmlAccessType.FIELD)
+@XmlSeeAlso({Rol.class})
 public class RolDAO implements Serializable {
-	@XmlElement(name = "employee")
+	
+	@XmlElement(name = "rol")
 	private List<Rol> roles;
 	private static RolDAO instance_R;
 
@@ -80,14 +83,16 @@ public class RolDAO implements Serializable {
 
 	public void saveRols() {
 		JAXBContext jaxbC;
-		List<Rol> lista = null;
+		Rol[] lista=new Rol[0];
 		try {
 			if (roles != null && roles.size() > 0) {
-				lista = new ArrayList();
-				for (Rol r : roles) {
-					if (r != null) {
-						lista.add(r);
+				lista = new Rol[roles.size()];
+				for (int i = 0; i < lista.length; i++) {
+					
+					if (roles.get(i) != null) {
+						lista[i]=(roles.get(i));
 					}
+					
 				}
 			}
 

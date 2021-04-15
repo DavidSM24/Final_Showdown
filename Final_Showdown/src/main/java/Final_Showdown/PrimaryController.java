@@ -13,6 +13,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import models.P_Attack.Attack;
+import models.P_Attack.AttackDAO;
 import models.P_Character.Rol;
 import models.P_Character.RolDAO;
 
@@ -52,9 +54,18 @@ public class PrimaryController {
 		
 		System.out.println(rolRepository.getAllRols());
 		
-		rolRepository.saveFile();*/
+		rolRepository.saveFile();
+		
+		AttackDAO attackRepository=AttackDAO.getInstance();
+		attackRepository.addNewAttack(new Attack(0, "Kamehameha", 50, 2, 85));
+		attackRepository.addNewAttack(new Attack(1, "Rasengan", 30, 1, 95));
+		attackRepository.addNewAttack(new Attack(2, "Hiperrayo", 120, 3, 75));
+		attackRepository.addNewAttack(new Attack(3, "Getsuga Tensho Final", 300, 5, 100));
+		attackRepository.addNewAttack(new Attack(4, "Golpe de Meteoros", 30, 1, 90));
+		attackRepository.saveFile();*/
 		
 		try {
+
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("character_creation.fxml"));
 			Parent root = loader.load();
 			Character_Creation_Controller chara_generator= loader.getController();

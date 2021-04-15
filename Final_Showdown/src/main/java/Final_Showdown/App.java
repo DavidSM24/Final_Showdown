@@ -11,6 +11,7 @@ import java.io.IOException;
 import javafx.application.*;
 import javafx.scene.*;
 import javafx.stage.*;
+import models.P_Attack.AttackDAO;
 import models.P_Character.Rol;
 import models.P_Character.RolDAO;
 
@@ -23,7 +24,8 @@ public class App extends Application {
 		
 		RolDAO repositoryRols= RolDAO.getInstance();
 		repositoryRols.loadFile();
-		System.out.println(repositoryRols.getAllRols());
+		AttackDAO repositoryAttacks=AttackDAO.getInstance();
+		repositoryAttacks.loadFile();
 		
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("primary.fxml"));
 		Parent root = loader.load();

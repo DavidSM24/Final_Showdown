@@ -23,13 +23,15 @@ import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.P_Attack.Attack;
+import models.P_Attack.AttackDAO;
 import models.P_Character.Rol;
 import models.P_Character.RolDAO;
 
 public class Character_Creation_Controller {
 	
 	//variables
-	ObservableList<Attack> attacks;
+	AttackDAO attacksRepository = AttackDAO.getInstance();
+	ObservableList<Attack> attacks=attacksRepository.getAllAttacks();
 	RolDAO repoR = RolDAO.getInstance();
 	List<Rol> roles=repoR.OL_getAllRols();
 	
@@ -45,11 +47,11 @@ public class Character_Creation_Controller {
 	@FXML
 	protected Button btn_cancel;
 	@FXML
-	protected Button btn_atk1;
+	protected Button btn_create_Attack;
 	@FXML
-	protected Button btn_atk2;
+	protected Button btn_edit_Attack;
 	@FXML
-	protected Button btn_atk3;
+	protected Button btn_delete_Attack;
 	@FXML
 	protected Button btn_image_presentation;
 	@FXML
@@ -104,6 +106,12 @@ public class Character_Creation_Controller {
 	@FXML
 	protected ComboBox<Rol> com_rol;
 	@FXML
+	protected ComboBox<Attack> com_att_1;
+	@FXML
+	protected ComboBox<Attack> com_att_2;
+	@FXML
+	protected ComboBox<Attack> com_att_3;
+	@FXML
 	protected ImageView image_presentation;
 	@FXML
 	protected ImageView image_card;
@@ -115,7 +123,7 @@ public class Character_Creation_Controller {
 	}
 	
 	@FXML
-	private void setAttack1() {
+	private void createAttack() {
 		try {
 			
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("attack_generator.fxml"));
@@ -146,7 +154,7 @@ public class Character_Creation_Controller {
 	}
 	
 	@FXML
-	private void setAttack2() {
+	private void editAttack() {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("attack_generator.fxml"));
 			Parent root = loader.load();
@@ -176,7 +184,7 @@ public class Character_Creation_Controller {
 	}
 	
 	@FXML
-	private void setAttack3() {
+	private void deleteAttack() {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("attack_generator.fxml"));
 			Parent root = loader.load();
@@ -262,6 +270,15 @@ public class Character_Creation_Controller {
 		this.me=me;
 		this.com_rol.setItems(roles);
 		this.com_rol.setValue(roles.get(0));
+		System.out.println(this.attacks);
+		if(attacks!=null&&attacks.size()>0) {
+			com_att_1.setItems(attacks);
+			com_att_1.setValue(attacks.get(0));
+			com_att_2.setItems(attacks);
+			com_att_2.setValue(attacks.get(0));
+			com_att_3.setItems(attacks);
+			com_att_3.setValue(attacks.get(0));
+		}
 	}
 	
 	@FXML
@@ -461,6 +478,19 @@ public class Character_Creation_Controller {
 					
 			lab_pnts.setText(pnts+"");
 			txt_total_spe.setText(txt_rol_spe.getText());
+		}
+	}
+	
+	@FXML
+	private void updateRols() {
+		if(com_att_1.getSelectionModel().getSelectedItem()!=null) {
+			attacks.set(0, com_att_1.getSelectionModel().getSelectedItem());
+		}
+		if(com_att_2.getSelectionModel().getSelectedItem()!=null) {
+			attacks.set(1, com_att_2.getSelectionModel().getSelectedItem());
+		}
+		if(com_att_3.getSelectionModel().getSelectedItem()!=null) {
+			attacks.set(2, com_att_3.getSelectionModel().getSelectedItem());
 		}
 	}
 }
