@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="687.0" prefWidth="601.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Final_Showdown.Character_Creation_Controller">
+   <children>
+      <TextField fx:id="txt_image_presentation" layoutX="64.0" layoutY="220.0" />
+      <Button fx:id="btn_image_presentation" layoutX="222.0" layoutY="220.0" mnemonicParsing="false" onAction="#set_Presentation" text="Cargar..." />
+      <Label layoutX="124.0" layoutY="298.0" text="Nombre" />
+      <Label layoutX="126.0" layoutY="365.0" text="Ataque" />
+      <Label layoutX="124.0" layoutY="397.0" text="Defensa" />
+      <Label layoutX="125.0" layoutY="331.0" text="Puntos de Vida" />
+      <TextField fx:id="txt_name" editable="false" layoutX="244.0" layoutY="294.0" prefHeight="25.0" prefWidth="149.0" />
+      <TextField fx:id="txt_total_hp" disable="true" editable="false" layoutX="412.0" layoutY="332.0" prefHeight="25.0" prefWidth="53.0" text="0" />
+      <TextField fx:id="txt_total_atk" disable="true" editable="false" layoutX="412.0" layoutY="363.0" prefHeight="25.0" prefWidth="53.0" text="0" />
+      <TextField fx:id="txt_total_def" disable="true" editable="false" layoutX="412.0" layoutY="394.0" prefHeight="25.0" prefWidth="53.0" text="0" />
+      <TextField fx:id="txt_total_spe" disable="true" editable="false" layoutX="412.0" layoutY="423.0" prefHeight="25.0" prefWidth="53.0" text="0" />
+      <Button fx:id="btn_atk1" layoutX="210.0" layoutY="479.0" mnemonicParsing="false" onAction="#setAttack1" text="Generar Ataque" />
+      <Button fx:id="btn_atk2" layoutX="210.0" layoutY="515.0" mnemonicParsing="false" onAction="#setAttack2" text="Generar Ataque" />
+      <Button fx:id="btn_atk3" layoutX="210.0" layoutY="550.0" mnemonicParsing="false" onAction="#setAttack3" text="Generar Ataque" />
+      <Label fx:id="lab_a1" layoutX="127.0" layoutY="485.0" text="Ataque 1" />
+      <Label fx:id="lab_a2" layoutX="127.0" layoutY="520.0" text="Ataque 2" />
+      <Label fx:id="lab_a3" layoutX="127.0" layoutY="553.0" text="Ataque 3" />
+      <Label layoutX="123.0" layoutY="426.0" text="Velocidad" />
+      <ComboBox fx:id="com_rol" layoutX="280.0" layoutY="591.0" onAction="#updateRolStats" prefWidth="150.0" />
+      <Label layoutX="201.0" layoutY="595.0" text="Rol" />
+      <ImageView fx:id="image_presentation" fitHeight="150.0" fitWidth="200.0" layoutX="65.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../../../Downloads/goku.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="101.0" layoutY="189.0" text="Imagen de Presentación" />
+      <ImageView fx:id="image_card" fitHeight="150.0" fitWidth="200.0" layoutX="328.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../../../Downloads/200x150.png" />
+         </image>
+      </ImageView>
+      <TextField fx:id="txt_image_card" layoutX="319.0" layoutY="220.0" />
+      <Button fx:id="btn_image_card" layoutX="477.0" layoutY="220.0" mnemonicParsing="false" onAction="#set_Card" text="Cargar..." />
+      <Button fx:id="btn_create" layoutX="205.0" layoutY="639.0" mnemonicParsing="false" onAction="#add" text="Crear y guardar" />
+      <Button fx:id="btn_cancel" layoutX="316.0" layoutY="639.0" mnemonicParsing="false" onAction="#cancel" text="Cancelar" />
+      <Label layoutX="364.0" layoutY="189.0" text="Imagen de Batalla" />
+      <TextField fx:id="txt_rol_def" disable="true" editable="false" layoutX="246.0" layoutY="392.0" prefHeight="25.0" prefWidth="53.0" text="0" />
+      <TextField fx:id="txt_rol_hp" disable="true" editable="false" layoutX="246.0" layoutY="331.0" prefHeight="25.0" prefWidth="53.0" text="0" />
+      <TextField fx:id="txt_rol_atk" disable="true" editable="false" layoutX="246.0" layoutY="361.0" prefHeight="25.0" prefWidth="53.0" text="0" />
+      <TextField fx:id="txt_rol_spe" disable="true" editable="false" layoutX="246.0" layoutY="422.0" prefHeight="25.0" prefWidth="53.0" text="0" />
+      <TextField fx:id="txt_def" layoutX="328.0" layoutY="393.0" onKeyReleased="#updateTextSDEF" prefHeight="25.0" prefWidth="53.0" text="0" />
+      <TextField fx:id="txt_hp" layoutX="328.0" layoutY="332.0" onKeyReleased="#updateTextSHP" prefHeight="25.0" prefWidth="53.0" text="0" />
+      <TextField fx:id="txt_atk" layoutX="328.0" layoutY="362.0" onKeyReleased="#updateTextSATK" prefHeight="25.0" prefWidth="53.0" text="0" />
+      <TextField fx:id="txt_spe" layoutX="328.0" layoutY="423.0" onKeyReleased="#updateTextSSPE" prefHeight="25.0" prefWidth="53.0" text="0" />
+      <Label layoutX="310.0" layoutY="397.0" text="+" />
+      <Label layoutX="310.0" layoutY="365.0" text="+" />
+      <Label layoutX="310.0" layoutY="336.0" text="+" />
+      <Label layoutX="310.0" layoutY="426.0" text="+" />
+      <Label layoutX="393.0" layoutY="335.0" text="=" />
+      <Label layoutX="393.0" layoutY="366.0" text="=" />
+      <Label layoutX="393.0" layoutY="396.0" text="=" />
+      <Label layoutX="393.0" layoutY="426.0" text="=" />
+      <Label layoutX="246.0" layoutY="263.0" text="Puntos de Refuerzo :" />
+      <Label fx:id="lab_pnts" layoutX="367.0" layoutY="263.0" text="400" />
+      <ComboBox layoutX="331.0" layoutY="481.0" prefWidth="150.0" />
+      <ComboBox layoutX="331.0" layoutY="516.0" prefWidth="150.0" />
+      <ComboBox layoutX="331.0" layoutY="549.0" prefWidth="150.0" />
+   </children>
+</AnchorPane>
