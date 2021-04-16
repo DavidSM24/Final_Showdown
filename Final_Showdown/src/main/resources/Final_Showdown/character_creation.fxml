@@ -67,8 +67,6 @@
       <ComboBox fx:id="com_att_3" layoutX="234.0" layoutY="550.0" prefWidth="150.0" />
       <Button fx:id="btn_edit_Attack" layoutX="394.0" layoutY="517.0" mnemonicParsing="false" onAction="#editAttack" prefHeight="25.0" prefWidth="109.0" text="Editar Ataque..." />
       <Button fx:id="btn_delete_Attack" layoutX="394.0" layoutY="550.0" mnemonicParsing="false" onAction="#deleteAttack" text="Eliminar Ataque..." />
-      <Button layoutX="200.0" layoutY="482.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="20.0" text="Button" />
-      <Button layoutX="200.0" layoutY="517.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="20.0" text="Button" />
-      <Button layoutX="200.0" layoutY="550.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="20.0" text="Button" />
+      <Button layoutX="524.0" layoutY="517.0" mnemonicParsing="false" onAction="#viewAttacks" prefHeight="25.0" prefWidth="20.0" text="Button" />
    </children>
 </AnchorPane>

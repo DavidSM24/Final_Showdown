@@ -2,6 +2,7 @@ package Final_Showdown;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.zone.ZoneOffsetTransitionRule.TimeDefinition;
 import java.util.List;
 
 import javafx.collections.FXCollections;
@@ -14,6 +15,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableView.TableViewSelectionModel;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
@@ -491,6 +493,27 @@ public class Character_Creation_Controller {
 		}
 		if(com_att_3.getSelectionModel().getSelectedItem()!=null) {
 			attacks.set(2, com_att_3.getSelectionModel().getSelectedItem());
+		}
+	}
+
+	@FXML
+	private void viewAttacks() {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("attack_view.fxml"));
+			Parent root = loader.load();
+			
+			Attack_View_Controller attack_view=loader.getController();
+			attack_view.setController(dad, me, attacks.get(0));
+			Scene scene= new Scene(root);
+			Stage stage= new Stage();
+			stage.getIcons().add(new Image("file:src/main/resources/images/icon_attack_creator.png"));
+			stage.setTitle("Visualizador de Ataques");
+			stage.setScene(scene);
+			stage.show();
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 }
