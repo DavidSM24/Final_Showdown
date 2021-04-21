@@ -8,10 +8,15 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
+import java.util.List;
+
 import javafx.application.*;
 import javafx.scene.*;
 import javafx.stage.*;
+import models.P_Attack.Attack;
 import models.P_Attack.AttackDAO;
+import models.P_Attack.Extra;
+import models.P_Attack.ExtraDAO;
 import models.P_Character.Rol;
 import models.P_Character.RolDAO;
 
@@ -22,10 +27,10 @@ public class App extends Application {
 	
 	public void start(Stage stage) throws IOException {
 		
-		RolDAO repositoryRols= RolDAO.getInstance();
-		repositoryRols.loadFile();
-		AttackDAO repositoryAttacks=AttackDAO.getInstance();
-		repositoryAttacks.loadFile();
+		Attack prueba= new Attack(1,"prueba",400,2,80,3,"","");
+		AttackDAO.guardar(prueba);
+		AttackDAO.eliminar(prueba);
+		
 		
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("primary.fxml"));
 		Parent root = loader.load();

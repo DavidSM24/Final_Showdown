@@ -1,6 +1,10 @@
 package Final_Showdown;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.List;
+
+import javax.print.attribute.standard.Media;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -11,10 +15,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.P_Attack.Attack;
 import models.P_Attack.AttackDAO;
+import models.P_Attack.Extra;
+import models.P_Attack.ExtraDAO;
 import models.P_Character.Rol;
 import models.P_Character.RolDAO;
 
@@ -22,8 +30,7 @@ public class PrimaryController {
 	
 	//variables
 	protected PrimaryController me;
-	RolDAO repoRol= RolDAO.getInstance();
-	protected ObservableList<Rol> roles=repoRol.OL_getAllRols();
+	protected List<Rol> roles= RolDAO.getAllRols();
 	
 	//buttons	
 	@FXML
@@ -91,7 +98,9 @@ public class PrimaryController {
 	
 	@FXML
 	private void view() {
+
 		try {
+			
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("image_panel.fxml"));
 			Parent root;
 			root = loader.load();

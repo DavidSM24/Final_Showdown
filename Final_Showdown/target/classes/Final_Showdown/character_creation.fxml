@@ -21,7 +21,6 @@
       <TextField fx:id="txt_total_atk" disable="true" editable="false" layoutX="412.0" layoutY="363.0" prefHeight="25.0" prefWidth="53.0" text="0" />
       <TextField fx:id="txt_total_def" disable="true" editable="false" layoutX="412.0" layoutY="394.0" prefHeight="25.0" prefWidth="53.0" text="0" />
       <TextField fx:id="txt_total_spe" disable="true" editable="false" layoutX="412.0" layoutY="423.0" prefHeight="25.0" prefWidth="53.0" text="0" />
-      <Button fx:id="btn_create_Attack" layoutX="395.0" layoutY="482.0" mnemonicParsing="false" onAction="#createAttack" text="Generar Ataque..." />
       <Label fx:id="lab_a1" layoutX="117.0" layoutY="486.0" text="Ataque 1" />
       <Label fx:id="lab_a2" layoutX="117.0" layoutY="521.0" text="Ataque 2" />
       <Label fx:id="lab_a3" layoutX="117.0" layoutY="554.0" text="Ataque 3" />
@@ -65,10 +64,6 @@
       <ComboBox fx:id="com_att_1" layoutX="234.0" layoutY="482.0" prefWidth="150.0" />
       <ComboBox fx:id="com_att_2" layoutX="234.0" layoutY="517.0" prefWidth="150.0" />
       <ComboBox fx:id="com_att_3" layoutX="234.0" layoutY="550.0" prefWidth="150.0" />
-      <Button fx:id="btn_edit_Attack" layoutX="394.0" layoutY="517.0" mnemonicParsing="false" onAction="#editAttack" prefHeight="25.0" prefWidth="109.0" text="Editar Ataque..." />
-      <Button fx:id="btn_delete_Attack" layoutX="394.0" layoutY="550.0" mnemonicParsing="false" onAction="#deleteAttack" text="Eliminar Ataque..." />
-      <Button layoutX="200.0" layoutY="482.0" mnemonicParsing="false" onAction="#viewAttacks" prefHeight="25.0" prefWidth="20.0" text="Button" />
-      <Button layoutX="200.0" layoutY="517.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="20.0" text="Button" />
-      <Button layoutX="200.0" layoutY="550.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="20.0" text="Button" />
+      <Button fx:id="btn_edit_Attack" layoutX="394.0" layoutY="517.0" mnemonicParsing="false" onAction="#viewAttacks" prefHeight="25.0" prefWidth="128.0" text="Gestor de Ataques..." />
    </children>
 </AnchorPane>

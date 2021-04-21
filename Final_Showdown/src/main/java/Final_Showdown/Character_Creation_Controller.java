@@ -34,8 +34,7 @@ public class Character_Creation_Controller {
 	//variables
 	AttackDAO attacksRepository = AttackDAO.getInstance();
 	ObservableList<Attack> attacks=attacksRepository.getAllAttacks();
-	RolDAO repoR = RolDAO.getInstance();
-	List<Rol> roles=repoR.OL_getAllRols();
+	ObservableList<Rol> roles=RolDAO.getAllObservableRols();
 	
 	protected PrimaryController dad;
 	protected Character_Creation_Controller me;
@@ -49,11 +48,7 @@ public class Character_Creation_Controller {
 	@FXML
 	protected Button btn_cancel;
 	@FXML
-	protected Button btn_create_Attack;
-	@FXML
-	protected Button btn_edit_Attack;
-	@FXML
-	protected Button btn_delete_Attack;
+	protected Button btn_attack_view;
 	@FXML
 	protected Button btn_image_presentation;
 	@FXML
@@ -91,10 +86,6 @@ public class Character_Creation_Controller {
 	@FXML
 	protected TextField txt_image_card;
 
-	
-	
-	
-	
 	@FXML
 	protected Label lab_a1;
 	@FXML
@@ -122,97 +113,6 @@ public class Character_Creation_Controller {
 	@FXML
 	private void add() {
 		
-	}
-	
-	@FXML
-	private void createAttack() {
-		try {
-			
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("attack_generator.fxml"));
-			Parent root = loader.load();
-			Attack_Generator_Controller attack_controller= loader.getController();
-			attack_controller.setController(me, attack_controller, 0);
-			
-			if(attacks!=null&&attacks.get(0)!=null) {
-				attack_controller.txt_name.setText(attacks.get(0).getName());
-				attack_controller.txt_power.setText(attacks.get(0).getPower()+"");
-				attack_controller.txt_cd.setText(attacks.get(0).getCd()+"");
-				attack_controller.txt_hit.setText(attacks.get(0).getHit_rate()+"");
-			}
-			
-			Scene scene= new Scene(root);
-			Stage stage= new Stage();
-			stage.getIcons().add(new Image("file:src/main/resources/images/icon_attack_creator.png"));
-			stage.setTitle("Generador de Ataques");
-			stage.initModality(Modality.APPLICATION_MODAL);
-			stage.setScene(scene);
-			stage.show();
-			
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	@FXML
-	private void editAttack() {
-		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("attack_generator.fxml"));
-			Parent root = loader.load();
-			Attack_Generator_Controller attack_controller= loader.getController();
-			attack_controller.setController(me, attack_controller, 1);
-			
-			if(attacks!=null&&attacks.get(1)!=null) {
-				attack_controller.txt_name.setText(attacks.get(1).getName());
-				attack_controller.txt_power.setText(attacks.get(1).getPower()+"");
-				attack_controller.txt_cd.setText(attacks.get(1).getCd()+"");
-				attack_controller.txt_hit.setText(attacks.get(1).getHit_rate()+"");
-			}
-			
-			Scene scene= new Scene(root);
-			Stage stage= new Stage();
-			stage.getIcons().add(new Image("file:src/main/resources/images/icon_attack_creator.png"));
-			stage.setTitle("Generador de Ataques");
-			stage.initModality(Modality.APPLICATION_MODAL);
-			stage.setScene(scene);
-			stage.show();
-			
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	@FXML
-	private void deleteAttack() {
-		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("attack_generator.fxml"));
-			Parent root = loader.load();
-			Attack_Generator_Controller attack_controller= loader.getController();
-			attack_controller.setController(me, attack_controller, 2);
-			
-			if(attacks!=null&&attacks.get(2)!=null) {
-				attack_controller.txt_name.setText(attacks.get(2).getName());
-				attack_controller.txt_power.setText(attacks.get(2).getPower()+"");
-				attack_controller.txt_cd.setText(attacks.get(2).getCd()+"");
-				attack_controller.txt_hit.setText(attacks.get(2).getHit_rate()+"");
-			}
-			
-			Scene scene= new Scene(root);
-			Stage stage= new Stage();
-			stage.getIcons().add(new Image("file:src/main/resources/images/icon_attack_creator.png"));
-			stage.setTitle("Generador de Ataques");
-			stage.initModality(Modality.APPLICATION_MODAL);
-			stage.setScene(scene);
-			stage.show();
-			
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 	
 	@FXML
@@ -267,10 +167,10 @@ public class Character_Creation_Controller {
 		stage.close();
 	}
 
-	protected void setController(PrimaryController dad, Character_Creation_Controller me, ObservableList<Rol> roles) {
+	protected void setController(PrimaryController dad, Character_Creation_Controller me) {
 		this.dad=dad;
 		this.me=me;
-		this.com_rol.setItems(roles);
+		this.com_rol.setItems(this.roles);
 		this.com_rol.setValue(roles.get(0));
 		System.out.println(this.attacks);
 		if(attacks!=null&&attacks.size()>0) {

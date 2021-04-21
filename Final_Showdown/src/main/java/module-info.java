@@ -5,6 +5,8 @@ module Final_Showdown {
 	requires javafx.base;
 	requires javafx.graphics;
 	requires java.xml.bind;
+	requires javafx.media;
+	requires java.sql;
 
 	
     opens Final_Showdown to javafx.fxml,javafx.base;

@@ -2,26 +2,31 @@ package models.P_Attack;
 
 import java.io.Serializable;
 
-public class Attack implements Serializable{
-
-	private String name;
-	private int power;
-	private int cd;
+public class Attack{
 
 	private int id;
+	private String name;
+	private int power;
+	private int cost;
 	private int hit_rate;
+	private int id_extra;
+	private String photo;
+	private String animation;
 
-	public Attack(int id,String name, int power, int cd, int hit) {
+	public Attack(int id,String name, int power, int cost, int hit, int id_extra,String photo, String animation) {
 		super();
 		this.id=id;
 		this.name = name;
 		this.power = power;
-		this.cd = cd;
+		this.cost = cost;
 		this.hit_rate=hit;
+		this.id_extra=id_extra;
+		this.photo=photo;
+		this.animation=animation;
 	}
 
 	public Attack() {
-		this(0,"",0,0,0);
+		this(0,"",0,0,0,0,"","");
 	}
 
 	public int getId() {
@@ -48,12 +53,12 @@ public class Attack implements Serializable{
 		this.power = power;
 	}
 
-	public int getCd() {
-		return this.cd;
+	public int getCost() {
+		return this.cost;
 	}
 
-	public void setCd(int cd) {
-		this.cd = cd;
+	public void setCost(int cost) {
+		this.cost = cost;
 	}
 
 	public int getHit_rate() {
@@ -62,6 +67,30 @@ public class Attack implements Serializable{
 
 	public void setHit_rate(int hit_rate) {
 		this.hit_rate=hit_rate;
+	}
+	
+	public int getId_extra() {
+		return id_extra;
+	}
+
+	public void setId_extra(int id_extra) {
+		this.id_extra = id_extra;
+	}
+
+	public String getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(String photo) {
+		this.photo = photo;
+	}
+
+	public String getAnimation() {
+		return animation;
+	}
+
+	public void setAnimation(String animation) {
+		this.animation = animation;
 	}
 
 	@Override
@@ -87,9 +116,5 @@ public class Attack implements Serializable{
 		if (id != other.id)
 			return false;
 		return true;
-	}
-	
-	
-	
-	
+	}	
 }
