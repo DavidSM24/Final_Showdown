@@ -26,15 +26,17 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.P_Attack.Attack;
 import models.P_Attack.AttackDAO;
+import models.P_Character.Character;
+import models.P_Character.CharacterDAO;
 import models.P_Character.Rol;
 import models.P_Character.RolDAO;
 
 public class Character_Creation_Controller {
 	
 	//variables
-	AttackDAO attacksRepository = AttackDAO.getInstance();
-	ObservableList<Attack> attacks=attacksRepository.getAllAttacks();
-	ObservableList<Rol> roles=RolDAO.getAllObservableRols();
+	ObservableList<Attack> attacks=AttackDAO.attacks;
+	ObservableList<Rol> roles=RolDAO.roles;
+	ObservableList<Character> charas= CharacterDAO.charas;
 	
 	protected PrimaryController dad;
 	protected Character_Creation_Controller me;
@@ -172,7 +174,6 @@ public class Character_Creation_Controller {
 		this.me=me;
 		this.com_rol.setItems(this.roles);
 		this.com_rol.setValue(roles.get(0));
-		System.out.println(this.attacks);
 		if(attacks!=null&&attacks.size()>0) {
 			com_att_1.setItems(attacks);
 			com_att_1.setValue(attacks.get(0));
@@ -192,7 +193,7 @@ public class Character_Creation_Controller {
 		txt_rol_spe.setText(com_rol.getSelectionModel().getSelectedItem().getSpe_base()+"");
 		
 		//calcular total
-		txt_total_hp.setText(Integer.parseInt(txt_rol_hp.getText())+Integer.parseInt(txt_hp.getText())+"");
+		txt_total_hp.setText(Integer.parseInt(txt_rol_hp.getText())+(Integer.parseInt(txt_hp.getText())*2)+"");
 		txt_total_atk.setText(Integer.parseInt(txt_rol_atk.getText())+Integer.parseInt(txt_atk.getText())+"");
 		txt_total_def.setText(Integer.parseInt(txt_rol_def.getText())+Integer.parseInt(txt_def.getText())+"");
 		txt_total_spe.setText(Integer.parseInt(txt_rol_spe.getText())+Integer.parseInt(txt_spe.getText())+"");
@@ -208,7 +209,7 @@ public class Character_Creation_Controller {
 			Integer.parseInt(txt_atk.getText())+
 			Integer.parseInt(txt_def.getText())+
 			Integer.parseInt(txt_spe.getText())<=400) { //es valido
-				txt_total_hp.setText(Integer.parseInt(txt_rol_hp.getText())+ini+"");
+				txt_total_hp.setText(Integer.parseInt(txt_rol_hp.getText())+(ini*2)+"");
 				pnts=400-(ini+
 						Integer.parseInt(txt_atk.getText())+
 						Integer.parseInt(txt_def.getText())+

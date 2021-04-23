@@ -5,7 +5,11 @@ import models.P_Attack.Attack;
 public class Character {
 	private int id;
 	private String name;
+	private String universe;
+	private String description;
 	private int hp;
+	private int energy_ini;
+	private int energy_recover;
 	private int atk;
 	private int def;
 	private int spe;
@@ -13,13 +17,19 @@ public class Character {
 	private Attack a2;
 	private Attack a3;
 	private Rol rol;
+	private String photo_face;
+	private String photo_card;
 	
-	private Character(int id, String name, int hp, int atk, int def, int spe, Attack a1, Attack a2, Attack a3,
-			Rol rol) {
+	public Character(int id, String universe, String name, String description, int hp, int energy_ini, int energy_recover, int atk, int def, int spe, Attack a1, Attack a2, Attack a3,
+			Rol rol, String photo_face, String photo_card) {
 		super();
 		this.id = id;
 		this.name = name;
+		this.universe=universe;
+		this.description=description;
 		this.hp = hp;
+		this.energy_ini=energy_ini;
+		this.energy_recover=energy_recover;
 		this.atk = atk;
 		this.def = def;
 		this.spe = spe;
@@ -27,10 +37,12 @@ public class Character {
 		this.a2 = a2;
 		this.a3 = a3;
 		this.rol = rol;
+		this.photo_face=photo_face;
+		this.photo_card=photo_card;
 	}
 
-	private Character() {
-		this(0,"",0,0,0,0,null,null,null,null);
+	public Character() {
+		this(0,"","","",0,0,0,0,0,0,null,null,null,null,"","");
 	}
 
 	public int getId() {
@@ -48,6 +60,22 @@ public class Character {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public String getUniverse() {
+		return universe;
+	}
+
+	public void setUniverse(String universe) {
+		this.universe = universe;
+	}
+	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
 	public int getHp() {
 		return hp;
@@ -55,6 +83,22 @@ public class Character {
 
 	public void setHp(int hp) {
 		this.hp = hp;
+	}
+	
+	public int getEnergy_ini() {
+		return energy_ini;
+	}
+
+	public void setEnergy_ini(int energy_ini) {
+		this.energy_ini = energy_ini;
+	}
+
+	public int getEnergy_recover() {
+		return energy_recover;
+	}
+
+	public void setEnergy_recover(int energy_recover) {
+		this.energy_recover = energy_recover;
 	}
 
 	public int getAtk() {
@@ -111,6 +155,22 @@ public class Character {
 
 	public void setRol(Rol rol) {
 		this.rol = rol;
+	}
+	
+	public String getPhoto_face() {
+		return photo_face;
+	}
+
+	public void setPhoto_face(String photo_face) {
+		this.photo_face = photo_face;
+	}
+	
+	public String getPhoto_card() {
+		return photo_card;
+	}
+
+	public void setPhoto_card(String photo_card) {
+		this.photo_card = photo_card;
 	}
 
 	@Override

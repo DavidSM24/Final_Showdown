@@ -65,5 +65,6 @@
       <ComboBox fx:id="com_att_2" layoutX="234.0" layoutY="517.0" prefWidth="150.0" />
       <ComboBox fx:id="com_att_3" layoutX="234.0" layoutY="550.0" prefWidth="150.0" />
       <Button fx:id="btn_edit_Attack" layoutX="394.0" layoutY="517.0" mnemonicParsing="false" onAction="#viewAttacks" prefHeight="25.0" prefWidth="128.0" text="Gestor de Ataques..." />
+      <Label layoutX="398.0" layoutY="263.0" text="(x2 en HP)" />
    </children>
 </AnchorPane>

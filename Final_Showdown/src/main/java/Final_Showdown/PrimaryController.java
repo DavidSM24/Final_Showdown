@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.print.attribute.standard.Media;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -30,9 +31,9 @@ public class PrimaryController {
 	
 	//variables
 	protected PrimaryController me;
-	protected List<Rol> roles= RolDAO.getAllRols();
+	protected ObservableList<Rol> roles= FXCollections.observableArrayList();
 	
-	//buttons	
+	//buttons		
 	@FXML
 	private Button btn_add;
 	@FXML
@@ -76,7 +77,7 @@ public class PrimaryController {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("character_creation.fxml"));
 			Parent root = loader.load();
 			Character_Creation_Controller chara_generator= loader.getController();
-			chara_generator.setController(me, chara_generator,roles);
+			chara_generator.setController(me, chara_generator);
 			chara_generator.image_presentation.setImage(new Image("file:src/main/resources/images/default_fighter.png"));
 			chara_generator.image_card.setImage(new Image("file:src/main/resources/images/default_fighter.png"));
 			chara_generator.updateRolStats();

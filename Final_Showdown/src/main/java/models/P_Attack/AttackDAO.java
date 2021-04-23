@@ -14,74 +14,67 @@ import utils.Conexion;
 
 public class AttackDAO extends Attack{
 	private static final String GETALL= "SELECT id,name,power,cost,hit_rate,id_extra,photo,animation FROM attack;";
+	
 	private final static String INSERT_UPDATE="INSERT INTO attack (id, name, power,cost,hit_rate,id_extra,photo,animation) "
 		+ "VALUES (?,?,?,?,?,?,?,?) "
 		+ "ON DUPLICATE KEY UPDATE name=?,power=?,cost=?,hit_rate=?,id_extra=?,photo=?,animation=?";
+	
 	private final static String DELETE ="DELETE FROM attack WHERE id=?";
 	
-	public static List<Attack> getAllAttacks() {
+	public static ObservableList<Attack> attacks=FXCollections.observableArrayList();
+	
+	public static void loadAllAttacks() {
+		Connection con = Conexion.getConexion();
+		if (con != null) {
+			try {
+				Statement st = con.createStatement();
+				ResultSet rs= st.executeQuery(GETALL);
+				while(rs.next()) {
+					//es que hay al menos un resultado
+					Attack aux=new Attack();
+					aux.setId(rs.getInt("id"));
+					aux.setName(rs.getString("name"));
+					aux.setPower(rs.getInt("power"));
+					aux.setCost(rs.getInt("cost"));
+					aux.setHit_rate(rs.getInt("hit_rate"));
+					aux.setId_extra(rs.getInt("id_extra"));
+					aux.setPhoto(rs.getString("photo"));
+					aux.setAnimation(rs.getString("animation"));
+					
+					
+					attacks.add(aux);
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public static List<Attack> getAllAttacksAsList() {
 		List<Attack> result=new ArrayList();
-		Connection con = Conexion.getConexion();
-		if (con != null) {
-			try {
-				Statement st = con.createStatement();
-				ResultSet rs= st.executeQuery(GETALL);
-				while(rs.next()) {
-					//es que hay al menos un resultado
-					Attack aux=new Attack();
-					aux.setId(rs.getInt("id"));
-					aux.setName(rs.getString("name"));
-					aux.setPower(rs.getInt("power"));
-					aux.setCost(rs.getInt("cost"));
-					aux.setHit_rate(rs.getInt("hit_rate"));
-					aux.setId_extra(rs.getInt("id_extra"));
-					aux.setPhoto(rs.getString("photo"));
-					aux.setAnimation(rs.getString("animation"));
-					
-					
-					result.add(aux);
-				}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		
+		if(attacks!=null&&attacks.size()>0) {
+			for(Attack a: attacks) {
+				result.add(a);
 			}
-		}
-				
+		}		
 		return result;
 	}
 	
-	public static ObservableList<Attack> getAllObservableAttacks() {
-		ObservableList<Attack> result=FXCollections.observableArrayList();
-		Connection con = Conexion.getConexion();
-		if (con != null) {
-			try {
-				Statement st = con.createStatement();
-				ResultSet rs= st.executeQuery(GETALL);
-				while(rs.next()) {
-					//es que hay al menos un resultado
-
-					Attack aux=new Attack();
-					aux.setId(rs.getInt("id"));
-					aux.setName(rs.getString("name"));
-					aux.setPower(rs.getInt("power"));
-					aux.setCost(rs.getInt("cost"));
-					aux.setHit_rate(rs.getInt("hit_rate"));
-					aux.setId_extra(rs.getInt("id_extra"));
-					aux.setPhoto(rs.getString("photo"));
-					aux.setAnimation(rs.getString("animation"));
-					
-					result.add(aux);
+	public static Attack getAttackById(int id) {
+		Attack result=null;
+		
+		if(attacks!=null) {
+			for (int i = 0; i < attacks.size(); i++) {
+				if(attacks.get(i).getId()==id) {
+					return attacks.get(i);
 				}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			}	
 		}
-				
-		return result;
+		
+		return result;	
 	}
-	
-	//save here
 	
 	public static void guardar(Attack a) {
 		// INSERT o UPDATE
@@ -110,7 +103,14 @@ public class AttackDAO extends Attack{
 				q.setString(14, a.getPhoto());
 				q.setString(15, a.getAnimation());
 				
-				rs =q.executeUpdate();		
+				rs =q.executeUpdate();	
+				if(attacks.contains(a)) {
+					int i=attacks.indexOf(a);
+					attacks.set(i, a);
+				}
+				else {
+					attacks.add(a);
+				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -127,7 +127,7 @@ public class AttackDAO extends Attack{
 				PreparedStatement q=con.prepareStatement(DELETE);
 				q.setInt(1, a.getId());
 				rs =q.executeUpdate();
-				a=null;
+				attacks.remove(a);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

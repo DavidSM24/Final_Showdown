@@ -10,6 +10,8 @@ import javafx.scene.layout.BorderPane;
 import java.io.IOException;
 import java.util.List;
 
+import org.w3c.dom.CharacterData;
+
 import javafx.application.*;
 import javafx.scene.*;
 import javafx.stage.*;
@@ -17,6 +19,8 @@ import models.P_Attack.Attack;
 import models.P_Attack.AttackDAO;
 import models.P_Attack.Extra;
 import models.P_Attack.ExtraDAO;
+import models.P_Character.Character;
+import models.P_Character.CharacterDAO;
 import models.P_Character.Rol;
 import models.P_Character.RolDAO;
 
@@ -27,9 +31,14 @@ public class App extends Application {
 	
 	public void start(Stage stage) throws IOException {
 		
-		Attack prueba= new Attack(1,"prueba",400,2,80,3,"","");
-		AttackDAO.guardar(prueba);
-		AttackDAO.eliminar(prueba);
+		ExtraDAO.loadAllExtras();
+		RolDAO.loadAllRols();
+		AttackDAO.loadAllAttacks();
+		CharacterDAO.loadAllCharacters();
+
+		Character c= new Character(2, "prueba", "", "", 0, 0, 0, 0, 0, 0, AttackDAO.attacks.get(0), AttackDAO.attacks.get(1), AttackDAO.attacks.get(2), RolDAO.roles.get(0), "", "");
+		CharacterDAO.guardar(c);
+		System.out.println(CharacterDAO.charas);
 		
 		
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("primary.fxml"));

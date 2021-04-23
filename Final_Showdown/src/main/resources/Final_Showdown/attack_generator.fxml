@@ -1,23 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="274.0" prefWidth="470.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Final_Showdown.Attack_Generator_Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="527.0" prefWidth="515.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Final_Showdown.Attack_Generator_Controller">
    <children>
-      <Label layoutX="84.0" layoutY="36.0" text="Nombre" />
-      <Label layoutX="83.0" layoutY="73.0" text="Potencia" />
-      <Label layoutX="84.0" layoutY="151.0" text="Probabilidad de Acierto" />
-      <Label layoutX="84.0" layoutY="113.0" prefHeight="17.0" prefWidth="44.0" text="Coste" />
-      <TextField fx:id="txt_name" layoutX="278.0" layoutY="32.0" />
-      <TextField fx:id="txt_power" layoutX="278.0" layoutY="69.0" />
-      <TextField fx:id="txt_cd" layoutX="278.0" layoutY="109.0" />
-      <TextField fx:id="txt_hit" layoutX="278.0" layoutY="147.0" />
-      <Button fx:id="btn_save" layoutX="129.0" layoutY="204.0" mnemonicParsing="false" onAction="#save" text="Guardar" />
-      <Button fx:id="btn_exit" layoutX="278.0" layoutY="204.0" mnemonicParsing="false" onAction="#cancel" text="Cancelar" />
-      <Text layoutX="427.0" layoutY="164.0" strokeType="OUTSIDE" strokeWidth="0.0" text="\%" />
+      <Label layoutX="99.0" layoutY="301.0" text="Nombre" />
+      <Label layoutX="98.0" layoutY="338.0" text="Potencia" />
+      <Label layoutX="98.0" layoutY="416.0" text="Probabilidad de Acierto" />
+      <Label layoutX="99.0" layoutY="378.0" prefHeight="17.0" prefWidth="44.0" text="Coste" />
+      <TextField fx:id="txt_name" layoutX="252.0" layoutY="297.0" />
+      <TextField fx:id="txt_power" layoutX="252.0" layoutY="334.0" />
+      <TextField fx:id="txt_cd" layoutX="252.0" layoutY="374.0" />
+      <TextField fx:id="txt_hit" layoutX="252.0" layoutY="412.0" />
+      <Button fx:id="btn_save" layoutX="191.0" layoutY="466.0" mnemonicParsing="false" onAction="#save" text="Guardar" />
+      <Button fx:id="btn_exit" layoutX="264.0" layoutY="466.0" mnemonicParsing="false" onAction="#cancel" text="Cancelar" />
+      <Text layoutX="407.0" layoutY="429.0" strokeType="OUTSIDE" strokeWidth="0.0" text="\%" />
+      <TextField layoutX="149.0" layoutY="212.0" />
+      <Button layoutX="307.0" layoutY="212.0" mnemonicParsing="false" text="Cargar..." />
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="158.0" layoutY="41.0" pickOnBounds="true" preserveRatio="true" />
+      <ComboBox layoutX="251.0" layoutY="263.0" prefWidth="150.0" />
+      <Label layoutX="99.0" layoutY="267.0" text="Animation" />
+      <TabPane layoutX="43.0" layoutY="12.0" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="Untitled Tab 1">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </content>
+          </Tab>
+          <Tab text="Untitled Tab 2">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
    </children>
 </AnchorPane>

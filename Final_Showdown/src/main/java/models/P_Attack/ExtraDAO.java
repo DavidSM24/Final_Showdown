@@ -22,10 +22,11 @@ import utils.Conexion;
 
 public class ExtraDAO{
 	
+	private static ObservableList<Extra> extras= FXCollections.observableArrayList();
+	
 	private static final String GETALL="SELECT id,name,description FROM extra";
 	
-	public static List<Extra> getAllExtras() {
-		List<Extra> result=new ArrayList();
+	public static void loadAllExtras() {
 		Connection con = Conexion.getConexion();
 		if (con != null) {
 			try {
@@ -37,38 +38,23 @@ public class ExtraDAO{
 					aux.setId(rs.getInt("id"));
 					aux.setName(rs.getString("name"));
 					aux.setDescription(rs.getString("description"));
-					result.add(aux);
+					extras.add(aux);
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-				
-		return result;
 	}
 	
-	public static ObservableList<Extra> getAllObservableExtras() {
-		ObservableList<Extra> result=FXCollections.observableArrayList();
-		Connection con = Conexion.getConexion();
-		if (con != null) {
-			try {
-				Statement st = con.createStatement();
-				ResultSet rs= st.executeQuery(GETALL);
-				while(rs.next()) {
-					//es que hay al menos un resultado
-					Extra aux=new Extra();
-					aux.setId(rs.getInt("id"));
-					aux.setName(rs.getString("name"));
-					aux.setDescription(rs.getString("description"));
-					result.add(aux);
-				}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+	public static List<Extra> getAllExtrasAsList() {
+		List<Extra> result=new ArrayList();
+		
+		if(extras!=null&&extras.size()>0) {
+			for(Extra e: extras) {
+				result.add(e);
 			}
-		}
-				
+		}		
 		return result;
 	}
 }
