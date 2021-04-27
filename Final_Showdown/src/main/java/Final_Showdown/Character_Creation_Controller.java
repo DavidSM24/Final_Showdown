@@ -3,6 +3,7 @@ package Final_Showdown;
 import java.io.File;
 import java.io.IOException;
 import java.time.zone.ZoneOffsetTransitionRule.TimeDefinition;
+import java.util.Arrays;
 import java.util.List;
 
 import javafx.collections.FXCollections;
@@ -16,6 +17,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView.TableViewSelectionModel;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
@@ -36,12 +38,10 @@ public class Character_Creation_Controller {
 	//variables
 	ObservableList<Attack> attacks=AttackDAO.attacks;
 	ObservableList<Rol> roles=RolDAO.roles;
-	ObservableList<Character> charas= CharacterDAO.charas;
+	Character chara= null;
 	
 	protected PrimaryController dad;
 	protected Character_Creation_Controller me;
-	private String path_image_presentation="";
-	private String path_image_card="";
 	private int pnts=400;
 	
 	//buttons
@@ -49,6 +49,14 @@ public class Character_Creation_Controller {
 	protected Button btn_create;
 	@FXML
 	protected Button btn_cancel;
+	@FXML
+	protected Button btn_create2;
+	@FXML
+	protected Button btn_cancel2;
+	@FXML
+	protected Button btn_create3;
+	@FXML
+	protected Button btn_cancel3;
 	@FXML
 	protected Button btn_attack_view;
 	@FXML
@@ -84,28 +92,32 @@ public class Character_Creation_Controller {
 	@FXML
 	protected TextField txt_total_spe;
 	@FXML
+	protected TextField txt_energy_ini;
+	@FXML
+	protected TextField txt_energy_recover;
+	@FXML
 	protected TextField txt_image_presentation;
 	@FXML
 	protected TextField txt_image_card;
-
 	@FXML
-	protected Label lab_a1;
-	@FXML
-	protected Label lab_a2;
-	@FXML
-	protected Label lab_a3;
+	protected TextField txt_universe;
+	
 	@FXML
 	protected Label lab_pnts;
+	@FXML
+	protected TextArea are_description;
 	
 	//others
 	@FXML
-	protected ComboBox<Rol> com_rol;
+ 	protected ComboBox<Rol> com_rol;
 	@FXML
 	protected ComboBox<Attack> com_att_1;
 	@FXML
 	protected ComboBox<Attack> com_att_2;
 	@FXML
 	protected ComboBox<Attack> com_att_3;
+	@FXML
+	protected ComboBox<String> com_band;
 	@FXML
 	protected ImageView image_presentation;
 	@FXML
@@ -169,11 +181,15 @@ public class Character_Creation_Controller {
 		stage.close();
 	}
 
-	protected void setController(PrimaryController dad, Character_Creation_Controller me) {
+	protected void setController(PrimaryController dad, Character_Creation_Controller me, Character chara) {
 		this.dad=dad;
 		this.me=me;
 		this.com_rol.setItems(this.roles);
 		this.com_rol.setValue(roles.get(0));
+		ObservableList<String> bands=FXCollections.observableArrayList();
+		bands.addAll("Héroe","Villano","Neutral");
+		com_band.setItems(bands);
+		
 		if(attacks!=null&&attacks.size()>0) {
 			com_att_1.setItems(attacks);
 			com_att_1.setValue(attacks.get(0));
@@ -181,6 +197,32 @@ public class Character_Creation_Controller {
 			com_att_2.setValue(attacks.get(0));
 			com_att_3.setItems(attacks);
 			com_att_3.setValue(attacks.get(0));
+			
+		}
+		if(chara!=null) {
+			this.chara=chara;
+			this.are_description.setText(chara.getDescription());
+			this.txt_name.setText(chara.getName());
+			this.txt_universe.setText(chara.getUniverse());
+			this.com_band.setValue(chara.getBand());
+			txt_hp.setText(((chara.getHp()-chara.getRol().getHp_base())/2)+"");
+			txt_total_hp.setText(chara.getHp()+"");
+			txt_atk.setText((chara.getAtk()-chara.getRol().getAtk_base())+"");
+			txt_total_atk.setText(chara.getAtk()+"");
+			txt_def.setText((chara.getDef()-chara.getRol().getDef_base())+"");
+			txt_total_def.setText(chara.getDef()+"");
+			txt_spe.setText((chara.getSpe()-chara.getRol().getSpe_base())+"");
+			txt_total_spe.setText(chara.getSpe()+"");
+			txt_energy_ini.setText(chara.getEnergy_ini()+"");
+			txt_energy_recover.setText(chara.getEnergy_recover()+"");
+			com_rol.setValue(chara.getRol());
+			updateTextSHP(); //para actualizar los pnts...
+			com_att_1.setValue(chara.getA1());
+			com_att_2.setValue(chara.getA2());
+			com_att_3.setValue(chara.getA3());
+			
+			//falta meter las imagenes...
+			
 		}
 	}
 	
@@ -200,6 +242,7 @@ public class Character_Creation_Controller {
 		
 	}
 	
+	//para los textos
 	@FXML 
 	private void updateTextSHP() {
 		if(txt_hp.getText().matches("[0-9]+")) {
@@ -245,7 +288,7 @@ public class Character_Creation_Controller {
 		}
 		
 	}
-	
+	//para los textos
 	@FXML 
 	private void updateTextSATK() {
 		if(txt_atk.getText().matches("[0-9]+")) {
@@ -291,7 +334,7 @@ public class Character_Creation_Controller {
 			txt_total_atk.setText(txt_rol_atk.getText());
 		}
 	}
-	
+	//para los textos
 	@FXML 
 	private void updateTextSDEF() {
 		if(txt_def.getText().matches("[0-9]+")) {
@@ -337,7 +380,7 @@ public class Character_Creation_Controller {
 			txt_total_def.setText(txt_rol_def.getText());
 		}
 	}
-	
+	//para los textos
 	@FXML 
 	private void updateTextSSPE() {
 		if(txt_spe.getText().matches("[0-9]+")) {
@@ -385,7 +428,7 @@ public class Character_Creation_Controller {
 	}
 	
 	@FXML
-	private void updateRols() {
+	private void updateAttacksBox() {
 		if(com_att_1.getSelectionModel().getSelectedItem()!=null) {
 			attacks.set(0, com_att_1.getSelectionModel().getSelectedItem());
 		}
@@ -407,7 +450,7 @@ public class Character_Creation_Controller {
 			attack_view.setController(dad, me, attacks.get(0));
 			Scene scene= new Scene(root);
 			Stage stage= new Stage();
-			stage.getIcons().add(new Image("file:src/main/resources/images/icon_attack_creator.png"));
+			stage.getIcons().add(new Image("file:src/main/resources/images/icons/icon_attack_creator.png"));
 			stage.setTitle("Visualizador de Ataques");
 			stage.setScene(scene);
 			stage.show();

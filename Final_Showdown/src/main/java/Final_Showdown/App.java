@@ -35,10 +35,6 @@ public class App extends Application {
 		RolDAO.loadAllRols();
 		AttackDAO.loadAllAttacks();
 		CharacterDAO.loadAllCharacters();
-
-		Character c= new Character(2, "prueba", "", "", 0, 0, 0, 0, 0, 0, AttackDAO.attacks.get(0), AttackDAO.attacks.get(1), AttackDAO.attacks.get(2), RolDAO.roles.get(0), "", "");
-		CharacterDAO.guardar(c);
-		System.out.println(CharacterDAO.charas);
 		
 		
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("primary.fxml"));
@@ -48,7 +44,7 @@ public class App extends Application {
 		Scene scene= new Scene(root);
 		Stage stage2= new Stage();
 		stage2.setScene(scene);
-		Image image= new Image("file:src/main/resources/images/icon_app.jpg");
+		Image image= new Image("file:src/main/resources/images/icons/icon_app.jpg");
 		stage2.setTitle("Final Showdown");
 		stage2.getIcons().add(image);
 		stage2.initModality(Modality.APPLICATION_MODAL);

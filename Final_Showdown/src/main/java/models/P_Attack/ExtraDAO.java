@@ -22,7 +22,7 @@ import utils.Conexion;
 
 public class ExtraDAO{
 	
-	private static ObservableList<Extra> extras= FXCollections.observableArrayList();
+	public static ObservableList<Extra> extras= FXCollections.observableArrayList();
 	
 	private static final String GETALL="SELECT id,name,description FROM extra";
 	
@@ -56,5 +56,20 @@ public class ExtraDAO{
 			}
 		}		
 		return result;
+	}
+	
+	public static Extra getExtraById(int id) {
+
+		Extra result=null;
+		
+		if(extras!=null) {
+			for (int i = 0; i < extras.size(); i++) {
+				if(extras.get(i).getId()==id) {
+					return extras.get(i);
+				}
+			}	
+		}
+		
+		return result;	
 	}
 }

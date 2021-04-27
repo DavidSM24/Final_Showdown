@@ -18,15 +18,15 @@ public class CharacterDAO {
 	
 	public static ObservableList<Character> charas=FXCollections.observableArrayList();
 	
-	private static final String GETALL= "SELECT id, name AS Nombre, universe AS Universo, description AS Descripcion, hp as HP, "
+	private static final String GETALL= "SELECT id, name AS Nombre, universe AS Universo, description AS Descripcion, bando, hp as HP, "
 			+ "energy_ini AS \"Energia Inicial\", energy_restore as Restauracion, atk, def, spe, id_attack_1 as A1 , "
 			+ "id_attack_2 as A2, id_attack_3 as A3, id_rol as Rol, photo_face as Face, photo_card as Carta "
 			+ "from chara;";
 	
 	private final static String INSERT_UPDATE="INSERT INTO chara (id, name, universe, description, hp, energy_ini, energy_restore, atk, "
 			+ "def, spe, id_attack_1, id_attack_2, id_attack_3, id_rol, photo_face, photo_card) "
-			+ "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) "
-			+ "ON DUPLICATE KEY UPDATE name=?,universe=?,description=?,hp=?,energy_ini=?,energy_restore=?,atk=?,def=?,spe=?,id_attack_1=?, "
+			+ "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) "
+			+ "ON DUPLICATE KEY UPDATE name=?,universe=?,description=?,bando=?,hp=?,energy_ini=?,energy_restore=?,atk=?,def=?,spe=?,id_attack_1=?, "
 			+ "id_attack_2=?,id_attack_3=?, id_rol=?,photo_face=?,photo_card=?";
 	
 	private final static String DELETE ="DELETE FROM chara WHERE id=?";
@@ -49,6 +49,7 @@ public class CharacterDAO {
 					aux.setName(rs.getString("Nombre"));
 					aux.setUniverse(rs.getString("Universo"));
 					aux.setDescription(rs.getString("Descripcion"));
+					aux.setBand(rs.getString("bando"));
 					aux.setHp(rs.getInt("HP"));
 					aux.setEnergy_ini(rs.getInt("Energia Inicial"));
 					aux.setEnergy_recover(rs.getInt("Restauracion"));
@@ -85,34 +86,36 @@ public class CharacterDAO {
 						q.setString(2, c.getName());
 						q.setString(3, c.getUniverse());
 						q.setString(4, c.getDescription()); 
-						q.setInt(5, c.getHp()); 
-						q.setInt(6, c.getEnergy_ini()); 
-						q.setInt(7, c.getEnergy_recover()); 
-						q.setInt(8, c.getAtk());
-						q.setInt(9, c.getDef());
-						q.setInt(10, c.getSpe());
-						q.setInt(11, c.getA1().getId());
-						q.setInt(12, c.getA2().getId());
-						q.setInt(13, c.getA3().getId());
-						q.setInt(14, c.getRol().getId());
-						q.setString(15, c.getPhoto_face());
-						q.setString(16, c.getPhoto_card());
+						q.setString(5, c.getBand());
+						q.setInt(6, c.getHp()); 
+						q.setInt(7, c.getEnergy_ini()); 
+						q.setInt(8, c.getEnergy_recover()); 
+						q.setInt(9, c.getAtk());
+						q.setInt(10, c.getDef());
+						q.setInt(11, c.getSpe());
+						q.setInt(12, c.getA1().getId());
+						q.setInt(13, c.getA2().getId());
+						q.setInt(14, c.getA3().getId());
+						q.setInt(15, c.getRol().getId());
+						q.setString(16, c.getPhoto_face());
+						q.setString(17, c.getPhoto_card());
 						
-						q.setString(17, c.getName()); 
-						q.setString(18, c.getUniverse());
-						q.setString(19, c.getDescription());
-						q.setInt(20, c.getHp()); 
-						q.setInt(21, c.getEnergy_ini());
-						q.setInt(22, c.getEnergy_recover());
-						q.setInt(23, c.getAtk());
-						q.setInt(24, c.getDef());
-						q.setInt(25, c.getSpe());
-						q.setInt(26, c.getA1().getId());
-						q.setInt(27, c.getA2().getId());
-						q.setInt(28, c.getA3().getId());
-						q.setInt(29, c.getRol().getId());
-						q.setString(30, c.getPhoto_face());
-						q.setString(31, c.getPhoto_card());
+						q.setString(18, c.getName()); 
+						q.setString(19, c.getUniverse());
+						q.setString(20, c.getDescription());
+						q.setString(21, c.getBand());
+						q.setInt(22, c.getHp()); 
+						q.setInt(23, c.getEnergy_ini());
+						q.setInt(24, c.getEnergy_recover());
+						q.setInt(25, c.getAtk());
+						q.setInt(26, c.getDef());
+						q.setInt(27, c.getSpe());
+						q.setInt(28, c.getA1().getId());
+						q.setInt(29, c.getA2().getId());
+						q.setInt(30, c.getA3().getId());
+						q.setInt(31, c.getRol().getId());
+						q.setString(32, c.getPhoto_face());
+						q.setString(33, c.getPhoto_card());
 						
 						rs =q.executeUpdate();	
 						if(charas.contains(c)) {

@@ -7,6 +7,7 @@ public class Character {
 	private String name;
 	private String universe;
 	private String description;
+	private String band;
 	private int hp;
 	private int energy_ini;
 	private int energy_recover;
@@ -20,13 +21,14 @@ public class Character {
 	private String photo_face;
 	private String photo_card;
 	
-	public Character(int id, String universe, String name, String description, int hp, int energy_ini, int energy_recover, int atk, int def, int spe, Attack a1, Attack a2, Attack a3,
+	public Character(int id, String universe, String name, String description, String band, int hp, int energy_ini, int energy_recover, int atk, int def, int spe, Attack a1, Attack a2, Attack a3,
 			Rol rol, String photo_face, String photo_card) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.universe=universe;
 		this.description=description;
+		this.band=band;
 		this.hp = hp;
 		this.energy_ini=energy_ini;
 		this.energy_recover=energy_recover;
@@ -42,7 +44,7 @@ public class Character {
 	}
 
 	public Character() {
-		this(0,"","","",0,0,0,0,0,0,null,null,null,null,"","");
+		this(0,"","","","",0,0,0,0,0,0,null,null,null,null,"","");
 	}
 
 	public int getId() {
@@ -75,6 +77,14 @@ public class Character {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getBand() {
+		return band;
+	}
+
+	public void setBand(String band) {
+		this.band = band;
 	}
 
 	public int getHp() {

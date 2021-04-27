@@ -1,70 +1,231 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="687.0" prefWidth="601.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Final_Showdown.Character_Creation_Controller">
-   <children>
-      <TextField fx:id="txt_image_presentation" layoutX="64.0" layoutY="220.0" />
-      <Button fx:id="btn_image_presentation" layoutX="222.0" layoutY="220.0" mnemonicParsing="false" onAction="#set_Presentation" text="Cargar..." />
-      <Label layoutX="124.0" layoutY="298.0" text="Nombre" />
-      <Label layoutX="126.0" layoutY="365.0" text="Ataque" />
-      <Label layoutX="124.0" layoutY="397.0" text="Defensa" />
-      <Label layoutX="125.0" layoutY="331.0" text="Puntos de Vida" />
-      <TextField fx:id="txt_name" editable="false" layoutX="244.0" layoutY="294.0" prefHeight="25.0" prefWidth="149.0" />
-      <TextField fx:id="txt_total_hp" disable="true" editable="false" layoutX="412.0" layoutY="332.0" prefHeight="25.0" prefWidth="53.0" text="0" />
-      <TextField fx:id="txt_total_atk" disable="true" editable="false" layoutX="412.0" layoutY="363.0" prefHeight="25.0" prefWidth="53.0" text="0" />
-      <TextField fx:id="txt_total_def" disable="true" editable="false" layoutX="412.0" layoutY="394.0" prefHeight="25.0" prefWidth="53.0" text="0" />
-      <TextField fx:id="txt_total_spe" disable="true" editable="false" layoutX="412.0" layoutY="423.0" prefHeight="25.0" prefWidth="53.0" text="0" />
-      <Label fx:id="lab_a1" layoutX="117.0" layoutY="486.0" text="Ataque 1" />
-      <Label fx:id="lab_a2" layoutX="117.0" layoutY="521.0" text="Ataque 2" />
-      <Label fx:id="lab_a3" layoutX="117.0" layoutY="554.0" text="Ataque 3" />
-      <Label layoutX="123.0" layoutY="426.0" text="Velocidad" />
-      <ComboBox fx:id="com_rol" layoutX="234.0" layoutY="591.0" onAction="#updateRolStats" prefWidth="150.0" />
-      <Label layoutX="201.0" layoutY="595.0" text="Rol" />
-      <ImageView fx:id="image_presentation" fitHeight="150.0" fitWidth="200.0" layoutX="65.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../../../../../../../Downloads/goku.png" />
-         </image>
-      </ImageView>
-      <Label layoutX="101.0" layoutY="189.0" text="Imagen de Presentación" />
-      <ImageView fx:id="image_card" fitHeight="150.0" fitWidth="200.0" layoutX="328.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../../../../../../../../Downloads/200x150.png" />
-         </image>
-      </ImageView>
-      <TextField fx:id="txt_image_card" layoutX="319.0" layoutY="220.0" />
-      <Button fx:id="btn_image_card" layoutX="477.0" layoutY="220.0" mnemonicParsing="false" onAction="#set_Card" text="Cargar..." />
-      <Button fx:id="btn_create" layoutX="205.0" layoutY="639.0" mnemonicParsing="false" onAction="#add" text="Crear y guardar" />
-      <Button fx:id="btn_cancel" layoutX="316.0" layoutY="639.0" mnemonicParsing="false" onAction="#cancel" text="Cancelar" />
-      <Label layoutX="364.0" layoutY="189.0" text="Imagen de Batalla" />
-      <TextField fx:id="txt_rol_def" disable="true" editable="false" layoutX="246.0" layoutY="392.0" prefHeight="25.0" prefWidth="53.0" text="0" />
-      <TextField fx:id="txt_rol_hp" disable="true" editable="false" layoutX="246.0" layoutY="331.0" prefHeight="25.0" prefWidth="53.0" text="0" />
-      <TextField fx:id="txt_rol_atk" disable="true" editable="false" layoutX="246.0" layoutY="361.0" prefHeight="25.0" prefWidth="53.0" text="0" />
-      <TextField fx:id="txt_rol_spe" disable="true" editable="false" layoutX="246.0" layoutY="422.0" prefHeight="25.0" prefWidth="53.0" text="0" />
-      <TextField fx:id="txt_def" layoutX="328.0" layoutY="393.0" onKeyReleased="#updateTextSDEF" prefHeight="25.0" prefWidth="53.0" text="0" />
-      <TextField fx:id="txt_hp" layoutX="328.0" layoutY="332.0" onKeyReleased="#updateTextSHP" prefHeight="25.0" prefWidth="53.0" text="0" />
-      <TextField fx:id="txt_atk" layoutX="328.0" layoutY="362.0" onKeyReleased="#updateTextSATK" prefHeight="25.0" prefWidth="53.0" text="0" />
-      <TextField fx:id="txt_spe" layoutX="328.0" layoutY="423.0" onKeyReleased="#updateTextSSPE" prefHeight="25.0" prefWidth="53.0" text="0" />
-      <Label layoutX="310.0" layoutY="397.0" text="+" />
-      <Label layoutX="310.0" layoutY="365.0" text="+" />
-      <Label layoutX="310.0" layoutY="336.0" text="+" />
-      <Label layoutX="310.0" layoutY="426.0" text="+" />
-      <Label layoutX="393.0" layoutY="335.0" text="=" />
-      <Label layoutX="393.0" layoutY="366.0" text="=" />
-      <Label layoutX="393.0" layoutY="396.0" text="=" />
-      <Label layoutX="393.0" layoutY="426.0" text="=" />
-      <Label layoutX="246.0" layoutY="263.0" text="Puntos de Refuerzo :" />
-      <Label fx:id="lab_pnts" layoutX="367.0" layoutY="263.0" text="400" />
-      <ComboBox fx:id="com_att_1" layoutX="234.0" layoutY="482.0" prefWidth="150.0" />
-      <ComboBox fx:id="com_att_2" layoutX="234.0" layoutY="517.0" prefWidth="150.0" />
-      <ComboBox fx:id="com_att_3" layoutX="234.0" layoutY="550.0" prefWidth="150.0" />
-      <Button fx:id="btn_edit_Attack" layoutX="394.0" layoutY="517.0" mnemonicParsing="false" onAction="#viewAttacks" prefHeight="25.0" prefWidth="128.0" text="Gestor de Ataques..." />
-      <Label layoutX="398.0" layoutY="263.0" text="(x2 en HP)" />
-   </children>
-</AnchorPane>
+<TabPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-image: url('file:src/main/resources/images/back.jpg');" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Final_Showdown.Character_Creation_Controller">
+   <tabs>
+      <Tab fx:id="tab1" text="Universo">
+         <content>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <Line endX="499.29290771484375" endY="-3.0517578125E-5" layoutX="100.0" layoutY="311.0" startX="-100.0" AnchorPane.leftAnchor="-0.7071075439453125" AnchorPane.rightAnchor="1.52587890625E-5" />
+                  <Line endX="-100.00001525878906" endY="-110.0" layoutX="152.0" layoutY="133.0" startX="-100.20713806152344" startY="157.29287719726562" />
+                  <Line endX="373.33331298828125" endY="3.814697265625E-6" layoutX="152.0" layoutY="23.0" startX="-7.3333282470703125" startY="3.814697265625E-6" />
+                  <Line endX="373.33331298828125" endY="3.814697265625E-6" layoutX="151.0" layoutY="291.0" startX="-98.50001525878906" startY="0.1666259765625" />
+                  <Line endX="-98.95965576171875" endY="-109.0" layoutX="625.0" layoutY="132.0" startX="-99.9595947265625" startY="159.08328247070312" />
+                  <Text layoutX="100.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Datos :" />
+                  <Line endX="-79.66666412353516" endY="-0.4999961853027344" layoutX="173.0" layoutY="23.0" startX="-120.50001525878906" startY="-0.4999961853027344" />
+                  <Button fx:id="btn_create" layoutX="245.0" layoutY="324.0" mnemonicParsing="false" text="Crear" />
+                  <Button fx:id="btn_cancel" layoutX="295.0" layoutY="324.0" mnemonicParsing="false" onAction="#cancel" text="Cancelar" />
+                  <GridPane layoutX="177.0" layoutY="53.0" prefHeight="208.0" prefWidth="221.0">
+                     <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="105.66668701171875" minWidth="10.0" prefWidth="66.33335367838541" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="161.6667022705078" minWidth="10.0" prefWidth="154.33331298828125" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <Label text="Nombre" />
+                        <Label text="Universo" GridPane.rowIndex="1" />
+                        <Label text="Descripcion" GridPane.rowIndex="2" />
+                        <Label text="Bando" GridPane.rowIndex="3" />
+                        <TextField fx:id="txt_name" GridPane.columnIndex="1" />
+                        <TextField fx:id="txt_universe" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextArea fx:id="are_description" prefHeight="200.0" prefWidth="200.0" text="meter universe" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <ComboBox fx:id="com_band" prefHeight="25.0" prefWidth="163.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                     </children>
+                  </GridPane>
+               </children>
+            </AnchorPane>
+         </content>
+      </Tab>
+      <Tab fx:id="tab11" text="Combate">
+         <content>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <Line endX="-100.00001525878906" endY="-110.0" layoutX="152.0" layoutY="133.0" startX="-100.20713806152344" startY="97.29289245605469" />
+                  <Line endX="491.5" endY="-0.414306640625" layoutX="32.0" layoutY="298.0" startX="22.000015258789062" startY="5.7220458984375E-6" />
+                  <Line endX="373.33331298828125" endY="3.814697265625E-6" layoutX="151.0" layoutY="231.0" startX="-98.50001525878906" startY="0.1666259765625" />
+                  <Line endX="-98.95965576171875" endY="-109.0" layoutX="625.0" layoutY="132.0" startX="-99.9595947265625" startY="98.29289245605469" />
+                  <Text layoutX="100.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Estadísticas :" />
+                  <Line endX="-79.66666412353516" endY="-0.4999961853027344" layoutX="173.0" layoutY="23.0" startX="-120.50001525878906" startY="-0.4999961853027344" />
+                  <Button fx:id="btn_create2" layoutX="245.0" layoutY="324.0" mnemonicParsing="false" text="Crear" />
+                  <Button fx:id="btn_cancel2" layoutX="295.0" layoutY="324.0" mnemonicParsing="false" text="Cancelar" />
+                  <GridPane layoutX="84.0" layoutY="38.0" prefHeight="184.0" prefWidth="411.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <TextField fx:id="txt_rol_hp" editable="false" prefHeight="25.0" prefWidth="37.0" text="0" GridPane.columnIndex="1" />
+                        <TextField fx:id="txt_hp" onKeyReleased="#updateTextSHP" text="0" GridPane.columnIndex="3" />
+                        <TextField fx:id="txt_total_hp" editable="false" text="0" GridPane.columnIndex="5" />
+                        <Label text="+" GridPane.columnIndex="2">
+                           <GridPane.margin>
+                              <Insets left="30.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <Label text="*2 =" GridPane.columnIndex="4">
+                           <GridPane.margin>
+                              <Insets left="15.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <TextField fx:id="txt_rol_atk" editable="false" prefHeight="25.0" prefWidth="48.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label text="+" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                           <GridPane.margin>
+                              <Insets left="30.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <Label text="=" GridPane.columnIndex="4" GridPane.rowIndex="1">
+                           <GridPane.margin>
+                              <Insets left="30.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <Label text="+" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                           <GridPane.margin>
+                              <Insets left="30.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <Label text="=" GridPane.columnIndex="4" GridPane.rowIndex="2">
+                           <GridPane.margin>
+                              <Insets left="30.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <Label text="+" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                           <GridPane.margin>
+                              <Insets left="30.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <Label text="=" GridPane.columnIndex="4" GridPane.rowIndex="3">
+                           <GridPane.margin>
+                              <Insets left="30.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <Label text="HP" />
+                        <Label text="Ataque" GridPane.rowIndex="1" />
+                        <Label text="Defensa" GridPane.rowIndex="2" />
+                        <Label text="Velocidad" GridPane.rowIndex="3" />
+                        <Label prefHeight="17.0" prefWidth="91.0" text="Energía" GridPane.rowIndex="4" />
+                        <Label text="Restauración" GridPane.rowIndex="5" />
+                        <TextField fx:id="txt_rol_def" editable="false" text="0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <TextField fx:id="txt_rol_spe" editable="false" text="0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <TextField fx:id="txt_energy_ini" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <TextField fx:id="txt_energy_recover" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                        <TextField fx:id="txt_atk" onAction="#updateTextSATK" onKeyReleased="#updateTextSATK" text="0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                        <TextField fx:id="txt_def" onAction="#updateTextSDEF" onKeyReleased="#updateTextSDEF" text="0" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                        <TextField fx:id="txt_spe" onAction="#updateTextSSPE" onKeyReleased="#updateTextSSPE" text="0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                        <TextField fx:id="txt_total_atk" editable="false" text="0" GridPane.columnIndex="5" GridPane.rowIndex="1" />
+                        <TextField fx:id="txt_total_def" editable="false" text="0" GridPane.columnIndex="5" GridPane.rowIndex="2" />
+                        <TextField fx:id="txt_total_spe" editable="false" text="0" GridPane.columnIndex="5" GridPane.rowIndex="3" />
+                        <Label text="Rol" GridPane.rowIndex="6" />
+                        <ComboBox fx:id="com_rol" onAction="#updateRolStats" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Puntos de Refuerzo :" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+                        <Label fx:id="lab_pnts" text="400" GridPane.columnIndex="5" GridPane.rowIndex="5" />
+                        <Label text="(x2 en HP)" GridPane.columnIndex="5" GridPane.rowIndex="6" />
+                     </children>
+                  </GridPane>
+                  <Line endX="102.66667938232422" endY="-7.62939453125E-5" layoutX="-10.0" layoutY="242.0" startX="63.000030517578125" startY="-6.103515625E-5" />
+                  <Line endX="373.33331298828125" endY="3.814697265625E-6" layoutX="151.0" layoutY="242.0" startX="4.3333282470703125" startY="-1.52587890625E-5" />
+                  <Text layoutX="100.0" layoutY="247.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ataques :" />
+                  <Line endX="-98.70710754394531" endY="54.878570556640625" layoutX="152.0" layoutY="242.0" startX="-100.0" />
+                  <Line endX="-99.79290771484375" endY="53.878570556640625" layoutX="624.0" layoutY="243.0" startX="-100.0" />
+                  <Line endX="218.333251953125" endY="0.29289817810058594" layoutX="306.0" layoutY="22.0" startX="-131.33335876464844" startY="0.29289817810058594" />
+                  <GridPane layoutX="132.0" layoutY="267.0" prefWidth="326.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <ComboBox fx:id="com_att_1" onAction="#updateAttacksBox" prefWidth="150.0">
+                           <GridPane.margin>
+                              <Insets left="5.0" />
+                           </GridPane.margin>
+                        </ComboBox>
+                        <ComboBox fx:id="com_att_2" onAction="#updateAttacksBox" prefWidth="150.0" GridPane.columnIndex="1">
+                           <GridPane.margin>
+                              <Insets left="5.0" />
+                           </GridPane.margin>
+                        </ComboBox>
+                        <ComboBox fx:id="com_att_3" onAction="#updateAttacksBox" prefWidth="150.0" GridPane.columnIndex="2">
+                           <GridPane.margin>
+                              <Insets left="5.0" />
+                           </GridPane.margin>
+                        </ComboBox>
+                     </children>
+                  </GridPane>
+                  <Label layoutX="168.0" layoutY="250.0" text="Ataque 1" />
+                  <Label layoutX="273.0" layoutY="250.0" text="Ataque 2" />
+                  <Label layoutX="375.0" layoutY="250.0" text="Ataque 3" />
+                  <Line endX="499.29290771484375" endY="-3.0517578125E-5" layoutX="100.0" layoutY="311.0" startX="-100.0" />
+               </children>
+            </AnchorPane>
+         </content>
+      </Tab>
+      <Tab fx:id="tab2" text="Recursos">
+         <content>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="213.0" layoutX="42.0" layoutY="45.0" stroke="BLACK" strokeType="INSIDE" width="250.0" />
+                  <TextField fx:id="txt_image_presentation" layoutX="60.0" layoutY="270.0" />
+                  <Button fx:id="btn_image_presentation" layoutX="214.0" layoutY="270.0" mnemonicParsing="false" onAction="#set_Presentation" text="Cargar..." />
+                  <ImageView fx:id="image_presentation" fitHeight="200.0" fitWidth="205.0" layoutX="67.0" layoutY="52.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../../../../Downloads/arsene_attack.jpg" />
+                     </image>
+                  </ImageView>
+                  <Button fx:id="btn_create3" layoutX="245.0" layoutY="324.0" mnemonicParsing="false" text="Crear" />
+                  <Button fx:id="btn_cancel3" layoutX="295.0" layoutY="324.0" mnemonicParsing="false" text="Cancelar" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="213.0" layoutX="308.0" layoutY="45.0" stroke="BLACK" strokeType="INSIDE" width="250.0" />
+                  <TextField fx:id="txt_image_card" layoutX="326.0" layoutY="270.0" />
+                  <Button fx:id="btn_image_card" layoutX="480.0" layoutY="270.0" mnemonicParsing="false" onAction="#set_Card" text="Cargar..." />
+                  <Line endX="499.29290771484375" endY="-3.0517578125E-5" layoutX="100.0" layoutY="311.0" startX="-100.0" />
+                  <Label layoutX="118.0" layoutY="14.0" text="Foto del Personaje" />
+                  <Label layoutX="394.0" layoutY="14.0" text="Foto de Batalla" />
+                  <ImageView fx:id="image_card" fitHeight="200.0" fitWidth="205.0" layoutX="333.0" layoutY="52.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../../../../Downloads/arsene_attack.jpg" />
+                     </image>
+                  </ImageView>
+               </children>
+            </AnchorPane>
+         </content>
+      </Tab>
+   </tabs>
+</TabPane>

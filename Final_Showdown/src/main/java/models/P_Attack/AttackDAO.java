@@ -134,4 +134,22 @@ public class AttackDAO extends Attack{
 			}
 		}
 	}
+	
+	public static int getNewId() {
+		//calcula el id mas alto de todos y suma 1
+		int result=-1;
+		if(attacks!=null&&attacks.size()>0) {
+			for(Attack a: attacks) {
+				if(a.getId()>result) {
+					result=a.getId();
+				}
+			}
+			
+			result++;
+		}
+		else{
+			return 0;
+		}
+		return result;
+	}
 }
