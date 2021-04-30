@@ -1,18 +1,206 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="285.0" prefWidth="224.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Final_Showdown.PrimaryController">
-   <children>
-      <TableView fx:id="table_char" layoutX="47.0" layoutY="26.0" prefHeight="200.0" prefWidth="129.0">
-        <columns>
-          <TableColumn fx:id="col_name" prefWidth="128.00000508626303" text="Nombre" />
-        </columns>
-      </TableView>
-      <Button fx:id="btn_add" layoutX="47.0" layoutY="243.0" mnemonicParsing="false" onAction="#add" text="Agregar" />
-      <Button fx:id="btn_view" layoutX="120.0" layoutY="243.0" mnemonicParsing="false" onAction="#view" text="imagen" />
-   </children>
-</AnchorPane>
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-image: url('file:src/main/resources/images/back.jpg');" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Final_Showdown.PrimaryController">
+  <tabs>
+    <Tab text="Personajes">
+         <content>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <AnchorPane layoutX="6.0" prefHeight="371.0" prefWidth="149.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="451.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <TableView fx:id="table_char" layoutX="6.0" layoutY="34.0" onMouseReleased="#select" prefHeight="331.0" prefWidth="144.0" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="34.0">
+                          <columns>
+                            <TableColumn fx:id="col_name" prefWidth="147.66666662693024" text="Nombre" />
+                          </columns>
+                        </TableView>
+                        <TextField fx:id="txt_filter" layoutX="5.0" layoutY="14.0" onKeyReleased="#filter" prefHeight="25.0" prefWidth="145.0" AnchorPane.topAnchor="5.0" />
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane layoutX="150.0" prefHeight="371.0" prefWidth="451.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="173.0" layoutX="140.0" layoutY="41.0" stroke="BLACK" strokeType="INSIDE" width="172.0" />
+                        <Line endX="-35.99998474121094" endY="-0.49999427795410156" layoutX="133.0" layoutY="24.0" startX="-112.00001525878906" startY="-0.49999427795410156" />
+                        <Line endX="51.0" endY="5.7220458984375E-6" layoutX="378.0" layoutY="24.0" startX="-30.999969482421875" startY="5.7220458984375E-6" />
+                        <Line endX="-100.70713806152344" endY="277.6666259765625" layoutX="133.0" layoutY="35.0" startX="-100.70713806152344" startY="-10.999994277954102" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="32.5" />
+                        <Line endX="280.6666259765625" endY="0.1666259765625" layoutX="149.0" layoutY="313.0" startX="-128.00001525878906" startY="0.1666259765625" />
+                        <Line endX="99.6311264038086" endY="-40.49999237060547" layoutX="318.0" layoutY="65.0" startX="100.0" startY="247.6666259765625" AnchorPane.rightAnchor="20.0" />
+                        <Button fx:id="btn_create_1" layoutX="81.0" layoutY="324.0" mnemonicParsing="false" onAction="#createCharacter" text="Crear..." AnchorPane.leftAnchor="70.0" />
+                        <Button fx:id="btn_edit_1" layoutX="198.0" layoutY="324.0" mnemonicParsing="false" onAction="#editCharacter" text="Editar..." />
+                        <Button fx:id="btn_delete_1" layoutX="317.0" layoutY="324.0" mnemonicParsing="false" onAction="#deleteCharacter" text="Eliminar..." AnchorPane.rightAnchor="70.0" />
+                        <GridPane layoutX="127.0" layoutY="214.0" prefHeight="97.0" prefWidth="200.0">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <Label text="Universo :" GridPane.halignment="RIGHT" />
+                              <Label text="Bando :" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+                              <Label text="Poder: " GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
+                              <Label text="Rol :" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
+                              <Label fx:id="lab_universe" text="Label" GridPane.columnIndex="1">
+                                 <GridPane.margin>
+                                    <Insets left="5.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label fx:id="lab_band" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <GridPane.margin>
+                                    <Insets left="5.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label fx:id="lab_power" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                 <GridPane.margin>
+                                    <Insets left="5.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label fx:id="lab_rol" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                 <GridPane.margin>
+                                    <Insets left="5.0" />
+                                 </GridPane.margin>
+                              </Label>
+                           </children>
+                        </GridPane>
+                        <GridPane layoutX="98.0" layoutY="8.0" prefHeight="30.0" prefWidth="247.0">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <Label fx:id="lab_name" alignment="CENTER" contentDisplay="CENTER" text="personaje" underline="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                                 <font>
+                                    <Font name="Showcard Gothic" size="24.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </GridPane>
+                        <ImageView fx:id="img_view_chara" fitHeight="162.0" fitWidth="79.0" layoutX="187.0" layoutY="57.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../../../../../Downloads/naruto%20face.jpg" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </AnchorPane>
+               </children>
+            </AnchorPane>
+         </content>
+    </Tab>
+    <Tab text="Ataques">
+      <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <AnchorPane prefHeight="371.0" prefWidth="149.0">
+                     <children>
+                        <TableView fx:id="table_attack" layoutX="6.0" layoutY="34.0" onMouseReleased="#select_2" prefHeight="331.0" prefWidth="144.0" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="34.0">
+                           <columns>
+                              <TableColumn fx:id="col_attack" prefWidth="147.66666662693024" text="Nombre" />
+                           </columns>
+                        </TableView>
+                        <TextField fx:id="txt_filter_2" layoutX="5.0" layoutY="14.0" onKeyReleased="#filter" prefHeight="25.0" prefWidth="145.0" AnchorPane.topAnchor="5.0" />
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane layoutX="151.0" prefHeight="371.0" prefWidth="451.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="150.0">
+                     <children>
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="173.0" layoutX="140.0" layoutY="41.0" stroke="BLACK" strokeType="INSIDE" width="172.0" />
+                        <Line endX="-35.99998474121094" endY="-0.49999427795410156" layoutX="133.0" layoutY="24.0" startX="-112.00001525878906" startY="-0.49999427795410156" />
+                        <Line endX="51.0" endY="5.7220458984375E-6" layoutX="378.0" layoutY="24.0" startX="-30.999969482421875" startY="5.7220458984375E-6" />
+                        <Line endX="-100.70713806152344" endY="277.6666259765625" layoutX="133.0" layoutY="35.0" startX="-100.70713806152344" startY="-10.999994277954102" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="32.5" />
+                        <Line endX="280.6666259765625" endY="0.1666259765625" layoutX="149.0" layoutY="313.0" startX="-128.00001525878906" startY="0.1666259765625" />
+                        <Line endX="99.6311264038086" endY="-40.49999237060547" layoutX="318.0" layoutY="65.0" startX="100.0" startY="247.6666259765625" AnchorPane.rightAnchor="20.0" />
+                        <Button fx:id="btn_create_2" layoutX="81.0" layoutY="324.0" mnemonicParsing="false" onAction="#createAttack" text="Crear..." AnchorPane.leftAnchor="70.0" />
+                        <Button fx:id="btn_edit_2" layoutX="198.0" layoutY="324.0" mnemonicParsing="false" onAction="#editAttack" text="Editar..." />
+                        <Button fx:id="btn_delete_2" layoutX="317.0" layoutY="324.0" mnemonicParsing="false" onAction="#deleteCharacter" text="Eliminar..." AnchorPane.rightAnchor="70.0" />
+                        <GridPane layoutX="127.0" layoutY="214.0" prefHeight="97.0" prefWidth="200.0">
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <Label text="Potencia :" GridPane.halignment="RIGHT" />
+                              <Label text="Coste :" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+                              <Label text="Acierto :" GridPane.halignment="RIGHT" GridPane.rowIndex="2" />
+                              <Label text="Extra :" GridPane.halignment="RIGHT" GridPane.rowIndex="3" />
+                              <Label fx:id="lab_power_2" text="Label" GridPane.columnIndex="1">
+                                 <GridPane.margin>
+                                    <Insets left="5.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label fx:id="lab_cost" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <GridPane.margin>
+                                    <Insets left="5.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label fx:id="lab_hit_rate" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                 <GridPane.margin>
+                                    <Insets left="5.0" />
+                                 </GridPane.margin>
+                              </Label>
+                              <Label fx:id="lab_extra_name" prefHeight="17.0" prefWidth="101.0" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                 <GridPane.margin>
+                                    <Insets left="5.0" />
+                                 </GridPane.margin>
+                              </Label>
+                           </children>
+                        </GridPane>
+                        <GridPane layoutX="98.0" layoutY="8.0" prefHeight="30.0" prefWidth="247.0">
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <Label fx:id="lab_name_2" alignment="CENTER" contentDisplay="CENTER" text="ataque" underline="true" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                                 <font>
+                                    <Font name="Showcard Gothic" size="24.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </GridPane>
+                        <ImageView fx:id="img_view_attack" fitHeight="162.0" fitWidth="79.0" layoutX="187.0" layoutY="57.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/attacks/adefault.jpg" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </AnchorPane>
+               </children></AnchorPane>
+      </content>
+    </Tab>
+      <Tab text="Combate">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+        </content>
+      </Tab>
+  </tabs>
+</TabPane>

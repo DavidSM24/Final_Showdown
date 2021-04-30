@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.time.zone.ZoneOffsetTransitionRule.TimeDefinition;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,6 +15,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView.TableViewSelectionModel;
@@ -32,13 +34,14 @@ import models.P_Character.Character;
 import models.P_Character.CharacterDAO;
 import models.P_Character.Rol;
 import models.P_Character.RolDAO;
+import utils.FileUtilities;
 
 public class Character_Creation_Controller {
 	
 	//variables
 	ObservableList<Attack> attacks=AttackDAO.attacks;
 	ObservableList<Rol> roles=RolDAO.roles;
-	Character chara= null;
+	Character c= null;
 	
 	protected PrimaryController dad;
 	protected Character_Creation_Controller me;
@@ -126,7 +129,130 @@ public class Character_Creation_Controller {
 	//méthods
 	@FXML
 	private void add() {
+		File image_presentation=new File(txt_image_presentation.getText());
+		File image_card=new File(txt_image_card.getText());
 		
+		if(
+				  txt_name.getText().matches("")
+				||txt_universe.getText().matches("")
+				||txt_energy_ini.getText().matches("")
+				||txt_energy_recover.getText().matches("")
+				||!txt_energy_ini.getText().matches("[0-9]+")
+				||!txt_energy_recover.getText().matches("[0-9]+")
+				||(
+						!this.txt_image_presentation.getText().matches(".+\\.jpg")
+						&&
+						!this.txt_image_presentation.getText().matches(".+\\.png")
+						&&
+						!this.txt_image_presentation.getText().matches("")
+				)
+				||(
+						!this.txt_image_card.getText().matches(".+\\.jpg")
+						&&
+						!this.txt_image_card.getText().matches(".+\\.png")
+						&&
+						!this.txt_image_card.getText().matches("")
+				)) {
+			
+			Alert alerterror=new Alert(AlertType.INFORMATION);
+    		alerterror.setHeaderText(null);
+    		alerterror.setTitle("Información");
+    		String f="";
+    		
+    		if(
+    				!this.txt_image_presentation.getText().matches(".+\\.jpg")
+						&&
+					!this.txt_image_presentation.getText().matches(".+\\.png")
+						&&
+					!this.txt_image_presentation.getText().matches("")) {
+    			f+="\n -El archivo solicitado para la imagen del personaje no es ni png ni jpg.";
+    		}
+    		
+    		if(
+    				!this.txt_image_card.getText().matches(".+\\.jpg")
+						&&
+					!this.txt_image_card.getText().matches(".+\\.png")
+						&&
+					!this.txt_image_card.getText().matches("")) {
+    			f+="\n -El archivo solicitado para la imagen de batalla no es ni png ni jpg.";
+    		}
+    		
+    		if(txt_name.getText().matches("")) {
+    			f+="\n -Debe rellenar el campo Nombre.";
+    		}
+    		
+    		if(txt_universe.getText().matches("")) {
+    			f+="\n -Debe rellenar el campo Universo.";
+    		}
+    		    		
+    		if(this.txt_energy_ini.getText().matches("")) {
+    			f+="\n -Debe rellenar el campo Energía Inicial.";
+    		}
+    		else if(!txt_energy_ini.getText().matches("[0-9]+")) {
+    			f+="\n -Debe rellenar el campo Energía Inicial con un valor numérico.";
+    		}
+    		
+    		if(this.txt_energy_recover.getText().matches("")) {
+    			f+="\n -Debe rellenar el campo Recuperación.";
+    		}
+    		else if(!txt_energy_recover.getText().matches("[0-9]+")) {
+    			f+="\n -Debe rellenar el campo Recuperación con un valor numérico.";
+    		}
+    		
+    		Alert alert=new Alert(AlertType.INFORMATION);
+    		alert.setHeaderText(null);
+    		alert.setTitle("Información");
+    		alert.setContentText(f);
+    		alert.showAndWait();
+    			
+			
+		}
+		else if(!txt_image_presentation.getText().matches("")&&!image_presentation.exists()
+				||!txt_image_card.getText().matches("")&&!image_card.exists()) {
+			String f="";
+			if(!txt_image_presentation.getText().matches("")&&!image_presentation.exists()) {
+				f+=" -El recurso para la imagen de personaje seleccionado no existe.";
+			}
+			if(!txt_image_card.getText().matches("")&&!image_card.exists()) {
+				f+=" -El recurso para la imagen de batalla seleccionado no existe.";
+			}
+			Alert alert=new Alert(AlertType.INFORMATION);
+    		alert.setHeaderText(null);
+    		alert.setTitle("Información");
+    		alert.setContentText(f);
+    		alert.showAndWait();
+		}
+		
+		else { //se añade...
+	
+			if(txt_image_presentation.getText().matches("")||txt_image_presentation.getText().matches("")) {
+				String f="";
+				if(txt_image_presentation.getText().matches("")) {
+					f+=" -No hay imagen para el personaje.\n";
+				}
+				if(txt_image_presentation.getText().matches("")) {
+					f+=" -No hay imagen para la batalla.\n";
+				}
+				f+=" ¿Desea crear este personaje usando recursos predeterminados?";
+				Alert alert = new Alert(AlertType.CONFIRMATION);
+				alert.setHeaderText(null);
+				alert.setTitle("Confirmación");
+				alert.setContentText(f);
+
+				Optional<ButtonType> result = alert.showAndWait();
+				if (result.get() == ButtonType.OK){
+					generateCharacter();
+				}
+				else {
+					//nada
+				}
+			}
+			else {
+				//generar directamente...
+				generateCharacter();
+			}
+			
+		}
 	}
 	
 	@FXML
@@ -189,6 +315,7 @@ public class Character_Creation_Controller {
 		ObservableList<String> bands=FXCollections.observableArrayList();
 		bands.addAll("Héroe","Villano","Neutral");
 		com_band.setItems(bands);
+		com_band.setValue("Héroe");
 		
 		if(attacks!=null&&attacks.size()>0) {
 			com_att_1.setItems(attacks);
@@ -200,11 +327,11 @@ public class Character_Creation_Controller {
 			
 		}
 		if(chara!=null) {
-			this.chara=chara;
-			this.are_description.setText(chara.getDescription());
-			this.txt_name.setText(chara.getName());
-			this.txt_universe.setText(chara.getUniverse());
-			this.com_band.setValue(chara.getBand());
+			c=chara;
+			are_description.setText(chara.getDescription());
+			txt_name.setText(chara.getName());
+			txt_universe.setText(chara.getUniverse());
+			com_band.setValue(chara.getBand());
 			txt_hp.setText(((chara.getHp()-chara.getRol().getHp_base())/2)+"");
 			txt_total_hp.setText(chara.getHp()+"");
 			txt_atk.setText((chara.getAtk()-chara.getRol().getAtk_base())+"");
@@ -222,7 +349,19 @@ public class Character_Creation_Controller {
 			com_att_3.setValue(chara.getA3());
 			
 			//falta meter las imagenes...
+			File f=new File(c.getPhoto_face());
+			Image face= new Image("file:"+f.getPath());
+			image_presentation.setImage(face);
+			if(!chara.getPhoto_face().equals("src/main/resources/images/characters/face/cfdefault.jpg")) {
+				txt_image_presentation.setText(c.getPhoto_face());
+			}
 			
+			File f2=new File(c.getPhoto_card());
+			Image card= new Image("file:"+f2.getPath());
+			image_card.setImage(card);
+			if(!chara.getPhoto_card().equals("src/main/resources/images/characters/card/ccdefault.jpg")) {
+				txt_image_card.setText(c.getPhoto_card());
+			}
 		}
 	}
 	
@@ -426,38 +565,163 @@ public class Character_Creation_Controller {
 			txt_total_spe.setText(txt_rol_spe.getText());
 		}
 	}
-	
-	@FXML
-	private void updateAttacksBox() {
-		if(com_att_1.getSelectionModel().getSelectedItem()!=null) {
-			attacks.set(0, com_att_1.getSelectionModel().getSelectedItem());
-		}
-		if(com_att_2.getSelectionModel().getSelectedItem()!=null) {
-			attacks.set(1, com_att_2.getSelectionModel().getSelectedItem());
-		}
-		if(com_att_3.getSelectionModel().getSelectedItem()!=null) {
-			attacks.set(2, com_att_3.getSelectionModel().getSelectedItem());
-		}
-	}
 
-	@FXML
-	private void viewAttacks() {
-		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("attack_view.fxml"));
-			Parent root = loader.load();
-			
-			Attack_View_Controller attack_view=loader.getController();
-			attack_view.setController(dad, me, attacks.get(0));
-			Scene scene= new Scene(root);
-			Stage stage= new Stage();
-			stage.getIcons().add(new Image("file:src/main/resources/images/icons/icon_attack_creator.png"));
-			stage.setTitle("Visualizador de Ataques");
-			stage.setScene(scene);
-			stage.show();
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	private void generateCharacter() {
+		int newId=CharacterDAO.getNewId();
+		
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setHeaderText(null);
+		alert.setTitle("Confirmación");
+		alert.setContentText(" ¿Desea generar y guardar el personaje que ha creado?");
+
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == ButtonType.OK){
+			if(c==null) { // insert
+				c=new Character();
+
+				c.setId(newId);
+				c.setName(txt_name.getText());
+				c.setUniverse(txt_universe.getText());
+				c.setDescription(are_description.getText());
+				c.setBand(com_band.getSelectionModel().getSelectedItem());
+				c.setHp(Integer.parseInt(txt_total_hp.getText()));
+				c.setEnergy_ini(Integer.parseInt(txt_energy_ini.getText()));
+				c.setEnergy_recover(Integer.parseInt(txt_energy_recover.getText()));
+				c.setAtk(Integer.parseInt(txt_total_atk.getText()));
+				c.setDef(Integer.parseInt(txt_total_def.getText()));
+				c.setSpe(Integer.parseInt(txt_total_spe.getText()));
+				c.setA1(com_att_1.getSelectionModel().getSelectedItem());
+				c.setA2(com_att_2.getSelectionModel().getSelectedItem());
+				c.setA3(com_att_3.getSelectionModel().getSelectedItem());
+				c.setRol(com_rol.getSelectionModel().getSelectedItem());
+
+				if(!txt_image_presentation.getText().matches("")) {
+					String realaddress= "src/main/resources/images/characters/face/cf"+c.getId()+".jpg";
+					c.setPhoto_face(realaddress);
+					FileUtilities.saveImage(txt_image_presentation.getText(),realaddress);
+				}
+				else {
+					c.setPhoto_face("src/main/resources/images/characters/face/cfdefault.jpg");
+				}
+				
+				if(!txt_image_card.getText().matches("")) {
+					String realaddress= "src/main/resources/images/characters/card/cc"+c.getId()+".jpg";
+					c.setPhoto_card(realaddress);
+					FileUtilities.saveImage(txt_image_card.getText(),realaddress);
+				}
+				else {
+					c.setPhoto_card("src/main/resources/images/characters/card/ccdefault.jpg");
+				}
+				CharacterDAO.guardar(c);
+				
+				dad.setTableAndDetailsInfo();
+				
+				Alert alert4=new Alert(AlertType.INFORMATION);
+	    		alert4.setHeaderText(null);
+	    		alert4.setTitle("Información");
+	    		alert4.setContentText("¡Personaje guardado con éxito!");
+	    		alert4.showAndWait();
+	    		
+	    		Stage stage = (Stage) this.btn_create.getScene().getWindow();
+	    		stage.close();
+			}
+			else { //update
+				Alert alert2 = new Alert(AlertType.CONFIRMATION);
+				alert2.setHeaderText(null);
+				alert2.setTitle("Sobreescribir");
+				alert2.setContentText(" Estás intentando sobreescribir un personaje, ¿estás seguro de que quieres eliminar el personaje existente?");
+
+				Optional<ButtonType> result2 = alert2.showAndWait();
+				if (result2.get() == ButtonType.OK){
+					c.setName(txt_name.getText());
+					c.setUniverse(txt_universe.getText());
+					c.setDescription(are_description.getText());
+					c.setBand(com_band.getSelectionModel().getSelectedItem());
+					c.setHp(Integer.parseInt(txt_total_hp.getText()));
+					c.setEnergy_ini(Integer.parseInt(txt_energy_ini.getText()));
+					c.setEnergy_recover(Integer.parseInt(txt_energy_recover.getText()));
+					c.setAtk(Integer.parseInt(txt_total_atk.getText()));
+					c.setDef(Integer.parseInt(txt_total_def.getText()));
+					c.setSpe(Integer.parseInt(txt_total_spe.getText()));
+					c.setA1(com_att_1.getSelectionModel().getSelectedItem());
+					c.setA2(com_att_2.getSelectionModel().getSelectedItem());
+					c.setA2(com_att_2.getSelectionModel().getSelectedItem());
+					c.setRol(com_rol.getSelectionModel().getSelectedItem());
+
+					//guardamos la info en funcion de si es default o no
+					
+					//face
+					if(!txt_image_presentation.getText().equals(c.getPhoto_face())){
+						
+						if(txt_image_presentation.getText().matches("")) { //si es default...
+							if(!c.getPhoto_face().matches("src/main/resources/images/characters/face/cfdefault.jpg")) { //no la tenia default
+								FileUtilities.removeFile(c.getPhoto_face());
+								c.setPhoto_face("src/main/resources/images/characters/face/cfdefault.jpg");
+							}
+							else { //antes la tenia default
+								//no se hace nada...
+							}			
+						}
+						else { //si es personalizada...
+							if(c.getPhoto_face().matches("src/main/resources/images/characters/face/cfdefault.jpg")) { //la tenia default
+								String realaddress= "src/main/resources/images/characters/face/cf"+c.getId()+".jpg";
+								c.setPhoto_face(realaddress);
+								FileUtilities.saveImage(txt_image_presentation.getText(),realaddress);
+							}
+							else { //no la tenia a default... hay que eliminar!!
+								String realaddress= "src/main/resources/images/characters/face/cf"+c.getId()+".jpg";
+								c.setPhoto_face(realaddress);
+								FileUtilities.saveImage(txt_image_presentation.getText(),realaddress);
+							}
+						}
+					}
+					
+					//card
+					if(!txt_image_card.getText().equals(c.getPhoto_card())) {
+						if(txt_image_card.getText().matches("")) { //si quiero default...
+							if(!c.getPhoto_card().matches("src/main/resources/images/characters/card/ccdefault.jpg")) { //no la tenia default
+								FileUtilities.removeFile(c.getPhoto_card());
+								c.setPhoto_card("src/main/resources/images/characters/card/ccdefault.jpg");
+							}
+							else { //antes la tenia default
+								//no se hace nada...
+							}			
+						}
+						else { //si quiero personalizada...
+							if(c.getPhoto_card().matches("src/main/resources/images/characters/card/ccdefault.jpg")) { //la tenia default
+								String realaddress= "src/main/resources/images/characters/card/cc"+c.getId()+".jpg";
+								c.setPhoto_card(realaddress);
+								FileUtilities.saveImage(txt_image_card.getText(),realaddress);
+							}
+							else { //no la tenia a default... hay que eliminar!!
+								String realaddress= "src/main/resources/images/characters/card/cc"+c.getId()+".jpg";
+								c.setPhoto_card(realaddress);
+								FileUtilities.saveImage(txt_image_card.getText(),realaddress);
+							}
+						}
+					}
+					
+					
+					CharacterDAO.guardar(c);
+												
+					Alert alert4=new Alert(AlertType.INFORMATION);
+		    		alert4.setHeaderText(null);
+		    		alert4.setTitle("Información");
+		    		alert4.setContentText("¡Personaje guardado con éxito!");
+		    		alert4.showAndWait();	
+		    		
+		    		Stage stage = (Stage) this.btn_create.getScene().getWindow();
+		    		stage.close();
+				}
+				else {
+					//cancel...
+				}
+			}
 		}
+		else {
+			
+		}
+		
+		
 	}
 }

@@ -9,24 +9,24 @@ public class Attack{
 	private int power;
 	private int cost;
 	private int hit_rate;
-	private int id_extra;
+	private Extra extra;
 	private String photo;
 	private String animation;
 
-	public Attack(int id,String name, int power, int cost, int hit, int id_extra,String photo, String animation) {
+	public Attack(int id,String name, int power, int cost, int hit, Extra extra,String photo, String animation) {
 		super();
 		this.id=id;
 		this.name = name;
 		this.power = power;
 		this.cost = cost;
 		this.hit_rate=hit;
-		this.id_extra=id_extra;
+		this.extra=extra;
 		this.photo=photo;
 		this.animation=animation;
 	}
 
 	public Attack() {
-		this(0,"",0,0,0,0,"","");
+		this(0,"",0,0,0,null,"","");
 	}
 
 	public int getId() {
@@ -69,12 +69,12 @@ public class Attack{
 		this.hit_rate=hit_rate;
 	}
 	
-	public int getId_extra() {
-		return id_extra;
+	public Extra getExtra() {
+		return extra;
 	}
 
-	public void setId_extra(int id_extra) {
-		this.id_extra = id_extra;
+	public void setExtra(Extra extra) {
+		this.extra = extra;
 	}
 
 	public String getPhoto() {

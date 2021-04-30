@@ -31,13 +31,14 @@ public class AttackDAO extends Attack{
 				ResultSet rs= st.executeQuery(GETALL);
 				while(rs.next()) {
 					//es que hay al menos un resultado
+					Extra e=ExtraDAO.getExtraById(rs.getInt("id_extra"));
 					Attack aux=new Attack();
 					aux.setId(rs.getInt("id"));
 					aux.setName(rs.getString("name"));
 					aux.setPower(rs.getInt("power"));
 					aux.setCost(rs.getInt("cost"));
 					aux.setHit_rate(rs.getInt("hit_rate"));
-					aux.setId_extra(rs.getInt("id_extra"));
+					aux.setExtra(e);
 					aux.setPhoto(rs.getString("photo"));
 					aux.setAnimation(rs.getString("animation"));
 					
@@ -91,7 +92,7 @@ public class AttackDAO extends Attack{
 				q.setInt(3, a.getPower());
 				q.setInt(4, a.getCost());
 				q.setInt(5, a.getHit_rate());
-				q.setInt(6, a.getId_extra());
+				q.setInt(6, a.getExtra().getId());
 				q.setString(7, a.getPhoto());
 				q.setString(8, a.getAnimation());
 				
@@ -99,7 +100,7 @@ public class AttackDAO extends Attack{
 				q.setInt(10, a.getPower());
 				q.setInt(11, a.getCost());
 				q.setInt(12, a.getHit_rate());
-				q.setInt(13, a.getId_extra());
+				q.setInt(13, a.getExtra().getId());
 				q.setString(14, a.getPhoto());
 				q.setString(15, a.getAnimation());
 				

@@ -35,37 +35,37 @@ public class Attack_Generator_Controller {
 	
 	//buttons
 	@FXML
-	private Button btn_save;
+	protected Button btn_save;
 	@FXML
-	private Button btn_exit;
+	protected Button btn_exit;
 	@FXML
-	private Button btn_import_image;
+	protected Button btn_import_image;
 	
 	//texts
 	@FXML
-	private TextField txt_name;
+	protected TextField txt_name;
 	@FXML
-	private TextField txt_power;
+	protected TextField txt_power;
 	@FXML
-	private TextField txt_cost;
+	protected TextField txt_cost;
 	@FXML
-	private TextField txt_hit; 
+	protected TextField txt_hit; 
 	@FXML
-	private TextField txt_photo;
+	protected TextField txt_photo;
 	@FXML
-	private TextArea are_des;
+	protected TextArea are_des;
 	
 	//others
 	@FXML
-	private ImageView photo;
+	protected ImageView photo;
 	@FXML
-	private ComboBox<Extra> com_extras;
+	protected ComboBox<Extra> com_extras;
 	@FXML
-	private ComboBox<String> com_animation;
+	protected ComboBox<String> com_animation;
 	@FXML
-	private Tab tab1;
+	protected Tab tab1;
 	@FXML
-	private Tab tab2;
+	protected Tab tab2;
 	
 	//methods
 	
@@ -157,7 +157,7 @@ public class Attack_Generator_Controller {
 						a.setPower(Integer.parseInt(txt_power.getText()));
 						a.setCost(Integer.parseInt(txt_cost.getText()));
 						a.setHit_rate(Integer.parseInt(txt_hit.getText()));
-						a.setId_extra(com_extras.getSelectionModel().getSelectedItem().getId());
+						a.setExtra(com_extras.getSelectionModel().getSelectedItem());
 						a.setAnimation(com_animation.getSelectionModel().getSelectedItem());
 
 						if(!txt_photo.getText().matches("")) {
@@ -193,22 +193,35 @@ public class Attack_Generator_Controller {
 							a.setPower(Integer.parseInt(txt_power.getText()));
 							a.setCost(Integer.parseInt(txt_cost.getText()));
 							a.setHit_rate(Integer.parseInt(txt_hit.getText()));
-							a.setId_extra(com_extras.getSelectionModel().getSelectedItem().getId());
+							a.setExtra(com_extras.getSelectionModel().getSelectedItem());
 							
 							a.setAnimation(com_animation.getSelectionModel().getSelectedItem());
 							
-
-							//guardamos la info en funcion de si es default o no
-							if(!txt_photo.getText().matches("")) {
-								String realaddress= "src/main/resources/images/attacks/a"+a.getId()+".jpg";
-								FileUtilities.saveImage(txt_photo.getText(), realaddress);
-								a.setPhoto(realaddress);
+							if(!txt_photo.getText().equals(a.getPhoto())){
+								
+								if(txt_photo.getText().matches("")) { //si es default...
+									if(!a.getPhoto().matches("src/main/resources/images/attacks/adefault.jpg")) { //no la tenia default
+										FileUtilities.removeFile(a.getPhoto());
+										a.setPhoto("src/main/resources/images/attacks/adefault.jpg");
+									}
+									else { //antes la tenia default
+										//no se hace nada...
+									}			
+								}
+								else { //si es personalizada...
+									if(a.getPhoto().matches("src/main/resources/images/attacks/adefault.jpg")) { //la tenia default
+										String realaddress= "src/main/resources/images/attacks/a"+a.getId()+".jpg";
+										a.setPhoto(realaddress);
+										FileUtilities.saveImage(txt_photo.getText(),realaddress);
+									}
+									else { //no la tenia a default... hay que eliminar!!
+										String realaddress= "src/main/resources/images/attacks/a"+a.getId()+".jpg";
+										a.setPhoto(realaddress);
+										FileUtilities.saveImage(txt_photo.getText(),realaddress);
+									}
+								}
 							}
-							else if(!a.getPhoto().matches("")){
-								//remove(a.getPhoto) --> se elimina el anterior al pasar de una foto al default
-								FileUtilities.removeFile(a.getPhoto());
-								a.setPhoto("src/main/resources/images/attacks/adefault.jpg");
-							}
+								
 							AttackDAO.guardar(a);
 
 							Alert alert4=new Alert(AlertType.INFORMATION);
@@ -250,7 +263,7 @@ public class Attack_Generator_Controller {
 						a.setPower(Integer.parseInt(txt_power.getText()));
 						a.setCost(Integer.parseInt(txt_cost.getText()));
 						a.setHit_rate(Integer.parseInt(txt_hit.getText()));
-						a.setId_extra(com_extras.getSelectionModel().getSelectedItem().getId());
+						a.setExtra(com_extras.getSelectionModel().getSelectedItem());
 						a.setAnimation(com_animation.getSelectionModel().getSelectedItem());
 
 						if(!txt_photo.getText().matches("")) {
@@ -288,21 +301,34 @@ public class Attack_Generator_Controller {
 							a.setPower(Integer.parseInt(txt_power.getText()));
 							a.setCost(Integer.parseInt(txt_cost.getText()));
 							a.setHit_rate(Integer.parseInt(txt_hit.getText()));
-							a.setId_extra(com_extras.getSelectionModel().getSelectedItem().getId());
+							a.setExtra(com_extras.getSelectionModel().getSelectedItem());
 							a.setAnimation(com_animation.getSelectionModel().getSelectedItem());
-							
-							//guardamos la info en funcion de si es default o no
-							if(!txt_photo.getText().matches("")) {
-								String realaddress= "src/main/resources/images/attacks/a"+a.getId()+".jpg";
-								FileUtilities.saveImage(txt_photo.getText(), realaddress);
-								a.setPhoto(realaddress);
+										
+							if(!txt_photo.getText().equals(a.getPhoto())){
+
+								if(txt_photo.getText().matches("")) { //si es default...
+									if(!a.getPhoto().matches("src/main/resources/images/attacks/adefault.jpg")) { //no la tenia default
+										FileUtilities.removeFile(a.getPhoto());
+										a.setPhoto("src/main/resources/images/attacks/adefault.jpg");
+									}
+									else { //antes la tenia default
+										//no se hace nada...
+									}			
+								}
+								else { //si es personalizada...
+									if(a.getPhoto().matches("src/main/resources/images/attacks/adefault.jpg")) { //la tenia default
+										String realaddress= "src/main/resources/images/attacks/a"+a.getId()+".jpg";
+										a.setPhoto(realaddress);
+										FileUtilities.saveImage(txt_photo.getText(),realaddress);
+									}
+									else { //no la tenia a default... hay que eliminar!!
+										String realaddress= "src/main/resources/images/attacks/a"+a.getId()+".jpg";
+										a.setPhoto(realaddress);
+										FileUtilities.saveImage(txt_photo.getText(),realaddress);
+									}
+								}
 							}
-							else if(!a.getPhoto().matches("")){
-								//remove(a.getPhoto) --> se elimina el anterior al pasar de una foto al default
-								FileUtilities.removeFile(a.getPhoto());
-								a.setPhoto("src/main/resources/images/attacks/adefault.jpg");
-							}
-							
+
 							AttackDAO.guardar(a);
 														
 							Alert alert4=new Alert(AlertType.INFORMATION);
@@ -321,17 +347,12 @@ public class Attack_Generator_Controller {
 				} else {
 					//no ocurre nada...
 				}
-			}
-			
-    		
-    		
-		}
-		
-		
+			}	
+		}	
 	}
 	
 	@FXML
-	private void set_Attack_Image() {
+	protected void set_Attack_Image() {
 		File file=null;
 		FileChooser filechooser= new FileChooser();
 		filechooser.setTitle("Selecionar imagen...");
@@ -383,7 +404,7 @@ public class Attack_Generator_Controller {
 			txt_power.setText(a.getPower()+"");
 			txt_cost.setText(a.getCost()+"");
 			txt_hit.setText(a.getHit_rate()+"");
-			com_extras.setValue(ExtraDAO.getExtraById(a.getId_extra()));
+			com_extras.setValue(a.getExtra());
 			updateExtraDescription();
 			txt_photo.setText(a.getPhoto());
 			File f=new File("file:"+a.getPhoto());

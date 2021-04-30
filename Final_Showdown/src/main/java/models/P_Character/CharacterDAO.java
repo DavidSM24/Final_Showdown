@@ -13,6 +13,7 @@ import javafx.collections.ObservableList;
 import models.P_Attack.Attack;
 import models.P_Attack.AttackDAO;
 import utils.Conexion;
+import utils.FileUtilities;
 
 public class CharacterDAO {
 	
@@ -23,7 +24,7 @@ public class CharacterDAO {
 			+ "id_attack_2 as A2, id_attack_3 as A3, id_rol as Rol, photo_face as Face, photo_card as Carta "
 			+ "from chara;";
 	
-	private final static String INSERT_UPDATE="INSERT INTO chara (id, name, universe, description, hp, energy_ini, energy_restore, atk, "
+	private final static String INSERT_UPDATE="INSERT INTO chara (id, name, universe, description, bando, hp, energy_ini, energy_restore, atk, "
 			+ "def, spe, id_attack_1, id_attack_2, id_attack_3, id_rol, photo_face, photo_card) "
 			+ "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) "
 			+ "ON DUPLICATE KEY UPDATE name=?,universe=?,description=?,bando=?,hp=?,energy_ini=?,energy_restore=?,atk=?,def=?,spe=?,id_attack_1=?, "
@@ -141,6 +142,15 @@ public class CharacterDAO {
 				PreparedStatement q=con.prepareStatement(DELETE);
 				q.setInt(1, c.getId());
 				rs =q.executeUpdate();
+				
+				if(!c.getPhoto_face().matches("src/main/resources/images/characters/face/cfdefault.jpg")) {
+					FileUtilities.removeFile(c.getPhoto_face());
+				}
+				
+				if(!c.getPhoto_card().matches("src/main/resources/images/characters/card/ccdefault.jpg")) {
+					FileUtilities.removeFile(c.getPhoto_card());
+				}
+				
 				charas.remove(c);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -149,4 +159,97 @@ public class CharacterDAO {
 		}
 	}
 	
+	public static ObservableList<Character> getCharactersByName(String name){
+		ObservableList<Character> result=FXCollections.observableArrayList();
+		if(name!=null&&!name.matches("")) {
+			for(Character c : charas) {
+				if(c.getName().toLowerCase().contains(name.toLowerCase())) {
+					result.add(c);
+				}
+			}
+			return result;
+		}
+		else {
+			return charas;
+		}
+		
+	}
+	
+	public static ObservableList<Character> getAllHeroes(){
+		ObservableList<Character> result=FXCollections.observableArrayList();
+		for(Character c:charas) {
+			if(c.getBand().equals("Héroe")) {
+				result.add(c);
+			}
+		}
+		return result;
+	}
+	
+	public static ObservableList<Character> getAllVillans(){
+		ObservableList<Character> result=FXCollections.observableArrayList();
+		for(Character c:charas) {
+			if(c.getBand().equals("Villano")) {
+				result.add(c);
+			}
+		}
+		return result;
+	}
+	
+	public static ObservableList<Character> getAllNeutrals(){
+		ObservableList<Character> result=FXCollections.observableArrayList();
+		for(Character c:charas) {
+			if(c.getBand().equals("Neutral")) {
+				result.add(c);
+			}
+		}
+		return result;
+	}
+	
+	public static ObservableList<Character> getAllHeroesAndVillans(){
+		ObservableList<Character> result=FXCollections.observableArrayList();
+		for(Character c:charas) {
+			if(c.getBand().equals("Héroe")||c.getBand().endsWith("Villano")) {
+				result.add(c);
+			}
+		}
+		return result;
+	}
+	
+	public static ObservableList<Character> getAllHeroesAndNeutrals(){
+		ObservableList<Character> result=FXCollections.observableArrayList();
+		for(Character c:charas) {
+			if(c.getBand().equals("Héroe")||c.getBand().endsWith("Neutral")) {
+				result.add(c);
+			}
+		}
+		return result;
+	}
+	
+	public static ObservableList<Character> getAllVillansAndNeutrals(){
+		ObservableList<Character> result=FXCollections.observableArrayList();
+		for(Character c:charas) {
+			if(c.getBand().equals("Villano")||c.getBand().endsWith("Neutral")) {
+				result.add(c);
+			}
+		}
+		return result;
+	}
+	
+	public static int getNewId() {
+		//calcula el id mas alto de todos y suma 1
+		int result=-1;
+		if(charas!=null&&charas.size()>0) {
+			for(Character c: charas) {
+				if(c.getId()>result) {
+					result=c.getId();
+				}
+			}
+			
+			result++;
+		}
+		else{
+			return 0;
+		}
+		return result;
+	}
 }

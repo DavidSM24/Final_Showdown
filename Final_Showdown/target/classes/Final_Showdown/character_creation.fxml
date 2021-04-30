@@ -31,12 +31,12 @@
                   <Line endX="-98.95965576171875" endY="-109.0" layoutX="625.0" layoutY="132.0" startX="-99.9595947265625" startY="159.08328247070312" />
                   <Text layoutX="100.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Datos :" />
                   <Line endX="-79.66666412353516" endY="-0.4999961853027344" layoutX="173.0" layoutY="23.0" startX="-120.50001525878906" startY="-0.4999961853027344" />
-                  <Button fx:id="btn_create" layoutX="245.0" layoutY="324.0" mnemonicParsing="false" text="Crear" />
+                  <Button fx:id="btn_create" layoutX="245.0" layoutY="324.0" mnemonicParsing="false" onAction="#add" text="Crear" />
                   <Button fx:id="btn_cancel" layoutX="295.0" layoutY="324.0" mnemonicParsing="false" onAction="#cancel" text="Cancelar" />
-                  <GridPane layoutX="177.0" layoutY="53.0" prefHeight="208.0" prefWidth="221.0">
+                  <GridPane layoutX="71.0" layoutY="53.0" prefHeight="208.0" prefWidth="429.0">
                      <columnConstraints>
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="105.66668701171875" minWidth="10.0" prefWidth="66.33335367838541" />
-                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="161.6667022705078" minWidth="10.0" prefWidth="154.33331298828125" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="268.0" minWidth="10.0" prefWidth="115.00002034505209" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="342.00001525878906" minWidth="0.0" prefWidth="313.6666463216145" />
                      </columnConstraints>
                      <rowConstraints>
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -51,7 +51,7 @@
                         <Label text="Bando" GridPane.rowIndex="3" />
                         <TextField fx:id="txt_name" GridPane.columnIndex="1" />
                         <TextField fx:id="txt_universe" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <TextArea fx:id="are_description" prefHeight="200.0" prefWidth="200.0" text="meter universe" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <TextArea fx:id="are_description" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                         <ComboBox fx:id="com_band" prefHeight="25.0" prefWidth="163.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                      </children>
                   </GridPane>
@@ -69,8 +69,8 @@
                   <Line endX="-98.95965576171875" endY="-109.0" layoutX="625.0" layoutY="132.0" startX="-99.9595947265625" startY="98.29289245605469" />
                   <Text layoutX="100.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Estadísticas :" />
                   <Line endX="-79.66666412353516" endY="-0.4999961853027344" layoutX="173.0" layoutY="23.0" startX="-120.50001525878906" startY="-0.4999961853027344" />
-                  <Button fx:id="btn_create2" layoutX="245.0" layoutY="324.0" mnemonicParsing="false" text="Crear" />
-                  <Button fx:id="btn_cancel2" layoutX="295.0" layoutY="324.0" mnemonicParsing="false" text="Cancelar" />
+                  <Button fx:id="btn_create2" layoutX="245.0" layoutY="324.0" mnemonicParsing="false" onAction="#add" text="Crear" />
+                  <Button fx:id="btn_cancel2" layoutX="295.0" layoutY="324.0" mnemonicParsing="false" onAction="#cancel" text="Cancelar" />
                   <GridPane layoutX="84.0" layoutY="38.0" prefHeight="184.0" prefWidth="411.0">
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -90,9 +90,9 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <TextField fx:id="txt_rol_hp" editable="false" prefHeight="25.0" prefWidth="37.0" text="0" GridPane.columnIndex="1" />
-                        <TextField fx:id="txt_hp" onKeyReleased="#updateTextSHP" text="0" GridPane.columnIndex="3" />
-                        <TextField fx:id="txt_total_hp" editable="false" text="0" GridPane.columnIndex="5" />
+                        <TextField fx:id="txt_rol_hp" alignment="CENTER" editable="false" prefHeight="25.0" prefWidth="37.0" text="0" GridPane.columnIndex="1" />
+                        <TextField fx:id="txt_hp" alignment="CENTER" onKeyReleased="#updateTextSHP" text="0" GridPane.columnIndex="3" />
+                        <TextField fx:id="txt_total_hp" alignment="CENTER" editable="false" text="0" GridPane.columnIndex="5" />
                         <Label text="+" GridPane.columnIndex="2">
                            <GridPane.margin>
                               <Insets left="30.0" />
@@ -103,7 +103,7 @@
                               <Insets left="15.0" />
                            </GridPane.margin>
                         </Label>
-                        <TextField fx:id="txt_rol_atk" editable="false" prefHeight="25.0" prefWidth="48.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="txt_rol_atk" alignment="CENTER" editable="false" prefHeight="25.0" prefWidth="48.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <Label text="+" GridPane.columnIndex="2" GridPane.rowIndex="1">
                            <GridPane.margin>
                               <Insets left="30.0" />
@@ -140,16 +140,16 @@
                         <Label text="Velocidad" GridPane.rowIndex="3" />
                         <Label prefHeight="17.0" prefWidth="91.0" text="Energía" GridPane.rowIndex="4" />
                         <Label text="Restauración" GridPane.rowIndex="5" />
-                        <TextField fx:id="txt_rol_def" editable="false" text="0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <TextField fx:id="txt_rol_spe" editable="false" text="0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                        <TextField fx:id="txt_energy_ini" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                        <TextField fx:id="txt_energy_recover" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                        <TextField fx:id="txt_atk" onAction="#updateTextSATK" onKeyReleased="#updateTextSATK" text="0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-                        <TextField fx:id="txt_def" onAction="#updateTextSDEF" onKeyReleased="#updateTextSDEF" text="0" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                        <TextField fx:id="txt_spe" onAction="#updateTextSSPE" onKeyReleased="#updateTextSSPE" text="0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-                        <TextField fx:id="txt_total_atk" editable="false" text="0" GridPane.columnIndex="5" GridPane.rowIndex="1" />
-                        <TextField fx:id="txt_total_def" editable="false" text="0" GridPane.columnIndex="5" GridPane.rowIndex="2" />
-                        <TextField fx:id="txt_total_spe" editable="false" text="0" GridPane.columnIndex="5" GridPane.rowIndex="3" />
+                        <TextField fx:id="txt_rol_def" alignment="CENTER" editable="false" text="0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <TextField fx:id="txt_rol_spe" alignment="CENTER" editable="false" text="0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <TextField fx:id="txt_energy_ini" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <TextField fx:id="txt_energy_recover" alignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                        <TextField fx:id="txt_atk" alignment="CENTER" onAction="#updateTextSATK" onKeyReleased="#updateTextSATK" text="0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                        <TextField fx:id="txt_def" alignment="CENTER" onAction="#updateTextSDEF" onKeyReleased="#updateTextSDEF" text="0" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                        <TextField fx:id="txt_spe" alignment="CENTER" onAction="#updateTextSSPE" onKeyReleased="#updateTextSSPE" text="0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                        <TextField fx:id="txt_total_atk" alignment="CENTER" editable="false" text="0" GridPane.columnIndex="5" GridPane.rowIndex="1" />
+                        <TextField fx:id="txt_total_def" alignment="CENTER" editable="false" text="0" GridPane.columnIndex="5" GridPane.rowIndex="2" />
+                        <TextField fx:id="txt_total_spe" alignment="CENTER" editable="false" text="0" GridPane.columnIndex="5" GridPane.rowIndex="3" />
                         <Label text="Rol" GridPane.rowIndex="6" />
                         <ComboBox fx:id="com_rol" onAction="#updateRolStats" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Puntos de Refuerzo :" GridPane.columnIndex="3" GridPane.rowIndex="5" />
@@ -173,17 +173,17 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <ComboBox fx:id="com_att_1" onAction="#updateAttacksBox" prefWidth="150.0">
+                        <ComboBox fx:id="com_att_1" prefWidth="150.0">
                            <GridPane.margin>
                               <Insets left="5.0" />
                            </GridPane.margin>
                         </ComboBox>
-                        <ComboBox fx:id="com_att_2" onAction="#updateAttacksBox" prefWidth="150.0" GridPane.columnIndex="1">
+                        <ComboBox fx:id="com_att_2" prefWidth="150.0" GridPane.columnIndex="1">
                            <GridPane.margin>
                               <Insets left="5.0" />
                            </GridPane.margin>
                         </ComboBox>
-                        <ComboBox fx:id="com_att_3" onAction="#updateAttacksBox" prefWidth="150.0" GridPane.columnIndex="2">
+                        <ComboBox fx:id="com_att_3" prefWidth="150.0" GridPane.columnIndex="2">
                            <GridPane.margin>
                               <Insets left="5.0" />
                            </GridPane.margin>
@@ -210,8 +210,8 @@
                         <Image url="@../../../../../../../../Downloads/arsene_attack.jpg" />
                      </image>
                   </ImageView>
-                  <Button fx:id="btn_create3" layoutX="245.0" layoutY="324.0" mnemonicParsing="false" text="Crear" />
-                  <Button fx:id="btn_cancel3" layoutX="295.0" layoutY="324.0" mnemonicParsing="false" text="Cancelar" />
+                  <Button fx:id="btn_create3" layoutX="245.0" layoutY="324.0" mnemonicParsing="false" onAction="#add" text="Crear" />
+                  <Button fx:id="btn_cancel3" layoutX="295.0" layoutY="324.0" mnemonicParsing="false" onAction="#cancel" text="Cancelar" />
                   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="213.0" layoutX="308.0" layoutY="45.0" stroke="BLACK" strokeType="INSIDE" width="250.0" />
                   <TextField fx:id="txt_image_card" layoutX="326.0" layoutY="270.0" />
                   <Button fx:id="btn_image_card" layoutX="480.0" layoutY="270.0" mnemonicParsing="false" onAction="#set_Card" text="Cargar..." />
