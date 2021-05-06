@@ -66,6 +66,8 @@ public class Character_Creation_Controller {
 	protected Button btn_image_presentation;
 	@FXML
 	protected Button btn_image_card;
+	@FXML
+	protected Button btn_ost;
 	
 	//texts
 	@FXML
@@ -104,6 +106,8 @@ public class Character_Creation_Controller {
 	protected TextField txt_image_card;
 	@FXML
 	protected TextField txt_universe;
+	@FXML 
+	protected TextField txt_ost;
 	
 	@FXML
 	protected Label lab_pnts;
@@ -131,6 +135,7 @@ public class Character_Creation_Controller {
 	private void add() {
 		File image_presentation=new File(txt_image_presentation.getText());
 		File image_card=new File(txt_image_card.getText());
+		File ost= new File(txt_ost.getText());
 		
 		if(
 				  txt_name.getText().matches("")
@@ -152,7 +157,10 @@ public class Character_Creation_Controller {
 						!this.txt_image_card.getText().matches(".+\\.png")
 						&&
 						!this.txt_image_card.getText().matches("")
-				)) {
+				)
+				||!this.txt_ost.getText().matches(".+\\.wav")&&!txt_ost.getText().matches("")) 
+				
+				{
 			
 			Alert alerterror=new Alert(AlertType.INFORMATION);
     		alerterror.setHeaderText(null);
@@ -199,22 +207,31 @@ public class Character_Creation_Controller {
     			f+="\n -Debe rellenar el campo Recuperación con un valor numérico.";
     		}
     		
+    		if(!txt_ost.getText().matches(".+\\.wav")) {
+    			f+="\n -El archivo solicitado para el ost no es un archivo de tipo wav.";
+    		}
+    		
     		Alert alert=new Alert(AlertType.INFORMATION);
     		alert.setHeaderText(null);
     		alert.setTitle("Información");
     		alert.setContentText(f);
     		alert.showAndWait();
+    		
     			
 			
 		}
-		else if(!txt_image_presentation.getText().matches("")&&!image_presentation.exists()
-				||!txt_image_card.getText().matches("")&&!image_card.exists()) {
+		else if((!txt_image_presentation.getText().matches("")&&!image_presentation.exists())
+				||(!txt_image_card.getText().matches("")&&!image_card.exists())
+				||(!txt_ost.getText().matches("")&&!ost.exists())) {
 			String f="";
 			if(!txt_image_presentation.getText().matches("")&&!image_presentation.exists()) {
 				f+=" -El recurso para la imagen de personaje seleccionado no existe.";
 			}
 			if(!txt_image_card.getText().matches("")&&!image_card.exists()) {
 				f+=" -El recurso para la imagen de batalla seleccionado no existe.";
+			}
+			if(!txt_ost.getText().matches("")&&!ost.exists()){
+				f+=" -El recurso para el ost seleccionado no existe.";
 			}
 			Alert alert=new Alert(AlertType.INFORMATION);
     		alert.setHeaderText(null);
@@ -225,13 +242,16 @@ public class Character_Creation_Controller {
 		
 		else { //se añade...
 	
-			if(txt_image_presentation.getText().matches("")||txt_image_presentation.getText().matches("")) {
+			if(txt_image_presentation.getText().matches("")||txt_image_presentation.getText().matches("")||txt_ost.getText().matches("")) {
 				String f="";
 				if(txt_image_presentation.getText().matches("")) {
 					f+=" -No hay imagen para el personaje.\n";
 				}
-				if(txt_image_presentation.getText().matches("")) {
+				if(txt_image_card.getText().matches("")) {
 					f+=" -No hay imagen para la batalla.\n";
+				}
+				if(txt_ost.getText().matches("")) {
+					f+=" -El personaje no tendrá ost.\n";
 				}
 				f+=" ¿Desea crear este personaje usando recursos predeterminados?";
 				Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -299,6 +319,27 @@ public class Character_Creation_Controller {
 		}catch (Exception e) {
 			// TODO: handle exception;
 		}		
+	}
+	
+	@FXML
+	private void set_ost() {
+		File file=null;
+		FileChooser filechooser= new FileChooser();
+		filechooser.setTitle("Selecionar archivo wav...");
+		try {
+			file=filechooser.showOpenDialog(null);
+			if(file!=null&&file.getPath().matches(".+\\.wav")) {
+				txt_ost.setText(file.getPath());
+			}else { //extension incorrecta
+				Alert alert=new Alert(AlertType.INFORMATION);
+	    		alert.setHeaderText(null);
+	    		alert.setTitle("Información");
+	    		alert.setContentText("Formato incorrecto: Debe elegir archivo de tipo wav.");
+	    		alert.showAndWait();
+			}
+		}catch (Exception e) {
+			// TODO: handle exception;
+		}	
 	}
 	
 	@FXML
@@ -594,7 +635,8 @@ public class Character_Creation_Controller {
 				c.setA2(com_att_2.getSelectionModel().getSelectedItem());
 				c.setA3(com_att_3.getSelectionModel().getSelectedItem());
 				c.setRol(com_rol.getSelectionModel().getSelectedItem());
-
+				
+				//face
 				if(!txt_image_presentation.getText().matches("")) {
 					String realaddress= "src/main/resources/images/characters/face/cf"+c.getId()+".jpg";
 					c.setPhoto_face(realaddress);
@@ -604,6 +646,7 @@ public class Character_Creation_Controller {
 					c.setPhoto_face("src/main/resources/images/characters/face/cfdefault.jpg");
 				}
 				
+				//card
 				if(!txt_image_card.getText().matches("")) {
 					String realaddress= "src/main/resources/images/characters/card/cc"+c.getId()+".jpg";
 					c.setPhoto_card(realaddress);
@@ -612,6 +655,17 @@ public class Character_Creation_Controller {
 				else {
 					c.setPhoto_card("src/main/resources/images/characters/card/ccdefault.jpg");
 				}
+				
+				//ost
+				if(!txt_ost.getText().matches("")) { //con ost
+					String realaddress= "src/main/resources/audio/characters/ost/co"+c.getId()+".wav";
+					c.setOst(realaddress);
+					FileUtilities.saveAudio(txt_ost.getText(),realaddress);
+				}
+				else { //sin ost
+					c.setOst("no_resource");
+				}
+				
 				CharacterDAO.guardar(c);
 				
 				dad.setTableAndDetailsInfo();
@@ -645,7 +699,7 @@ public class Character_Creation_Controller {
 					c.setSpe(Integer.parseInt(txt_total_spe.getText()));
 					c.setA1(com_att_1.getSelectionModel().getSelectedItem());
 					c.setA2(com_att_2.getSelectionModel().getSelectedItem());
-					c.setA2(com_att_2.getSelectionModel().getSelectedItem());
+					c.setA3(com_att_3.getSelectionModel().getSelectedItem());
 					c.setRol(com_rol.getSelectionModel().getSelectedItem());
 
 					//guardamos la info en funcion de si es default o no
@@ -701,6 +755,31 @@ public class Character_Creation_Controller {
 						}
 					}
 					
+					//ost
+					
+					if(!txt_ost.getText().equals(c.getOst())) {
+						if(txt_ost.getText().matches("")) { //si no quiero ost
+							if(!c.getOst().matches("no_resource")) { //si tenia ost
+								FileUtilities.removeFile(c.getOst());
+								c.setOst("no_resource");
+							}
+							else { //antes no tenía ost tampoco...
+								//no se hace nada...
+							}	
+						}
+						else { //si quiero ost
+							if(c.getOst().matches("no_resource")) { //la tenia default
+								String realaddress= "src/main/resources/audio/characters/ost/co"+c.getId()+".wav";
+								c.setOst(realaddress);
+								FileUtilities.saveAudio(txt_ost.getText(),realaddress);
+							}
+							else { //no la tenia a default... hay que eliminar/sobreescrivir!!
+								String realaddress= "src/main/resources/audio/characters/ost/co"+c.getId()+".wav";
+								c.setOst(realaddress);
+								FileUtilities.saveAudio(txt_ost.getText(),realaddress);
+							}
+						}
+					}
 					
 					CharacterDAO.guardar(c);
 												

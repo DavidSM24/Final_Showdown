@@ -2,7 +2,14 @@ package Final_Showdown;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.util.Optional;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -14,7 +21,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -22,11 +29,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.P_Attack.Attack;
 import models.P_Attack.AttackDAO;
 import models.P_Character.CharacterDAO;
+import models.P_Character.Fighter;
 import models.P_Character.Character;
 
 public class PrimaryController {
@@ -53,6 +63,32 @@ public class PrimaryController {
 	private Button btn_edit_2;
 	@FXML
 	private Button btn_delete_2;
+	@FXML
+	private Button btn_luchar;
+	@FXML
+	private Button pruebaMedia;
+	@FXML
+	private Button btn_ost;
+	
+	public void prueba() {////////////borrar//////////////////////
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("battler.fxml"));
+		Parent root;
+		try {
+			root = loader.load();
+			Battle_Controller battler= loader.getController();
+			battler.setController(new Fighter(charas.get(0)), new Fighter(charas.get(0)));
+			battler.startBattle();
+			Scene scene= new Scene(root);
+			Stage stage= new Stage();
+			stage.setScene(scene);
+			stage.show();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		///////////////////////////////////////////////////////
+	}
 	
 	//table
 	@FXML
@@ -97,8 +133,52 @@ public class PrimaryController {
 	protected ImageView img_view_chara;
 	@FXML
 	protected ImageView img_view_attack;
+	@FXML
+	protected ImageView img_view_fighter1;
+	@FXML
+	protected ImageView img_view_fighter2;
+	@FXML
+	protected ComboBox<Character> com_fighter1;
+	@FXML
+	protected ComboBox<Character> com_fighter2;
+	
+	boolean running;
+	File f= new File("src/main/resources/audio/characters/ost/co16.wav");
+	Clip clip=null;
 	
 	//methods
+	@FXML
+	public void listen_Stop_Ost(){
+		AudioInputStream audioInputStream = null;
+		try {
+			
+			if(!running) {
+				audioInputStream = AudioSystem.getAudioInputStream(f);
+				clip = AudioSystem.getClip();
+				clip.open(audioInputStream);
+				clip.start();
+				running=true;
+				btn_ost.setText("Stop");
+			}
+			else {
+				clip.stop();
+				running=false;
+				btn_ost.setText("Play");
+			}
+			
+		} 
+		catch (UnsupportedAudioFileException | IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		catch (LineUnavailableException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+        
+	}
+		   
+	
 	@FXML
 	private void createCharacter() {
 		
@@ -163,6 +243,14 @@ public class PrimaryController {
 
 			Optional<ButtonType> result = alert.showAndWait();
 			if (result.get() == ButtonType.OK){
+				
+				if(com_fighter1.getSelectionModel().getSelectedItem().equals(c)) {
+					com_fighter1.setValue(null);
+				}
+				if(com_fighter2.getSelectionModel().getSelectedItem().equals(c)) {
+					com_fighter2.setValue(null);
+				}
+				
 				CharacterDAO.eliminar(c);
 				select();
 				Alert alert2=new Alert(AlertType.INFORMATION);
@@ -223,13 +311,73 @@ public class PrimaryController {
 		}	
 	}
 	
+	@FXML
+	protected void deleteAttack() {
+		ObservableList<Character> charasWithThisAttack=CharacterDAO.getCharactersByAttack(a);
+		if(charasWithThisAttack.size()>0) { //si existen char con ese atk
+			//listar charas con ese atk y preguntar si setear a pred.
+			String f="";
+			for (Character c: charasWithThisAttack) {
+				f+="-"+c.getName()+" ("+c.getUniverse()+")\n";
+			}
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setHeaderText("El ataque \""+a.getName()+"\" de los siguientes personajes se seteará a default:");
+			alert.setTitle("Confirmación");
+			alert.setContentText(f);
+
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == ButtonType.OK){
+				for(Character c:charasWithThisAttack) {
+					if(c.getA1().equals(a)) {
+						c.setA1(attacks.get(0));
+					}
+					if(c.getA2().equals(a)) {
+						c.setA2(attacks.get(0));
+					}
+					if(c.getA3().equals(a)) {
+						c.setA3(attacks.get(0));
+					}
+					CharacterDAO.guardar(c);
+				}
+				AttackDAO.eliminar(a);
+				Alert alert2=new Alert(AlertType.INFORMATION);
+	    		alert2.setHeaderText(null);
+	    		alert2.setTitle("Información");
+	    		alert2.setContentText("¡Se han aplicado todos los cambios y se ha eliminado correctamente el ataque!");
+	    		alert2.showAndWait();
+			}
+			
+		}
+		else { //si no...
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setHeaderText(null);
+			alert.setTitle("Confirmación");
+			alert.setContentText("¿Deseas eliminar este ataque?");
+
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == ButtonType.OK){
+				AttackDAO.eliminar(a);
+				Alert alert2=new Alert(AlertType.INFORMATION);
+	    		alert2.setHeaderText(null);
+	    		alert2.setTitle("Información");
+	    		alert2.setContentText("¡Se ha eliminado correctamente el ataque!");
+	    		alert2.showAndWait();
+			}
+		}
+	}
+	
 	protected void setController (PrimaryController me) {
 		this.me=me;
 		table_char.setItems(charas);
 		table_attack.setItems(attacks);
+		com_fighter1.setItems(charas);
+		com_fighter1.setValue(charas.get(0));
+		com_fighter2.setItems(charas);
+		com_fighter2.setValue(charas.get(0));
 		select();
 		select_2();
 		setTableAndDetailsInfo();
+		updateFightersInfo();
 		
 	}
 	
@@ -349,6 +497,36 @@ public class PrimaryController {
 		else {
 			table_char.setItems(charas);
 			setTableAndDetailsInfo();
+		}
+	}
+	
+	@FXML
+	private void updateFightersInfo() {
+		if(com_fighter1.getSelectionModel().getSelectedItem()==null&&charas.size()>0) {
+			com_fighter1.setValue(charas.get(0));
+		}
+		
+		if(com_fighter2.getSelectionModel().getSelectedItem()==null&&charas.size()>0) {
+			com_fighter2.setValue(charas.get(0));
+		}
+		
+		//fighter 1
+		if(com_fighter1.getSelectionModel().getSelectedItem()!=null) {//setea los valores del fighter1
+			File f=new File("file:"+com_fighter1.getSelectionModel().getSelectedItem().getPhoto_face());
+			Image img=new Image(f.getPath());
+			img_view_fighter1.setImage(img);
+		}
+		else {// no hay seleccion --> todo a ""
+			img_view_fighter1.setImage(null);
+		}
+		//fighter 2
+		if(com_fighter2.getSelectionModel().getSelectedItem()!=null) {//setea los valores del fighter2
+			File f=new File("file:"+com_fighter2.getSelectionModel().getSelectedItem().getPhoto_face());
+			Image img=new Image(f.getPath());
+			img_view_fighter2.setImage(img);
+		}
+		else {// no hay seleccion --> todo a ""
+			img_view_fighter2.setImage(null);
 		}
 	}
 }

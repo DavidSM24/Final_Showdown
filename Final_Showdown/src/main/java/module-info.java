@@ -9,7 +9,7 @@ module Final_Showdown {
 	requires java.sql;
 
 	
-    opens Final_Showdown to javafx.fxml,javafx.base;
+    opens Final_Showdown to javafx.fxml,javafx.base,javafx.media;
     opens models.P_Character to java.xml.bind,java.xml,java.xml.crypto;
     exports Final_Showdown;
 }

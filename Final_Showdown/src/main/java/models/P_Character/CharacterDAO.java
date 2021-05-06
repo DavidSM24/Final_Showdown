@@ -21,14 +21,14 @@ public class CharacterDAO {
 	
 	private static final String GETALL= "SELECT id, name AS Nombre, universe AS Universo, description AS Descripcion, bando, hp as HP, "
 			+ "energy_ini AS \"Energia Inicial\", energy_restore as Restauracion, atk, def, spe, id_attack_1 as A1 , "
-			+ "id_attack_2 as A2, id_attack_3 as A3, id_rol as Rol, photo_face as Face, photo_card as Carta "
+			+ "id_attack_2 as A2, id_attack_3 as A3, id_rol as Rol, photo_face as Face, photo_card as Carta , ost "
 			+ "from chara;";
 	
 	private final static String INSERT_UPDATE="INSERT INTO chara (id, name, universe, description, bando, hp, energy_ini, energy_restore, atk, "
-			+ "def, spe, id_attack_1, id_attack_2, id_attack_3, id_rol, photo_face, photo_card) "
-			+ "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) "
+			+ "def, spe, id_attack_1, id_attack_2, id_attack_3, id_rol, photo_face, photo_card, ost) "
+			+ "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) "
 			+ "ON DUPLICATE KEY UPDATE name=?,universe=?,description=?,bando=?,hp=?,energy_ini=?,energy_restore=?,atk=?,def=?,spe=?,id_attack_1=?, "
-			+ "id_attack_2=?,id_attack_3=?, id_rol=?,photo_face=?,photo_card=?";
+			+ "id_attack_2=?,id_attack_3=?, id_rol=?,photo_face=?,photo_card=?, ost=?";
 	
 	private final static String DELETE ="DELETE FROM chara WHERE id=?";
 	
@@ -63,6 +63,7 @@ public class CharacterDAO {
 					aux.setRol(r);
 					aux.setPhoto_face(rs.getString("Face"));
 					aux.setPhoto_card(rs.getString("Carta"));
+					aux.setOst(rs.getString("ost"));
 
 					charas.add(aux);
 				}
@@ -100,23 +101,25 @@ public class CharacterDAO {
 						q.setInt(15, c.getRol().getId());
 						q.setString(16, c.getPhoto_face());
 						q.setString(17, c.getPhoto_card());
+						q.setString(18, c.getOst());
 						
-						q.setString(18, c.getName()); 
-						q.setString(19, c.getUniverse());
-						q.setString(20, c.getDescription());
-						q.setString(21, c.getBand());
-						q.setInt(22, c.getHp()); 
-						q.setInt(23, c.getEnergy_ini());
-						q.setInt(24, c.getEnergy_recover());
-						q.setInt(25, c.getAtk());
-						q.setInt(26, c.getDef());
-						q.setInt(27, c.getSpe());
-						q.setInt(28, c.getA1().getId());
-						q.setInt(29, c.getA2().getId());
-						q.setInt(30, c.getA3().getId());
-						q.setInt(31, c.getRol().getId());
-						q.setString(32, c.getPhoto_face());
-						q.setString(33, c.getPhoto_card());
+						q.setString(19, c.getName()); 
+						q.setString(20, c.getUniverse());
+						q.setString(21, c.getDescription());
+						q.setString(22, c.getBand());
+						q.setInt(23, c.getHp()); 
+						q.setInt(24, c.getEnergy_ini());
+						q.setInt(25, c.getEnergy_recover());
+						q.setInt(26, c.getAtk());
+						q.setInt(27, c.getDef());
+						q.setInt(28, c.getSpe());
+						q.setInt(29, c.getA1().getId());
+						q.setInt(30, c.getA2().getId());
+						q.setInt(31, c.getA3().getId());
+						q.setInt(32, c.getRol().getId());
+						q.setString(33, c.getPhoto_face());
+						q.setString(34, c.getPhoto_card());
+						q.setString(35, c.getOst());
 						
 						rs =q.executeUpdate();	
 						if(charas.contains(c)) {
@@ -231,6 +234,16 @@ public class CharacterDAO {
 			if(c.getBand().equals("Villano")||c.getBand().endsWith("Neutral")) {
 				result.add(c);
 			}
+		}
+		return result;
+	}
+	
+	public static ObservableList<Character> getCharactersByAttack(Attack a){
+		ObservableList<Character> result=FXCollections.observableArrayList();
+		for(Character c: charas) {
+			if(a!=null&&c!=null&&(c.getA1().equals(a)||c.getA2().equals(a)||c.getA3().equals(a))) {
+				result.add(c);
+			}	
 		}
 		return result;
 	}

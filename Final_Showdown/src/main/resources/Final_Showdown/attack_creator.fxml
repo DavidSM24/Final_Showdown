@@ -31,7 +31,7 @@
                   <Text layoutX="100.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Datos :" />
                   <Line endX="-79.66666412353516" endY="-0.4999961853027344" layoutX="173.0" layoutY="23.0" startX="-120.50001525878906" startY="-0.4999961853027344" />
                   <Button fx:id="btn_save" layoutX="245.0" layoutY="324.0" mnemonicParsing="false" onAction="#save" text="Crear" />
-                  <Button fx:id="btn_exit" layoutX="295.0" layoutY="324.0" mnemonicParsing="false" text="Cancelar" />
+                  <Button fx:id="btn_exit" layoutX="295.0" layoutY="324.0" mnemonicParsing="false" onAction="#cancel" text="Cancelar" />
                   <GridPane layoutX="184.0" layoutY="24.0" prefHeight="176.0" prefWidth="221.0">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="105.66668701171875" minWidth="10.0" prefWidth="60.33329772949219" />
@@ -77,7 +77,7 @@
                   <ComboBox fx:id="com_animation" layoutX="264.0" layoutY="273.0" prefHeight="25.0" prefWidth="139.0" />
                   <Label layoutX="197.0" layoutY="277.0" text="Animation" />
                   <Button layoutX="245.0" layoutY="324.0" mnemonicParsing="false" onAction="#save" text="Crear" />
-                  <Button layoutX="295.0" layoutY="324.0" mnemonicParsing="false" text="Cancelar" />
+                  <Button layoutX="295.0" layoutY="324.0" mnemonicParsing="false" onAction="#cancel" text="Cancelar" />
                </children></AnchorPane>
         </content>
       </Tab>

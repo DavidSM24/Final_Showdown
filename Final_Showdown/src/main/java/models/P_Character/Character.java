@@ -20,9 +20,10 @@ public class Character {
 	private Rol rol;
 	private String photo_face;
 	private String photo_card;
+	private String ost;
 	
 	public Character(int id, String universe, String name, String description, String band, int hp, int energy_ini, int energy_recover, int atk, int def, int spe, Attack a1, Attack a2, Attack a3,
-			Rol rol, String photo_face, String photo_card) {
+			Rol rol, String photo_face, String photo_card, String ost) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -41,10 +42,11 @@ public class Character {
 		this.rol = rol;
 		this.photo_face=photo_face;
 		this.photo_card=photo_card;
+		this.ost=ost;
 	}
 
 	public Character() {
-		this(0,"","","","",0,0,0,0,0,0,null,null,null,null,"","");
+		this(0,"","","","",0,0,0,0,0,0,null,null,null,null,"","","");
 	}
 
 	public int getId() {
@@ -182,11 +184,18 @@ public class Character {
 	public void setPhoto_card(String photo_card) {
 		this.photo_card = photo_card;
 	}
+	
+	public String getOst() {
+		return ost;
+	}
+
+	public void setOst(String ost) {
+		this.ost = ost;
+	}
 
 	@Override
 	public String toString() {
-		return "Character [id=" + id + ", name=" + name + ", hp=" + hp + ", atk=" + atk + ", def=" + def + ", spe="
-				+ spe + ", a1=" + a1 + ", a2=" + a2 + ", a3=" + a3 + ", rol=" + rol + "]";
+		return name+" ("+universe+")";
 	}
 
 	@Override

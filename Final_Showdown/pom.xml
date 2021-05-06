@@ -27,6 +27,7 @@
 				<version>0.0.4</version>
 				<configuration>
 					<mainClass>Final_Showdown.App</mainClass>
+					
 				</configuration>
 			</plugin>
 		</plugins>
@@ -58,15 +59,16 @@
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-media</artifactId>
-			<version>17-ea+7</version>
+			<version>13</version>
 		</dependency>
-		
+
+
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>8.0.23</version>
 		</dependency>
- 	
+
 
 
 	</dependencies>

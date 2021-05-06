@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
@@ -103,6 +104,9 @@
                               <Image url="@../../../../../../../../Downloads/naruto%20face.jpg" />
                            </image>
                         </ImageView>
+                        <Button fx:id="pruebaMedia" layoutX="44.0" layoutY="238.0" mnemonicParsing="false" onAction="#pruebaMedia" text="Button" />
+                        <Button fx:id="btn_ost" layoutX="30.0" layoutY="49.0" mnemonicParsing="false" onAction="#listen_Stop_Ost" text="Play" />
+                        <Label layoutX="40.0" layoutY="32.0" text="Ost" />
                      </children>
                   </AnchorPane>
                </children>
@@ -133,7 +137,7 @@
                         <Line endX="99.6311264038086" endY="-40.49999237060547" layoutX="318.0" layoutY="65.0" startX="100.0" startY="247.6666259765625" AnchorPane.rightAnchor="20.0" />
                         <Button fx:id="btn_create_2" layoutX="81.0" layoutY="324.0" mnemonicParsing="false" onAction="#createAttack" text="Crear..." AnchorPane.leftAnchor="70.0" />
                         <Button fx:id="btn_edit_2" layoutX="198.0" layoutY="324.0" mnemonicParsing="false" onAction="#editAttack" text="Editar..." />
-                        <Button fx:id="btn_delete_2" layoutX="317.0" layoutY="324.0" mnemonicParsing="false" onAction="#deleteCharacter" text="Eliminar..." AnchorPane.rightAnchor="70.0" />
+                        <Button fx:id="btn_delete_2" layoutX="317.0" layoutY="324.0" mnemonicParsing="false" onAction="#deleteAttack" text="Eliminar..." AnchorPane.rightAnchor="70.0" />
                         <GridPane layoutX="127.0" layoutY="214.0" prefHeight="97.0" prefWidth="200.0">
                            <columnConstraints>
                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -197,9 +201,33 @@
                </children></AnchorPane>
       </content>
     </Tab>
-      <Tab text="Combate">
+      <Tab onSelectionChanged="#updateFightersInfo" text="Combate">
         <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <ImageView fx:id="img_view_fighter1" fitHeight="150.0" fitWidth="200.0" layoutX="90.0" layoutY="71.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../../../../Downloads/goku.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="img_view_fighter2" fitHeight="150.0" fitWidth="200.0" layoutX="310.0" layoutY="71.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../../../../Downloads/200x150.png" />
+                     </image>
+                  </ImageView>
+                  <ComboBox fx:id="com_fighter1" layoutX="115.0" layoutY="246.0" onAction="#updateFightersInfo" prefWidth="150.0" />
+                  <ComboBox fx:id="com_fighter2" layoutX="335.0" layoutY="246.0" onAction="#updateFightersInfo" prefWidth="150.0" />
+                  <Button fx:id="btn_luchar" layoutX="269.0" layoutY="297.0" mnemonicParsing="false" onAction="#prueba" text="¡Luchar!" />
+                  <Line endX="260.0" endY="5.7220458984375E-6" layoutX="274.0" layoutY="28.0" startX="-211.3333282470703" startY="5.7220458984375E-6" />
+                  <Line endX="188.5" layoutX="345.0" layoutY="334.0" startX="-282.5" />
+                  <Line endX="-100.00001525878906" endY="-213.0" layoutX="162.0" layoutY="242.0" startX="-100.00001525878906" startY="91.5" />
+                  <Line endX="100.0" endY="175.5" layoutX="434.0" layoutY="158.0" startX="100.0" startY="-129.33331298828125" />
+                  <ImageView fitHeight="65.0" fitWidth="65.0" layoutX="268.0" layoutY="226.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../../../../../Downloads/img_418591.png" />
+                     </image>
+                  </ImageView>
+               </children></AnchorPane>
         </content>
       </Tab>
   </tabs>
