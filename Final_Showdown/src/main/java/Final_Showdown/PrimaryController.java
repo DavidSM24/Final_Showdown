@@ -2,7 +2,6 @@ package Final_Showdown;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.util.Optional;
 
 import javax.sound.sampled.AudioInputStream;
@@ -16,13 +15,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Cursor;
 import javafx.scene.ImageCursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -31,8 +30,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
+import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.P_Attack.Attack;
@@ -50,10 +48,13 @@ public class PrimaryController {
 	protected ObservableList<Character> filter_charas=null;
 	protected Character c=null;
 	protected Attack a=null;
+	protected Attack a_pred=null;
 	protected boolean running;
 	protected File ost= new File("src/main/resources/audio/characters/ost/co16.wav");
 	protected String ost_playing=null;
 	protected Clip clip=null;
+	protected boolean random_p1;
+	protected boolean random_p2;
 	
 	//buttons		
 	@FXML
@@ -72,35 +73,9 @@ public class PrimaryController {
 	@FXML
 	private Button btn_luchar;
 	@FXML
-	private Button pruebaMedia;
-	@FXML
 	private Button btn_play;
 	@FXML
 	private Button btn_stop;
-	
-	public void prueba() {////////////borrar//////////////////////
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("battler.fxml"));
-		Parent root;
-		try {
-			root = loader.load();
-			Battle_Controller battler= loader.getController();
-			Scene scene= new Scene(root);
-			File f= new File("file:src/main/resources/images/battle_cursor.png");
-			Image image = new Image(f.getPath());
-			scene.setCursor(new ImageCursor(image));
-			battler.setController(new Fighter(com_fighter1.getSelectionModel().getSelectedItem()), new Fighter(com_fighter2.getSelectionModel().getSelectedItem()));
-			battler.startBattle();
-
-			Stage stage= new Stage();
-			stage.setScene(scene);
-			stage.show();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		///////////////////////////////////////////////////////
-	}
 	
 	//table
 	@FXML
@@ -153,8 +128,92 @@ public class PrimaryController {
 	protected ComboBox<Character> com_fighter1;
 	@FXML
 	protected ComboBox<Character> com_fighter2;
+	@FXML
+	private CheckBox che_random_1;
+	@FXML
+	private CheckBox che_random_2;
+	@FXML
+	private Pane pan_img_vs;
 	
 	//methods
+	@FXML
+	public void battle() {
+		if(charas.size()>0) {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("battler.fxml"));
+			Parent root;
+			try {
+				
+				Fighter f1=new Fighter(com_fighter1.getSelectionModel().getSelectedItem());
+				Fighter f2=new Fighter(com_fighter2.getSelectionModel().getSelectedItem());
+				
+				if(random_p1&&charas.size()!=1) {
+					int random=(int)(Math.floor(Math.random()*charas.size()));
+					f1=new Fighter(charas.get(random));
+				}
+				
+				if(random_p2&&charas.size()!=1) {
+					int random=(int)(Math.floor(Math.random()*charas.size()));
+					f2=new Fighter(charas.get(random));
+				}
+				
+				root = loader.load();
+				Battle_Controller battler= loader.getController();
+				Scene scene= new Scene(root);
+				File f= new File("file:src/main/resources/images/battle_cursor.png");
+				Image image = new Image(f.getPath());
+				scene.setCursor(new ImageCursor(image));
+				battler.setController(f1, f2);
+				battler.startBattle();
+
+				Stage stage= new Stage();
+				stage.setScene(scene);
+				stage.show();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		else {
+			Alert alert2=new Alert(AlertType.INFORMATION);
+    		alert2.setHeaderText(null);
+    		alert2.setTitle("Información");
+    		alert2.setContentText(" No hay personajes para luchar."
+    				+ "\n Antes de jugar, crea algún personaje.");
+    		alert2.showAndWait();
+		}	
+	}
+	
+	@FXML
+	private void changeRandom_1(){
+		if(che_random_1.isSelected()) {
+			com_fighter1.setDisable(true);
+			random_p1=true;
+			updateFightersInfo();
+		}
+		else {
+			com_fighter1.setDisable(false);
+			random_p1=false;
+			updateFightersInfo();			
+		}
+	}
+	
+	@FXML
+	private void changeRandom_2(){
+		if(che_random_2.isSelected()) {
+			com_fighter2.setDisable(true);
+			random_p2=true;
+			updateFightersInfo();
+		}
+		else {
+			com_fighter2.setDisable(false);
+			random_p2=false;
+			updateFightersInfo();
+			
+			
+			
+		}
+	}
+	
 	@FXML
 	public void play(){
 		if(ost!=null) {
@@ -398,6 +457,13 @@ public class PrimaryController {
 	
 	protected void setController (PrimaryController me) {
 		this.me=me;
+		this.a_pred=attacks.get(0);
+		
+		com_fighter1.setDisable(false);
+		random_p1=false;
+		com_fighter2.setDisable(false);
+		random_p2=false;
+		
 		table_char.setItems(charas);
 		table_attack.setItems(attacks);
 		if(charas.size()>0) {
@@ -428,7 +494,7 @@ public class PrimaryController {
 		if (attacks.size()>0) {
 			col_attack.setCellValueFactory(eachattack->{
 	    		SimpleStringProperty v=new SimpleStringProperty();
-	    		if(eachattack.getValue().equals(attacks.get(0))){
+	    		if(eachattack.getValue().equals(a_pred)){
 	    			v.setValue(eachattack.getValue().getName()+" (Predeterminado)");
 	    		}
 	    		else {
@@ -518,7 +584,7 @@ public class PrimaryController {
 		}
 
 		if(a!=null) {//setea los valores del atta
-			if(a!=attacks.get(0)) {
+			if(a!=a_pred) {
 				btn_delete_2.setDisable(false);
 				btn_edit_2.setDisable(false);
 			}
@@ -574,18 +640,35 @@ public class PrimaryController {
 		
 		//fighter 1
 		if(com_fighter1.getSelectionModel().getSelectedItem()!=null) {//setea los valores del fighter1
-			File f=new File("file:"+com_fighter1.getSelectionModel().getSelectedItem().getPhoto_face());
-			Image img=new Image(f.getPath());
-			img_view_fighter1.setImage(img);
+			if(!random_p1) {
+				File f=new File("file:"+com_fighter1.getSelectionModel().getSelectedItem().getPhoto_face());
+				Image img=new Image(f.getPath());
+				img_view_fighter1.setImage(img);
+			}
+			else {
+				File f=new File("file:src/main/resources/images/symbolrandom.png");
+				Image img=new Image(f.getPath());
+				img_view_fighter1.setImage(img);
+			}
+			
 		}
+		
 		else {// no hay seleccion --> todo a ""
 			img_view_fighter1.setImage(null);
 		}
+		
 		//fighter 2
 		if(com_fighter2.getSelectionModel().getSelectedItem()!=null) {//setea los valores del fighter2
-			File f=new File("file:"+com_fighter2.getSelectionModel().getSelectedItem().getPhoto_face());
-			Image img=new Image(f.getPath());
-			img_view_fighter2.setImage(img);
+			if(!random_p2) {
+				File f=new File("file:"+com_fighter2.getSelectionModel().getSelectedItem().getPhoto_face());
+				Image img=new Image(f.getPath());
+				img_view_fighter2.setImage(img);
+			}
+			else {
+				File f=new File("file:src/main/resources/images/symbolrandom.png");
+				Image img=new Image(f.getPath());
+				img_view_fighter2.setImage(img);
+			}
 		}
 		else {// no hay seleccion --> todo a ""
 			img_view_fighter2.setImage(null);

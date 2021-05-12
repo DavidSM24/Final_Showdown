@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tab?>
@@ -14,6 +15,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.shape.Rectangle?>
@@ -219,16 +221,11 @@
                <children>
                   <ComboBox fx:id="com_fighter1" layoutX="115.0" layoutY="246.0" onAction="#updateFightersInfo" prefWidth="150.0" />
                   <ComboBox fx:id="com_fighter2" layoutX="335.0" layoutY="246.0" onAction="#updateFightersInfo" prefWidth="150.0" />
-                  <Button fx:id="btn_luchar" layoutX="269.0" layoutY="297.0" mnemonicParsing="false" onAction="#prueba" text="¡Luchar!" />
+                  <Button fx:id="btn_luchar" layoutX="269.0" layoutY="297.0" mnemonicParsing="false" onAction="#battle" text="¡Luchar!" />
                   <Line endX="260.0" endY="5.7220458984375E-6" layoutX="274.0" layoutY="28.0" startX="-211.3333282470703" startY="5.7220458984375E-6" />
                   <Line endX="188.5" layoutX="345.0" layoutY="334.0" startX="-282.5" />
                   <Line endX="-100.00001525878906" endY="-213.0" layoutX="162.0" layoutY="242.0" startX="-100.00001525878906" startY="91.5" />
                   <Line endX="100.0" endY="175.5" layoutX="434.0" layoutY="158.0" startX="100.0" startY="-129.33331298828125" />
-                  <ImageView fitHeight="65.0" fitWidth="65.0" layoutX="268.0" layoutY="226.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../../../../../../Downloads/img_418591.png" />
-                     </image>
-                  </ImageView>
                   <GridPane layoutX="90.0" layoutY="71.0" prefHeight="150.0" prefWidth="200.0">
                     <columnConstraints>
                       <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -259,6 +256,9 @@
                         </ImageView>
                      </children>
                   </GridPane>
+                  <CheckBox fx:id="che_random_1" layoutX="155.0" layoutY="289.0" mnemonicParsing="false" onAction="#changeRandom_1" text="Aleatorio" />
+                  <CheckBox fx:id="che_random_2" layoutX="374.0" layoutY="289.0" mnemonicParsing="false" onAction="#changeRandom_2" text="Aleatorio" />
+                  <Pane fx:id="pan_img_vs" layoutX="267.0" layoutY="226.0" prefHeight="65.0" prefWidth="65.0" style="-fx-background-image: url('file:src/main/resources/images/img_vs.jpg');" />
                </children></AnchorPane>
         </content>
       </Tab>

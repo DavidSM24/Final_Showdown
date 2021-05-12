@@ -50,6 +50,7 @@ public class Battle_Controller {
 	File stun=new File("src/main/resources/audio/effects/stun.wav");
 	File fail=new File("src/main/resources/audio/effects/fail.wav");
 	File buff=new File("src/main/resources/audio/effects/buff.wav");
+	File debuff=new File("src/main/resources/audio/effects/debuff.wav");
 	File sound_animation;
 	int frame_number=0;
 	int limit_frame=0;
@@ -193,9 +194,17 @@ public class Battle_Controller {
 		}
 		
 		//calcular % prioridades
+		try {
+			fighter1.setPriority((int) (r.nextInt((int) (fighter1.getSpe()*1.15-fighter1.getSpe()*0.85))+fighter1.getSpe()*0.85)); 
+		} catch (Exception e) {
+			fighter1.setPriority(1);
+		}
+		try {
+			fighter2.setPriority((int) (r.nextInt((int) (fighter2.getSpe()*1.15-fighter2.getSpe()*0.85))+fighter2.getSpe()*0.85));
+		} catch (Exception e) {
+			fighter2.setPriority(1);
+		}
 
-		fighter1.setPriority((int) (r.nextInt((int) (fighter1.getSpe()*1.15-fighter1.getSpe()*0.85))+fighter1.getSpe()*0.85)); 
-		fighter2.setPriority((int) (r.nextInt((int) (fighter2.getSpe()*1.15-fighter2.getSpe()*0.85))+fighter2.getSpe()*0.85));
 		if(!(fighter1.getPriority()==fighter2.getPriority())) {
 			if(fighter1.getSpe()>fighter2.getSpe()) {
 				fighter1.setPriority(fighter1.getPriority()+1);
@@ -1288,10 +1297,20 @@ public class Battle_Controller {
 	@FXML
 	public void showInfoA1() {
 		try {
-			are_Info.setText("Poder : "+fighter1.getA1().getPower()
-					+"\nCoste : "+fighter1.getA1().getCost()
-					+"\nAcierto : "+fighter1.getA1().getHit_rate()+" %"
-					+"\n"+fighter1.getA1().getExtra().getDescription());
+			String f="";
+			if(fighter1.getA1().getExtra().getId()!=34) {
+				f="Poder : "+fighter1.getA1().getPower()
+						+"\nCoste : "+fighter1.getA1().getCost()
+						+"\nAcierto : "+fighter1.getA1().getHit_rate()+" %"
+						+"\n"+fighter1.getA1().getExtra().getDescription();
+			}
+			else {
+				f="Poder : "+fighter1.getA1().getPower()
+						+"\nCoste : "+fighter1.getA1().getCost()
+						+"\nAcierto : "+fighter1.getA1().getHit_rate()+" %"
+						+"\nJuego Final, puede pasar cualquier cosa...";
+			}
+			are_Info.setText(f);
 			are_Info.setVisible(true);
 		}
 		catch (Exception e) {
@@ -1302,10 +1321,20 @@ public class Battle_Controller {
 	@FXML
 	public void showInfoA2() {
 		try {
-			are_Info.setText("Poder : "+fighter1.getA2().getPower()
-					+"\nCoste : "+fighter1.getA2().getCost()
-					+"\nAcierto : "+fighter1.getA2().getHit_rate()+" %"
-					+"\n"+fighter1.getA2().getExtra().getDescription());
+			String f="";
+			if(fighter1.getA2().getExtra().getId()!=34) {
+				f="Poder : "+fighter1.getA2().getPower()
+						+"\nCoste : "+fighter1.getA2().getCost()
+						+"\nAcierto : "+fighter1.getA2().getHit_rate()+" %"
+						+"\n"+fighter1.getA2().getExtra().getDescription();
+			}
+			else {
+				f="Poder : "+fighter1.getA2().getPower()
+						+"\nCoste : "+fighter1.getA2().getCost()
+						+"\nAcierto : "+fighter1.getA2().getHit_rate()+" %"
+						+"\nJuego Final, puede pasar cualquier cosa...";
+			}
+			are_Info.setText(f);
 			are_Info.setVisible(true);
 		}
 		catch (Exception e) {
@@ -1315,10 +1344,20 @@ public class Battle_Controller {
 	@FXML
 	public void showInfoA3() {
 		try {
-			are_Info.setText("Poder : "+fighter1.getA3().getPower()
-					+"\nCoste : "+fighter1.getA3().getCost()
-					+"\nAcierto : "+fighter1.getA3().getHit_rate()+" %"
-					+"\n"+fighter1.getA3().getExtra().getDescription());
+			String f="";
+			if(fighter1.getA3().getExtra().getId()!=34) {
+				f="Poder : "+fighter1.getA3().getPower()
+						+"\nCoste : "+fighter1.getA3().getCost()
+						+"\nAcierto : "+fighter1.getA3().getHit_rate()+" %"
+						+"\n"+fighter1.getA3().getExtra().getDescription();
+			}
+			else {
+				f="Poder : "+fighter1.getA3().getPower()
+						+"\nCoste : "+fighter1.getA3().getCost()
+						+"\nAcierto : "+fighter1.getA3().getHit_rate()+" %"
+						+"\nJuego Final, puede pasar cualquier cosa...";
+			}
+			are_Info.setText(f);
 			are_Info.setVisible(true);
 		} catch (Exception e) {
 			closeInfos();
@@ -1427,6 +1466,7 @@ public class Battle_Controller {
 			break;
 
 		case 16:
+			playEffect(debuff);
 			if(defensor.getAtk()>=0){
 				defensor.setAtk((int)(defensor.getAtk()*0.9));
 				defensor.setAtkState(defensor.getAtkState()-1);
@@ -1439,6 +1479,7 @@ public class Battle_Controller {
 			
 			break;
 		case 17:
+			playEffect(debuff);
 			if(defensor.getAtk()>=0){
 				defensor.setAtk((int)(defensor.getAtk()*0.8));
 				defensor.setAtkState(defensor.getAtkState()-2);
@@ -1451,6 +1492,7 @@ public class Battle_Controller {
 			
 			break;
 		case 18:
+			playEffect(debuff);
 			if(defensor.getAtk()>=0){
 				defensor.setAtk((int)(defensor.getAtk()*0.7));
 				defensor.setAtkState(defensor.getAtkState()-3);
@@ -1462,6 +1504,7 @@ public class Battle_Controller {
 			}
 			break;
 		case 19:
+			playEffect(debuff);
 			if(defensor.getDef()>=0) {
 				defensor.setDef((int)(defensor.getDef()*0.9));
 				defensor.setDefState(defensor.getDefState()-1);
@@ -1474,6 +1517,7 @@ public class Battle_Controller {
 			
 			break;
 		case 20:
+			playEffect(debuff);
 			if(defensor.getDef()>=0) {
 				defensor.setDef((int)(defensor.getDef()*0.8));
 				defensor.setDefState(defensor.getDefState()-2);
@@ -1486,6 +1530,7 @@ public class Battle_Controller {
 			
 			break;
 		case 21:
+			playEffect(debuff);
 			if(defensor.getDef()>=0) {
 				defensor.setDef((int)(defensor.getDef()*0.7));
 				defensor.setDefState(defensor.getDefState()-3);
@@ -1497,6 +1542,7 @@ public class Battle_Controller {
 			}
 			break;
 		case 22:
+			playEffect(debuff);
 			if(defensor.getSpe()>=0) {
 				defensor.setSpe((int)(defensor.getSpe()*0.9));
 				defensor.setSpeState(defensor.getSpeState()-1);
@@ -1509,6 +1555,7 @@ public class Battle_Controller {
 			
 			break;
 		case 23:
+			playEffect(debuff);
 			if(defensor.getSpe()>=0) {
 				defensor.setSpe((int)(defensor.getSpe()*0.8));
 				defensor.setSpeState(defensor.getSpeState()-2);
@@ -1521,6 +1568,7 @@ public class Battle_Controller {
 			
 			break;
 		case 24:
+			playEffect(debuff);
 			if(defensor.getSpe()>=0) {
 				defensor.setSpe((int)(defensor.getSpe()*0.7));
 				defensor.setSpeState(defensor.getSpeState()-3);
@@ -1683,6 +1731,40 @@ public class Battle_Controller {
 					lab_P1_ene.setText(defensor.getEnergy()+"");
 				}
 			}
+			break;
+		case 34:
+			int prob=(int)(Math.floor(Math.random()*100));
+			if(prob<=50) {
+				playEffect(debuff);
+				atacante.setEnergy(0);
+				atacante.setAtk(1);
+				atacante.setDef(1);
+				atacante.setSpe(1);
+				
+				atacante.setAtkState(-100);
+				atacante.setDefState(-100);
+				atacante.setSpeState(-100);
+				
+				are_terminal.setText(are_terminal.getText()+"\n¡Las estadísticas de "+atacante.getName()
+						+"\n han sido reducidas a 1!");
+				are_terminal.end();
+			}
+			else {
+				playEffect(buff);
+				atacante.setEnergy(0);
+				atacante.setAtk((int)(atacante.getAtk()*1.3));
+				atacante.setDef((int)(atacante.getDef()*1.3));
+				atacante.setSpe((int)(atacante.getDef()*1.3));
+				
+				atacante.setAtkState(atacante.getAtkState()+3);
+				atacante.setDefState(atacante.getDefState()+3);
+				atacante.setSpeState(atacante.getSpeState()+3);
+				
+				are_terminal.setText(are_terminal.getText()+"\n¡Las estadísticas de "+atacante.getName()
+				+"\n han sido aumentadas en un 30 %!");
+		are_terminal.end();
+			}
+			
 			break;
 		}	
 	}

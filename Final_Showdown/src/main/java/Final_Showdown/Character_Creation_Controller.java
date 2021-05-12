@@ -403,7 +403,7 @@ public class Character_Creation_Controller {
 				txt_image_card.setText(c.getPhoto_card());
 			}
 			
-			if(c.getOst()!="no_resource") {
+			if(!c.getOst().matches("no_resource")) {
 				txt_ost.setText(c.getOst());
 			}
 		}
