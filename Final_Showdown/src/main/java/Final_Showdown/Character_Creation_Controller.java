@@ -389,7 +389,6 @@ public class Character_Creation_Controller {
 			com_att_2.setValue(chara.getA2());
 			com_att_3.setValue(chara.getA3());
 			
-			//falta meter las imagenes...
 			File f=new File(c.getPhoto_face());
 			Image face= new Image("file:"+f.getPath());
 			image_presentation.setImage(face);
@@ -402,6 +401,10 @@ public class Character_Creation_Controller {
 			image_card.setImage(card);
 			if(!chara.getPhoto_card().equals("src/main/resources/images/characters/card/ccdefault.jpg")) {
 				txt_image_card.setText(c.getPhoto_card());
+			}
+			
+			if(c.getOst()!="no_resource") {
+				txt_ost.setText(c.getOst());
 			}
 		}
 	}
@@ -596,7 +599,7 @@ public class Character_Creation_Controller {
 			}	
 		}
 		else {			
-			txt_def.setText(0+"");
+			txt_spe.setText(0+"");
 			pnts=400-(0+
 					Integer.parseInt(txt_hp.getText())+
 					Integer.parseInt(txt_atk.getText())+

@@ -202,30 +202,50 @@
          <content>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="171.0" layoutX="342.0" layoutY="46.0" stroke="BLACK" strokeType="INSIDE" width="170.0" />
                   <TextField fx:id="txt_image_presentation" layoutX="46.0" layoutY="229.0" />
                   <Button fx:id="btn_image_presentation" layoutX="200.0" layoutY="229.0" mnemonicParsing="false" onAction="#set_Presentation" text="Cargar..." />
-                  <ImageView fx:id="image_presentation" fitHeight="150.0" fitWidth="200.0" layoutX="78.0" layoutY="57.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../../../../../../Downloads/arsene_attack.jpg" />
-                     </image>
-                  </ImageView>
                   <Button fx:id="btn_create3" layoutX="245.0" layoutY="324.0" mnemonicParsing="false" onAction="#add" text="Crear" />
                   <Button fx:id="btn_cancel3" layoutX="295.0" layoutY="324.0" mnemonicParsing="false" onAction="#cancel" text="Cancelar" />
                   <TextField fx:id="txt_image_card" layoutX="320.0" layoutY="229.0" />
                   <Button fx:id="btn_image_card" layoutX="474.0" layoutY="229.0" mnemonicParsing="false" onAction="#set_Card" text="Cargar..." />
                   <Line endX="499.29290771484375" endY="-3.0517578125E-5" layoutX="100.0" layoutY="311.0" startX="-100.0" />
-                  <Label layoutX="104.0" layoutY="14.0" text="Foto del Personaje" />
-                  <Label layoutX="380.0" layoutY="14.0" text="Foto de Batalla" />
-                  <ImageView fx:id="image_card" fitHeight="150.0" fitWidth="200.0" layoutX="352.0" layoutY="57.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../../../../../../Downloads/arsene_attack.jpg" />
-                     </image>
-                  </ImageView>
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="171.0" layoutX="68.0" layoutY="46.0" stroke="BLACK" strokeType="INSIDE" width="170.0" />
+                  <Label layoutX="104.0" layoutY="31.0" text="Foto del Personaje" />
+                  <Label layoutX="383.0" layoutY="31.0" text="Foto de Batalla" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="155.0" layoutX="51.0" layoutY="62.0" stroke="BLACK" strokeType="INSIDE" width="205.0" />
                   <Text layoutX="166.0" layoutY="285.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ost :" />
                   <TextField fx:id="txt_ost" layoutX="199.0" layoutY="268.0" />
                   <Button fx:id="btn_ost" layoutX="353.0" layoutY="268.0" mnemonicParsing="false" onAction="#set_ost" text="Cargar..." />
+                  <GridPane layoutX="53.0" layoutY="65.0" prefHeight="150.0" prefWidth="200.0">
+                    <columnConstraints>
+                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <ImageView fx:id="image_presentation" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../../../../../Downloads/arsene_attack.jpg" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </GridPane>
+                  <GridPane layoutX="328.0" layoutY="65.0" prefHeight="150.0" prefWidth="200.0">
+                     <columnConstraints>
+                        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                     </rowConstraints>
+                     <children>
+                        <ImageView fx:id="image_card" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../../../../../Downloads/arsene_attack.jpg" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </GridPane>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="155.0" layoutX="326.0" layoutY="62.0" stroke="BLACK" strokeType="INSIDE" width="205.0" />
                </children>
             </AnchorPane>
          </content>

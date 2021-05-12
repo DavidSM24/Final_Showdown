@@ -5,10 +5,12 @@ import models.P_Attack.Attack;
 public class Fighter extends Character{
 
 	private String name;
+	private int priority;
 	private int hp_total;
 	private int hp_current;
 	private double hp_percentage;
 	private int energy;
+	private int energy_ini;
 	private int energy_recover;
 	private int atk;
 	private int def;
@@ -18,16 +20,23 @@ public class Fighter extends Character{
 	private Attack a3;
 	private Rol rol;
 	private String photo_card;
+	private String ost;
 	private int action;
 	private boolean evade;
 	private boolean block;
+	int AtkState;
+	int DefState;
+	int SpeState;
 	
 	public Fighter (Character c) {
+		this.priority=0;
 		this.name=c.getName();
 		this.hp_total=c.getHp();
 		this.hp_current=c.getHp();
 		this.hp_percentage=1.0;
-		this.energy=c.getEnergy_ini();
+		this.energy=0;
+		this.energy_ini=c.getEnergy_ini();
+		System.out.println(c.getEnergy_ini());
 		this.energy_recover=c.getEnergy_recover();
 		this.atk=c.getAtk();
 		this.def=c.getDef();
@@ -37,6 +46,10 @@ public class Fighter extends Character{
 		this.a3=c.getA3();
 		this.rol=c.getRol();
 		this.photo_card=c.getPhoto_card();
+		this.ost=c.getOst();
+		this.AtkState=0;
+		this.DefState=0;
+		this.SpeState=0;
 		
 	}
 
@@ -46,6 +59,14 @@ public class Fighter extends Character{
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public int getPriority() {
+		return priority;
+	}
+
+	public void setPriority(int priority) {
+		this.priority = priority;
 	}
 
 	public int getHp_total() {
@@ -78,6 +99,14 @@ public class Fighter extends Character{
 
 	public void setEnergy(int energy) {
 		this.energy = energy;
+	}
+
+	public int getEnergy_ini() {
+		return energy_ini;
+	}
+
+	public void setEnergy_ini(int energy_ini) {
+		this.energy_ini = energy_ini;
 	}
 
 	public int getEnergy_recover() {
@@ -152,6 +181,14 @@ public class Fighter extends Character{
 		this.photo_card = photo_card;
 	}
 
+	public String getOst() {
+		return ost;
+	}
+
+	public void setOst(String ost) {
+		this.ost = ost;
+	}
+
 	public int getAction() {
 		return action;
 	}
@@ -175,6 +212,28 @@ public class Fighter extends Character{
 	public void setBlock(boolean block) {
 		this.block = block;
 	}
-	
-	
+
+	public int getAtkState() {
+		return AtkState;
+	}
+
+	public void setAtkState(int atkState) {
+		AtkState = atkState;
+	}
+
+	public int getDefState() {
+		return DefState;
+	}
+
+	public void setDefState(int defState) {
+		DefState = defState;
+	}
+
+	public int getSpeState() {
+		return SpeState;
+	}
+
+	public void setSpeState(int speState) {
+		SpeState = speState;
+	}
 }
