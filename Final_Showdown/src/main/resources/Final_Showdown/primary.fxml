@@ -29,12 +29,12 @@
                <children>
                   <AnchorPane layoutX="6.0" prefHeight="371.0" prefWidth="149.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="451.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <TableView fx:id="table_char" layoutX="6.0" layoutY="34.0" onMouseReleased="#select" prefHeight="331.0" prefWidth="144.0" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="34.0">
+                        <TableView fx:id="table_char" layoutX="6.0" layoutY="34.0" onMouseReleased="#select_Character" prefHeight="331.0" prefWidth="144.0" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="34.0">
                           <columns>
                             <TableColumn fx:id="col_name" prefWidth="147.66666662693024" text="Nombre" />
                           </columns>
                         </TableView>
-                        <TextField fx:id="txt_filter" layoutX="5.0" layoutY="14.0" onKeyReleased="#filter" prefHeight="25.0" prefWidth="145.0" AnchorPane.topAnchor="5.0" />
+                        <TextField fx:id="txt_filter" layoutX="5.0" layoutY="14.0" onKeyReleased="#filter_Characters" prefHeight="25.0" prefWidth="145.0" AnchorPane.topAnchor="5.0" />
                      </children>
                   </AnchorPane>
                   <AnchorPane layoutX="150.0" prefHeight="371.0" prefWidth="451.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="0.0">
@@ -127,12 +127,12 @@
                <children>
                   <AnchorPane prefHeight="371.0" prefWidth="149.0">
                      <children>
-                        <TableView fx:id="table_attack" layoutX="6.0" layoutY="34.0" onMouseReleased="#select_2" prefHeight="331.0" prefWidth="144.0" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="34.0">
+                        <TableView fx:id="table_attack" layoutX="6.0" layoutY="34.0" onKeyReleased="#select_Attack" onMouseReleased="#select_Attack" prefHeight="331.0" prefWidth="144.0" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="34.0">
                            <columns>
                               <TableColumn fx:id="col_attack" prefWidth="147.66666662693024" text="Nombre" />
                            </columns>
                         </TableView>
-                        <TextField fx:id="txt_filter_2" layoutX="5.0" layoutY="14.0" onKeyReleased="#filter" prefHeight="25.0" prefWidth="145.0" AnchorPane.topAnchor="5.0" />
+                        <TextField fx:id="txt_filter_2" layoutX="5.0" layoutY="14.0" onKeyReleased="#filter_Attacks" prefHeight="25.0" prefWidth="145.0" AnchorPane.topAnchor="5.0" />
                      </children>
                   </AnchorPane>
                   <AnchorPane layoutX="151.0" prefHeight="371.0" prefWidth="451.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="150.0">

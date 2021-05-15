@@ -4,6 +4,7 @@ package Final_Showdown;
 import java.io.File;
 import java.util.Optional;
 
+import interfaces.IAttack_Generator_Controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -25,7 +26,7 @@ import models.P_Attack.Extra;
 import models.P_Attack.ExtraDAO;
 import utils.FileUtilities;
 
-public class Attack_Generator_Controller {
+public class Attack_Generator_Controller implements IAttack_Generator_Controller{
 	
 	//variables
 	protected Character_Creation_Controller dad;
@@ -69,8 +70,44 @@ public class Attack_Generator_Controller {
 	
 	//methods
 	
+	public void setController(Character_Creation_Controller dad, Attack_Generator_Controller me, Attack a) {
+		
+		me=me;
+		dad=dad;
+		com_extras.setItems(extras);
+		com_extras.setValue(extras.get(0));
+		updateExtraDescription();
+				
+		ObservableList<String> animations=FXCollections.observableArrayList();
+		animations.add("Base"); animations.add("Fuego");animations.add("Rayo");
+		com_animation.setItems(animations);
+		com_animation.setValue(animations.get(0));
+		
+		this.a=a;
+		if(this.a!=null) {
+			txt_name.setText(a.getName());
+			txt_power.setText(a.getPower()+"");
+			txt_cost.setText(a.getCost()+"");
+			txt_hit.setText(a.getHit_rate()+"");
+			com_extras.setValue(a.getExtra());
+			updateExtraDescription();
+			txt_photo.setText(a.getPhoto());
+			File f=new File("file:"+a.getPhoto());
+			Image img=new Image(f.getPath());
+			photo.setImage(img);
+			if(a.getPhoto().matches("src/main/resources/images/attacks/adefault.jpg")) {
+				txt_photo.setText("");
+			}
+			else {
+				txt_photo.setText(a.getPhoto());
+			}
+			
+			com_animation.setValue(a.getAnimation());
+		}
+	}
+	
 	@FXML
-	private void save() {
+	public void save() {
 		File image=new File(txt_photo.getText());
 		if(
 				this.txt_name.getText().equals("")
@@ -352,7 +389,13 @@ public class Attack_Generator_Controller {
 	}
 	
 	@FXML
-	protected void set_Attack_Image() {
+	public void cancel() {
+		Stage stage = (Stage) this.btn_exit.getScene().getWindow();
+		stage.close();
+	}
+	
+	@FXML
+	public void set_Attack_Image() {
 		File file=null;
 		FileChooser filechooser= new FileChooser();
 		filechooser.setTitle("Selecionar imagen...");
@@ -375,49 +418,8 @@ public class Attack_Generator_Controller {
 	}
 	
 	@FXML
-	private void updateExtraDescription() {
+	public void updateExtraDescription() {
 		are_des.setText(com_extras.getSelectionModel().getSelectedItem().getDescription());
 	}
-	
-	@FXML
-	private void cancel() {
-		Stage stage = (Stage) this.btn_exit.getScene().getWindow();
-		stage.close();
-	}
-	
-	protected void setController(Character_Creation_Controller dad, Attack_Generator_Controller me, Attack a) {
-	
-		me=me;
-		dad=dad;
-		com_extras.setItems(extras);
-		com_extras.setValue(extras.get(0));
-		updateExtraDescription();
-				
-		ObservableList<String> animations=FXCollections.observableArrayList();
-		animations.add("Base"); animations.add("Fuego");
-		com_animation.setItems(animations);
-		com_animation.setValue(animations.get(0));
 		
-		this.a=a;
-		if(this.a!=null) {
-			txt_name.setText(a.getName());
-			txt_power.setText(a.getPower()+"");
-			txt_cost.setText(a.getCost()+"");
-			txt_hit.setText(a.getHit_rate()+"");
-			com_extras.setValue(a.getExtra());
-			updateExtraDescription();
-			txt_photo.setText(a.getPhoto());
-			File f=new File("file:"+a.getPhoto());
-			Image img=new Image(f.getPath());
-			photo.setImage(img);
-			if(a.getPhoto().matches("src/main/resources/images/attacks/adefault.jpg")) {
-				txt_photo.setText("");
-			}
-			else {
-				txt_photo.setText(a.getPhoto());
-			}
-			
-			com_animation.setValue(a.getAnimation());
-		}
-	}
 }

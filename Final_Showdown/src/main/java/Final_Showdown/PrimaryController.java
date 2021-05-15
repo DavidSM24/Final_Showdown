@@ -10,6 +10,7 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
+import interfaces.IPrimaryController;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -39,7 +40,7 @@ import models.P_Character.CharacterDAO;
 import models.P_Character.Fighter;
 import models.P_Character.Character;
 
-public class PrimaryController {
+public class PrimaryController implements IPrimaryController{
 	
 	//variables
 	protected PrimaryController me;
@@ -55,6 +56,7 @@ public class PrimaryController {
 	protected Clip clip=null;
 	protected boolean random_p1;
 	protected boolean random_p2;
+	protected boolean filteringAttacks=false;
 	
 	//buttons		
 	@FXML
@@ -136,6 +138,34 @@ public class PrimaryController {
 	private Pane pan_img_vs;
 	
 	//methods
+	
+	public void setController (PrimaryController me) {
+		this.me=me;
+		this.a_pred=attacks.get(0);
+		
+		com_fighter1.setDisable(false);
+		random_p1=false;
+		com_fighter2.setDisable(false);
+		random_p2=false;
+		
+		table_char.setItems(charas);
+		table_attack.setItems(attacks);
+		if(charas.size()>0) {
+			com_fighter1.setItems(charas);
+			com_fighter1.setValue(charas.get(0));
+			com_fighter2.setItems(charas);
+			com_fighter2.setValue(charas.get(0));
+		}
+		
+		select_Character();
+		select_Attack();
+		setTableAndDetailsInfo();
+		updateFightersInfo();
+		btn_play.setDisable(true);
+		btn_stop.setDisable(true);
+		
+	}
+	
 	@FXML
 	public void battle() {
 		if(charas.size()>0) {
@@ -184,7 +214,7 @@ public class PrimaryController {
 	}
 	
 	@FXML
-	private void changeRandom_1(){
+	public void changeRandom_1(){
 		if(che_random_1.isSelected()) {
 			com_fighter1.setDisable(true);
 			random_p1=true;
@@ -198,7 +228,7 @@ public class PrimaryController {
 	}
 	
 	@FXML
-	private void changeRandom_2(){
+	public void changeRandom_2(){
 		if(che_random_2.isSelected()) {
 			com_fighter2.setDisable(true);
 			random_p2=true;
@@ -246,6 +276,7 @@ public class PrimaryController {
         
 	}
 	
+	@FXML
 	public void stop() {
 		if(running) {
 			clip.stop();
@@ -257,10 +288,9 @@ public class PrimaryController {
 			}
 		}
 	}
-		   
-	
+		   	
 	@FXML
-	private void createCharacter() {
+	public void createCharacter() {
 		
 		try {
 
@@ -288,7 +318,7 @@ public class PrimaryController {
 	}
 	
 	@FXML
-	private void editCharacter() {
+	public void editCharacter() {
 		try {
 
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("character_creation.fxml"));
@@ -312,7 +342,7 @@ public class PrimaryController {
 	}
 	
 	@FXML
-	private void deleteCharacter() {
+	public void deleteCharacter() {
 
 		if(c!=null) {
 			String sf="";							
@@ -341,7 +371,7 @@ public class PrimaryController {
 				}
 				
 				CharacterDAO.eliminar(c);
-				select();
+				select_Character();
 				Alert alert2=new Alert(AlertType.INFORMATION);
 	    		alert2.setHeaderText(null);
 	    		alert2.setTitle("Información");
@@ -352,7 +382,7 @@ public class PrimaryController {
 	}
 	
 	@FXML
-	private void createAttack() {		
+	public void createAttack() {		
 		
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("attack_creator.fxml"));
@@ -365,7 +395,7 @@ public class PrimaryController {
 			Stage stage= new Stage();
 			stage.getIcons().add(new Image("file:src/main/resources/images/icons/icon_attack_creator.png"));
 			stage.setTitle("Generador de Ataques");
-			stage.setResizable(false);;
+			stage.setResizable(false);
 			stage.initModality(Modality.APPLICATION_MODAL);
 			stage.setScene(scene);
 			stage.show();
@@ -377,7 +407,7 @@ public class PrimaryController {
 	}
 	
 	@FXML
-	private void editAttack() {		
+	public void editAttack() {		
 		
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("attack_creator.fxml"));
@@ -401,7 +431,7 @@ public class PrimaryController {
 	}
 	
 	@FXML
-	protected void deleteAttack() {
+	public void deleteAttack() {
 		ObservableList<Character> charasWithThisAttack=CharacterDAO.getCharactersByAttack(a);
 		if(charasWithThisAttack.size()>0) { //si existen char con ese atk
 			//listar charas con ese atk y preguntar si setear a pred.
@@ -454,59 +484,9 @@ public class PrimaryController {
 			}
 		}
 	}
-	
-	protected void setController (PrimaryController me) {
-		this.me=me;
-		this.a_pred=attacks.get(0);
-		
-		com_fighter1.setDisable(false);
-		random_p1=false;
-		com_fighter2.setDisable(false);
-		random_p2=false;
-		
-		table_char.setItems(charas);
-		table_attack.setItems(attacks);
-		if(charas.size()>0) {
-			com_fighter1.setItems(charas);
-			com_fighter1.setValue(charas.get(0));
-			com_fighter2.setItems(charas);
-			com_fighter2.setValue(charas.get(0));
-		}
-		
-		select();
-		select_2();
-		setTableAndDetailsInfo();
-		updateFightersInfo();
-		btn_play.setDisable(true);
-		btn_stop.setDisable(true);
-		
-	}
-	
-	protected void setTableAndDetailsInfo() {
-		if (charas.size()>0) {
-			col_name.setCellValueFactory(eachchara->{
-	    		SimpleStringProperty v=new SimpleStringProperty();
-	    		v.setValue(eachchara.getValue().getName());
-	    		return v;
-	    	});
-		}
-		
-		if (attacks.size()>0) {
-			col_attack.setCellValueFactory(eachattack->{
-	    		SimpleStringProperty v=new SimpleStringProperty();
-	    		if(eachattack.getValue().equals(a_pred)){
-	    			v.setValue(eachattack.getValue().getName()+" (Predeterminado)");
-	    		}
-	    		else {
-	    			v.setValue(eachattack.getValue().getName());
-	    		}
-	    		return v;
-	    	});
-		}		
-	}
-	
+
 	@FXML
-	private void select() { //actualizar esto cuando tenga tiempo por una variable power
+	public void select_Character() { //actualizar esto cuando tenga tiempo por una variable power
 		
 		if(charas.size()>0) {
 			if(table_char.getSelectionModel().getSelectedItem()!=null) {
@@ -573,7 +553,7 @@ public class PrimaryController {
 	}
 	
 	@FXML
-	private void select_2() {
+	public void select_Attack() {
 		if(table_attack.getSelectionModel().getSelectedItem()!=null) {
 			a= this.table_attack.getSelectionModel().getSelectedItem();
 		}
@@ -614,8 +594,32 @@ public class PrimaryController {
 		}
 	}
 	
+	public void setTableAndDetailsInfo() {
+		if (charas.size()>0) {
+			col_name.setCellValueFactory(eachchara->{
+	    		SimpleStringProperty v=new SimpleStringProperty();
+	    		v.setValue(eachchara.getValue().getName());
+	    		return v;
+	    	});
+		}
+
+		if (attacks.size()>0) {
+			col_attack.setCellValueFactory(eachattack->{	
+				SimpleStringProperty v=new SimpleStringProperty();
+	    		if(eachattack.getValue().equals(a_pred)){
+	    			v.setValue(eachattack.getValue().getName()+" (Predeterminado)");
+	    		}
+	    		else {
+	    			v.setValue(eachattack.getValue().getName());
+	    		}
+	    		return v;
+	    	});
+
+		}		
+	}
+	
 	@FXML
-	private void filter(){
+	public void filter_Characters(){
 		if(!txt_filter.getText().matches("")) {
 			ObservableList<Character> filter= FXCollections.observableArrayList();
 			filter=CharacterDAO.getCharactersByName(txt_filter.getText());
@@ -629,7 +633,21 @@ public class PrimaryController {
 	}
 	
 	@FXML
-	private void updateFightersInfo() {
+	public void filter_Attacks() {
+		if(!txt_filter_2.getText().matches("")) {
+			ObservableList<Attack> filter= FXCollections.observableArrayList();
+			filter=AttackDAO.getAttacksByName(txt_filter_2.getText());
+			table_attack.setItems(filter);
+			setTableAndDetailsInfo();
+		}
+		else {
+			table_attack.setItems(attacks);
+			setTableAndDetailsInfo();
+		}
+	}
+	
+	@FXML
+	public void updateFightersInfo() {
 		if(com_fighter1.getSelectionModel().getSelectedItem()==null&&charas.size()>0) {
 			com_fighter1.setValue(charas.get(0));
 		}

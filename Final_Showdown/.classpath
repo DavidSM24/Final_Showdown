@@ -30,5 +30,14 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="C:/Users/david/Downloads/SimpleWAVIO-15.02.24.jar"/>
+	<classpathentry kind="lib" path="C:/Users/david/.m2/repository/jakarta/xml/bind/jakarta.xml.bind-api/2.3.2/jakarta.xml.bind-api-2.3.2.jar" sourcepath="C:/Users/david/.m2/repository/jakarta/xml/bind/jakarta.xml.bind-api/2.3.2/jakarta.xml.bind-api-2.3.2-sources.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="jakarta.xml.bind"/>
+			<attribute name="maven.artifactId" value="jakarta.xml.bind-api"/>
+			<attribute name="maven.version" value="2.3.2"/>
+			<attribute name="maven.scope" value="compile"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

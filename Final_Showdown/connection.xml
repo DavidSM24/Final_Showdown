@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<connection>
+  <info>
+    <server>jdbc:mysql://localhost:3307</server>
+    <database>final_showdown</database>
+    <user>root</user>
+    <password/>
+  </info>
+</connection>

@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import interfaces.ICharacter_Creation_Controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -36,7 +37,7 @@ import models.P_Character.Rol;
 import models.P_Character.RolDAO;
 import utils.FileUtilities;
 
-public class Character_Creation_Controller {
+public class Character_Creation_Controller implements ICharacter_Creation_Controller{
 	
 	//variables
 	ObservableList<Attack> attacks=AttackDAO.attacks;
@@ -131,8 +132,70 @@ public class Character_Creation_Controller {
 	protected ImageView image_card;
 
 	//méthods
+	
+	public void setController(PrimaryController dad, Character_Creation_Controller me, Character chara) {
+		this.dad=dad;
+		this.me=me;
+		this.com_rol.setItems(this.roles);
+		this.com_rol.setValue(roles.get(0));
+		ObservableList<String> bands=FXCollections.observableArrayList();
+		bands.addAll("Héroe","Villano","Neutral");
+		com_band.setItems(bands);
+		com_band.setValue("Héroe");
+		
+		if(attacks!=null&&attacks.size()>0) {
+			com_att_1.setItems(attacks);
+			com_att_1.setValue(attacks.get(0));
+			com_att_2.setItems(attacks);
+			com_att_2.setValue(attacks.get(0));
+			com_att_3.setItems(attacks);
+			com_att_3.setValue(attacks.get(0));
+			
+		}
+		if(chara!=null) {
+			c=chara;
+			are_description.setText(chara.getDescription());
+			txt_name.setText(chara.getName());
+			txt_universe.setText(chara.getUniverse());
+			com_band.setValue(chara.getBand());
+			txt_hp.setText(((chara.getHp()-chara.getRol().getHp_base())/2)+"");
+			txt_total_hp.setText(chara.getHp()+"");
+			txt_atk.setText((chara.getAtk()-chara.getRol().getAtk_base())+"");
+			txt_total_atk.setText(chara.getAtk()+"");
+			txt_def.setText((chara.getDef()-chara.getRol().getDef_base())+"");
+			txt_total_def.setText(chara.getDef()+"");
+			txt_spe.setText((chara.getSpe()-chara.getRol().getSpe_base())+"");
+			txt_total_spe.setText(chara.getSpe()+"");
+			txt_energy_ini.setText(chara.getEnergy_ini()+"");
+			txt_energy_recover.setText(chara.getEnergy_recover()+"");
+			com_rol.setValue(chara.getRol());
+			updateTextSHP(); //para actualizar los pnts...
+			com_att_1.setValue(chara.getA1());
+			com_att_2.setValue(chara.getA2());
+			com_att_3.setValue(chara.getA3());
+			
+			File f=new File(c.getPhoto_face());
+			Image face= new Image("file:"+f.getPath());
+			image_presentation.setImage(face);
+			if(!chara.getPhoto_face().equals("src/main/resources/images/characters/face/cfdefault.jpg")) {
+				txt_image_presentation.setText(c.getPhoto_face());
+			}
+			
+			File f2=new File(c.getPhoto_card());
+			Image card= new Image("file:"+f2.getPath());
+			image_card.setImage(card);
+			if(!chara.getPhoto_card().equals("src/main/resources/images/characters/card/ccdefault.jpg")) {
+				txt_image_card.setText(c.getPhoto_card());
+			}
+			
+			if(!c.getOst().matches("no_resource")) {
+				txt_ost.setText(c.getOst());
+			}
+		}
+	}
+	
 	@FXML
-	private void add() {
+	public void add() {
 		File image_presentation=new File(txt_image_presentation.getText());
 		File image_card=new File(txt_image_card.getText());
 		File ost= new File(txt_ost.getText());
@@ -276,7 +339,13 @@ public class Character_Creation_Controller {
 	}
 	
 	@FXML
-	private void set_Presentation() {
+	public void cancel() {
+		Stage stage = (Stage) this.btn_cancel.getScene().getWindow();
+		stage.close();
+	}
+	
+	@FXML
+	public void set_Presentation() {
 		File file=null;
 		FileChooser filechooser= new FileChooser();
 		filechooser.setTitle("Selecionar imagen...");
@@ -299,7 +368,7 @@ public class Character_Creation_Controller {
 	}
 	
 	@FXML
-	private void set_Card() {
+	public void set_Card() {
 		File file=null;
 		FileChooser filechooser= new FileChooser();
 		filechooser.setTitle("Selecionar imagen...");
@@ -322,7 +391,7 @@ public class Character_Creation_Controller {
 	}
 	
 	@FXML
-	private void set_ost() {
+	public void set_ost() {
 		File file=null;
 		FileChooser filechooser= new FileChooser();
 		filechooser.setTitle("Selecionar archivo wav...");
@@ -341,76 +410,9 @@ public class Character_Creation_Controller {
 			// TODO: handle exception;
 		}	
 	}
-	
-	@FXML
-	private void cancel() {
-		Stage stage = (Stage) this.btn_cancel.getScene().getWindow();
-		stage.close();
-	}
 
-	protected void setController(PrimaryController dad, Character_Creation_Controller me, Character chara) {
-		this.dad=dad;
-		this.me=me;
-		this.com_rol.setItems(this.roles);
-		this.com_rol.setValue(roles.get(0));
-		ObservableList<String> bands=FXCollections.observableArrayList();
-		bands.addAll("Héroe","Villano","Neutral");
-		com_band.setItems(bands);
-		com_band.setValue("Héroe");
-		
-		if(attacks!=null&&attacks.size()>0) {
-			com_att_1.setItems(attacks);
-			com_att_1.setValue(attacks.get(0));
-			com_att_2.setItems(attacks);
-			com_att_2.setValue(attacks.get(0));
-			com_att_3.setItems(attacks);
-			com_att_3.setValue(attacks.get(0));
-			
-		}
-		if(chara!=null) {
-			c=chara;
-			are_description.setText(chara.getDescription());
-			txt_name.setText(chara.getName());
-			txt_universe.setText(chara.getUniverse());
-			com_band.setValue(chara.getBand());
-			txt_hp.setText(((chara.getHp()-chara.getRol().getHp_base())/2)+"");
-			txt_total_hp.setText(chara.getHp()+"");
-			txt_atk.setText((chara.getAtk()-chara.getRol().getAtk_base())+"");
-			txt_total_atk.setText(chara.getAtk()+"");
-			txt_def.setText((chara.getDef()-chara.getRol().getDef_base())+"");
-			txt_total_def.setText(chara.getDef()+"");
-			txt_spe.setText((chara.getSpe()-chara.getRol().getSpe_base())+"");
-			txt_total_spe.setText(chara.getSpe()+"");
-			txt_energy_ini.setText(chara.getEnergy_ini()+"");
-			txt_energy_recover.setText(chara.getEnergy_recover()+"");
-			com_rol.setValue(chara.getRol());
-			updateTextSHP(); //para actualizar los pnts...
-			com_att_1.setValue(chara.getA1());
-			com_att_2.setValue(chara.getA2());
-			com_att_3.setValue(chara.getA3());
-			
-			File f=new File(c.getPhoto_face());
-			Image face= new Image("file:"+f.getPath());
-			image_presentation.setImage(face);
-			if(!chara.getPhoto_face().equals("src/main/resources/images/characters/face/cfdefault.jpg")) {
-				txt_image_presentation.setText(c.getPhoto_face());
-			}
-			
-			File f2=new File(c.getPhoto_card());
-			Image card= new Image("file:"+f2.getPath());
-			image_card.setImage(card);
-			if(!chara.getPhoto_card().equals("src/main/resources/images/characters/card/ccdefault.jpg")) {
-				txt_image_card.setText(c.getPhoto_card());
-			}
-			
-			if(!c.getOst().matches("no_resource")) {
-				txt_ost.setText(c.getOst());
-			}
-		}
-	}
-	
 	@FXML
-	protected void updateRolStats() {
+	public void updateRolStats() {
 		//setear base
 		txt_rol_hp.setText(com_rol.getSelectionModel().getSelectedItem().getHp_base()+"");
 		txt_rol_atk.setText(com_rol.getSelectionModel().getSelectedItem().getAtk_base()+"");
@@ -425,9 +427,8 @@ public class Character_Creation_Controller {
 		
 	}
 	
-	//para los textos
 	@FXML 
-	private void updateTextSHP() {
+	public void updateTextSHP() {
 		if(txt_hp.getText().matches("[0-9]+")) {
 			int ini=Integer.parseInt(txt_hp.getText());
 			
@@ -471,9 +472,9 @@ public class Character_Creation_Controller {
 		}
 		
 	}
-	//para los textos
+
 	@FXML 
-	private void updateTextSATK() {
+	public void updateTextSATK() {
 		if(txt_atk.getText().matches("[0-9]+")) {
 			int ini=Integer.parseInt(txt_atk.getText());
 			
@@ -517,9 +518,9 @@ public class Character_Creation_Controller {
 			txt_total_atk.setText(txt_rol_atk.getText());
 		}
 	}
-	//para los textos
+
 	@FXML 
-	private void updateTextSDEF() {
+	public void updateTextSDEF() {
 		if(txt_def.getText().matches("[0-9]+")) {
 			int ini=Integer.parseInt(txt_def.getText());
 			
@@ -563,9 +564,9 @@ public class Character_Creation_Controller {
 			txt_total_def.setText(txt_rol_def.getText());
 		}
 	}
-	//para los textos
+
 	@FXML 
-	private void updateTextSSPE() {
+	public void updateTextSSPE() {
 		if(txt_spe.getText().matches("[0-9]+")) {
 			int ini=Integer.parseInt(txt_spe.getText());
 			
@@ -610,7 +611,7 @@ public class Character_Creation_Controller {
 		}
 	}
 
-	private void generateCharacter() {
+	public void generateCharacter() {
 		int newId=CharacterDAO.getNewId();
 		
 		Alert alert = new Alert(AlertType.CONFIRMATION);

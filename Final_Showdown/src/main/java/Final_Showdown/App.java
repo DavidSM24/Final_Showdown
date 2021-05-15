@@ -23,6 +23,8 @@ import models.P_Character.Character;
 import models.P_Character.CharacterDAO;
 import models.P_Character.Rol;
 import models.P_Character.RolDAO;
+import utils.Conexion;
+import utils.FileUtilities;
 
 /**
  * JavaFX App
@@ -31,11 +33,12 @@ public class App extends Application {
 	
 	public void start(Stage stage) throws IOException {
 		
+		Conexion.loadServerInfo();
+		
 		ExtraDAO.loadAllExtras();
 		RolDAO.loadAllRols();
 		AttackDAO.loadAllAttacks();
 		CharacterDAO.loadAllCharacters();
-		
 		
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("primary.fxml"));
 		Parent root = loader.load();

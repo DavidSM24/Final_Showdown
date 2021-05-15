@@ -10,6 +10,7 @@ import java.util.List;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import models.P_Character.Character;
 import utils.Conexion;
 
 public class AttackDAO extends Attack{
@@ -75,6 +76,22 @@ public class AttackDAO extends Attack{
 		}
 		
 		return result;	
+	}
+	
+	public static ObservableList<Attack> getAttacksByName(String name) {
+		ObservableList<Attack> result=FXCollections.observableArrayList();
+		if(name!=null&&!name.matches("")) {
+			for(Attack a : attacks) {
+				if(a.getName().toLowerCase().contains(name.toLowerCase())) {
+					result.add(a);
+				}
+			}
+			return result;
+		}
+		else {
+			return attacks;
+		}
+			
 	}
 	
 	public static void guardar(Attack a) {

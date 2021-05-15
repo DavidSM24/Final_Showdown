@@ -12,6 +12,7 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
+import interfaces.IBattler_Controller;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
@@ -33,8 +34,11 @@ import javafx.scene.shape.Rectangle;
 import models.P_Attack.Attack;
 import models.P_Character.Fighter;
 
-public class Battle_Controller {
+public class Battle_Controller implements IBattler_Controller{
 	//variables
+	
+	
+	int turno=1;
 	
 	PrimaryController dad;
 	private boolean firstTurn=true;
@@ -51,6 +55,7 @@ public class Battle_Controller {
 	File fail=new File("src/main/resources/audio/effects/fail.wav");
 	File buff=new File("src/main/resources/audio/effects/buff.wav");
 	File debuff=new File("src/main/resources/audio/effects/debuff.wav");
+	File critic=new File("src/main/resources/audio/effects/critic.wav");
 	File sound_animation;
 	int frame_number=0;
 	int limit_frame=0;
@@ -118,184 +123,81 @@ public class Battle_Controller {
 	
 	//methods
 	
-	@FXML
-	public void useAttack1() {
-		fighter1.setAction(1);
-		a=fighter1.getA1();
-		action(IAChoose());
-	}
-	
-	
-
-	@FXML
-	public void useAttack2() {
-		fighter1.setAction(2);
-		a=fighter1.getA2();
-		action(IAChoose());
-	}
-	
-	@FXML
-	public void useAttack3() {
-		fighter1.setAction(3);
-		a=fighter1.getA3();
-		action(IAChoose());
-	}
-	
-	@FXML
-	public void useBlock() {
-		fighter1.setAction(4);
-		action(IAChoose());
-	}
-	
-	@FXML
-	public void useEvade() {
-		fighter1.setAction(5);
-		action(IAChoose());
-	}
-	
-	private int IAChoose() { //IA elige un movimiento y se procede al combate...
-		fighter2.setAction(3);
-		a2=fighter2.getA3(); //metido a fuego
-		return 3;
+	public void setController(Fighter fighter1, Fighter fighter2) {
 		
-	}
-	
-	private void action(int actionP2) { //se procede al combate
+		this.dad=dad;
+		pan_blacK_effect.setVisible(false);
+		pan_serpentBack.setVisible(false);
+		this.fighter1=fighter1;
+		this.fighter2=fighter2;
 		
-		gri_action_buttons.setVisible(false);
-		gri_action_buttons.setDisable(true);
-		closeInfos();
+		this.lab_P1_name.setText(fighter1.getName());
+		this.lab_P2_name.setText(fighter2.getName());
+		this.lab_P1_ene.setText(fighter1.getEnergy_ini()+"");
+		this.lab_P2_ene.setText(fighter2.getEnergy_ini()+"");
 		
-		switch(fighter1.getAction()) {
-		case 4: 
-			are_terminal.setText(are_terminal.getText()+"\n¡"+fighter1.getName()+" se prepara para bloquear el ataque!");
-			are_terminal.end();
-			fighter1.setBlock(true);
-			break;
-			
-		case 5: 
-			are_terminal.setText(are_terminal.getText()+"\n¡"+fighter1.getName()+" se prepara para evadir el ataque!");
-			are_terminal.end();
-			fighter1.setEvade(true);
-			break;
-		}
-		switch(fighter2.getAction()) {
-		case 4: 
-			are_terminal.setText(are_terminal.getText()+"\n¡"+fighter2.getName()+" se prepara para bloquear el ataque!");
-			are_terminal.end();
-			fighter2.setBlock(true);
-			break;
+		File f1=new File("file:"+fighter1.getPhoto_card());
+		Image img1=new Image(f1.getPath());
+		img_card_P1.setImage(img1);
 		
-		case 5: 
-			are_terminal.setText(are_terminal.getText()+"\n¡"+fighter2.getName()+" se prepara para evadir el ataque!");
-			are_terminal.end();
-			fighter2.setEvade(true);
-			break;
-		}
+		File f2=new File("file:"+fighter2.getPhoto_card());
+		Image img2=new Image(f2.getPath());
+		img_card_P2.setImage(img2);
 		
-		//calcular % prioridades
-		try {
-			fighter1.setPriority((int) (r.nextInt((int) (fighter1.getSpe()*1.15-fighter1.getSpe()*0.85))+fighter1.getSpe()*0.85)); 
-		} catch (Exception e) {
-			fighter1.setPriority(1);
-		}
-		try {
-			fighter2.setPriority((int) (r.nextInt((int) (fighter2.getSpe()*1.15-fighter2.getSpe()*0.85))+fighter2.getSpe()*0.85));
-		} catch (Exception e) {
-			fighter2.setPriority(1);
-		}
-
-		if(!(fighter1.getPriority()==fighter2.getPriority())) {
-			if(fighter1.getSpe()>fighter2.getSpe()) {
-				fighter1.setPriority(fighter1.getPriority()+1);
-			}
-			else {
-				fighter2.setPriority(fighter2.getPriority()+1);
-			}
-		}
-		else {
-			int ran=(int)(Math.floor(Math.random())*100);
-			if(ran>50) {
-				fighter1.setPriority(fighter1.getPriority()+1);
-			}
-			else {
-				fighter2.setPriority(fighter2.getPriority()+1);
-			}
-		}
-		
-		//turnos...
-		if(fighter1.getPriority()>fighter2.getPriority()) { //f1 ataca antes
-			p1Attack();
-		}
-		else { //f2 ataca antes
-			p2Attack();
-		}
-	}
-	
-	public void playEffect(File f){
-		AudioInputStream audioInputStream = null;
-		try {
-			audioInputStream = AudioSystem.getAudioInputStream(f);
-			Clip clip= null;
-			clip = AudioSystem.getClip();
-			clip.open(audioInputStream);
-			clip.start();
-		} catch (UnsupportedAudioFileException | IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		catch (LineUnavailableException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
-	
-	public void playAnimation(String animation){
-		switch(animation) {
-		case "Base":
-			sound_animation=new File("src/main/resources/audio/effects/base_animation.wav");
-			break;
-		case "Fuego":
-			sound_animation=new File("src/main/resources/audio/effects/fire_animation.wav");
-			break;
-		}
-		
-		AudioInputStream audioInputStream = null;
-		try {
-			audioInputStream = AudioSystem.getAudioInputStream(sound_animation);
-			Clip clip= null;
-			clip = AudioSystem.getClip();
-			clip.open(audioInputStream);
-			clip.start();
-		} catch (UnsupportedAudioFileException | IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		catch (LineUnavailableException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
-	
-	@FXML
-	public void setProgress() {
 		this.lab_P1_hp.setText("100 %");
 		this.lab_P2_hp.setText("100 %");
 		pb1.setProgress(1.0);
 		pb2.setProgress(1.0);
 		pb1.setStyle("-fx-accent: green;");
-		pb2.setStyle("-fx-accent: green;");;
+		pb2.setStyle("-fx-accent: green;");
 		
+		btn_P1_atk1.setText(fighter1.getA1().getName());
+		btn_P1_atk2.setText(fighter1.getA2().getName());
+		btn_P1_atk3.setText(fighter1.getA3().getName());
+		
+		btn_P1_block.setTextFill(Color.WHITE);
+		btn_P1_evade.setTextFill(Color.WHITE);
+		btn_P1_atk1.setTextFill(Color.WHITE);
+		btn_P1_atk2.setTextFill(Color.WHITE);
+		btn_P1_atk3.setTextFill(Color.WHITE);
+		
+		are_terminal.setStyle("-fx-text-fill:red");
+		
+		gri_action_buttons.setDisable(true);
+		gri_action_buttons.setVisible(false);
+		
+		are_Info.setVisible(false);
+		are_info_p1.setVisible(false);
+		are_info_p2.setVisible(false);
+		
+		if(!fighter2.getOst().matches("no_resource")) {
+			File ost=new File(fighter2.getOst());
+			clip=null;
+			if(ost!=null) {
+				AudioInputStream audioInputStream = null;
+				try {
+					
+					audioInputStream = AudioSystem.getAudioInputStream(ost);
+					clip = AudioSystem.getClip();
+					clip.open(audioInputStream);
+					clip.start();
+					clip.loop(Clip.LOOP_CONTINUOUSLY);
+					
+				} 
+				
+				catch (UnsupportedAudioFileException | IOException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				}
+				catch (LineUnavailableException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		}
 	}
 	
-	private int calculateCriticPercent(Fighter f) {
-		int result=(f.getSpe()/13)*3;
-		return result;
-	}
-	
-	protected void startBattle() {
+	public void startBattle() {
 		if(fighter1!=null&&fighter2!=null) {
 			are_terminal.setText("¡El combate entre "+fighter1.getName()+" y "+fighter2.getName()+" ha comenzado!");
 			are_terminal.end();
@@ -310,8 +212,9 @@ public class Battle_Controller {
 		}
 	}
 	
-	private void turn() { //se reinician los turnos...
-
+	public void turn() { //se reinician los turnos...
+		System.out.println("\n"+turno);
+		turno++;
 		if(fighter1.getHp_current()>0&&fighter2.getHp_current()>0) { //seguir jugando
 			if(firstTurn) {
 				fighter1.setEnergy(fighter1.getEnergy_ini());
@@ -392,8 +295,200 @@ public class Battle_Controller {
 			
 		}
 	}
+	
+	@FXML
+	public void useAttack1() {
+		fighter1.setAction(1);
+		a=fighter1.getA1();
+		action(IAChoose());
+	}
+	
+	@FXML
+	public void useAttack2() {
+		fighter1.setAction(2);
+		a=fighter1.getA2();
+		action(IAChoose());
+	}
+	
+	@FXML
+	public void useAttack3() {
+		fighter1.setAction(3);
+		a=fighter1.getA3();
+		action(IAChoose());
+	}
+	
+	@FXML
+	public void useBlock() {
+		fighter1.setAction(4);
+		action(IAChoose());
+	}
+	
+	@FXML
+	public void useEvade() {
+		fighter1.setAction(5);
+		action(IAChoose());
+	}
+	
+	public int IAChoose() { //IA elige un movimiento y se procede al combate...
+		//quiere curarse...
+		if(pb2.getProgress()<=0.35&&
+				((fighter2.getA3().getExtra().getId()>0&&fighter2.getA3().getExtra().getId()<4)
+				|(fighter2.getA2().getExtra().getId()>0&&fighter2.getA2().getExtra().getId()<4)
+				|(fighter2.getA1().getExtra().getId()>0&&fighter2.getA1().getExtra().getId()<4)
+				)) { 
+			
+			if(fighter2.getEnergy()>=fighter2.getA3().getCost() //usa el 3 con heal
+					&&(fighter2.getA3().getExtra().getId()>0&&fighter2.getA3().getExtra().getId()<4)) {
+				fighter2.setAction(3);
+				a2=fighter2.getA3(); 
+				return 3;
+			}
+			if(fighter2.getEnergy()>=fighter2.getA2().getCost() //usa el 2 con heal
+					&&(fighter2.getA2().getExtra().getId()>0&&fighter2.getA2().getExtra().getId()<4)) {
+				fighter2.setAction(2);
+				a2=fighter2.getA2();
+				return 2;
+			}
+			if(fighter2.getEnergy()>=fighter2.getA1().getCost() //usa el 1 con heal
+					&&(fighter2.getA1().getExtra().getId()>0&&fighter2.getA1().getExtra().getId()<4)) {
+				fighter2.setAction(1);
+				a2=fighter2.getA1(); 
+				return 1;
+			}
+				
+		}
+		//no puede curarse...
+		
+		if(fighter2.getEnergy()<fighter2.getA3().getCost()) { //prio ahorra energy
+			int prob=(int)(Math.floor(Math.random()*100));
+			if(prob<=50) { //usa block o evasion
+				prob=(int)(Math.floor(Math.random()*100));
+				if(prob<=50) { //usa block
+					fighter2.setAction(4);
+					a2=fighter2.getA1(); 
+					return 4;
 
-	private void p1Attack() {
+				}
+				else { //usa evade
+					fighter2.setAction(5);
+					a2=fighter2.getA1(); 
+					return 5;
+				}
+			}
+			else {// usa un ataque
+				prob=(int)(Math.floor(Math.random()*100));
+				if(prob>=75&&fighter2.getEnergy()>=fighter2.getA3().getCost()) {
+					fighter2.setAction(3);
+					a2=fighter2.getA3(); 
+					return 3;
+				}
+				else if(prob>=50&&fighter2.getEnergy()>=fighter2.getA2().getCost()) {
+					fighter2.setAction(2);
+					a2=fighter2.getA2(); 
+					return 2;
+				}
+				else if(fighter2.getEnergy()>=fighter2.getA1().getCost()){
+					fighter2.setAction(1);
+					a2=fighter2.getA1(); 
+					return 1;
+				}
+				else {
+					prob=(int)(Math.floor(Math.random()*100));
+					if(prob<=50) { //usa block
+						fighter2.setAction(4);
+						a2=fighter2.getA1(); 
+						return 4;
+
+					}
+					else { //usa evade
+						fighter2.setAction(5);
+						a2=fighter2.getA1(); 
+						return 5;
+					}
+				}
+			}
+		}
+		
+		else { //prio ofensivo gasta energy
+			fighter2.setAction(3);
+			a2=fighter2.getA3();
+			return 3;
+		}		
+	}
+	
+	public void action(int actionP2) { //se procede al combate
+		
+		gri_action_buttons.setVisible(false);
+		gri_action_buttons.setDisable(true);
+		closeInfos();
+		
+		switch(fighter1.getAction()) {
+		case 4: 
+			are_terminal.setText(are_terminal.getText()+"\n¡"+fighter1.getName()+" se prepara para bloquear el ataque!");
+			are_terminal.end();
+			fighter1.setBlock(true);
+			break;
+			
+		case 5: 
+			are_terminal.setText(are_terminal.getText()+"\n¡"+fighter1.getName()+" se prepara para evadir el ataque!");
+			are_terminal.end();
+			fighter1.setEvade(true);
+			break;
+		}
+		switch(fighter2.getAction()) {
+		case 4: 
+			are_terminal.setText(are_terminal.getText()+"\n¡"+fighter2.getName()+" se prepara para bloquear el ataque!");
+			are_terminal.end();
+			fighter2.setBlock(true);
+			break;
+		
+		case 5: 
+			are_terminal.setText(are_terminal.getText()+"\n¡"+fighter2.getName()+" se prepara para evadir el ataque!");
+			are_terminal.end();
+			fighter2.setEvade(true);
+			break;
+		}
+		
+		//calcular % prioridades
+		try {
+			fighter1.setPriority((int) (r.nextInt((int) (fighter1.getSpe()*1.15-fighter1.getSpe()*0.85))+fighter1.getSpe()*0.85)); 
+		} catch (Exception e) {
+			fighter1.setPriority(1);
+		}
+		try {
+			fighter2.setPriority((int) (r.nextInt((int) (fighter2.getSpe()*1.15-fighter2.getSpe()*0.85))+fighter2.getSpe()*0.85));
+		} catch (Exception e) {
+			fighter2.setPriority(1);
+		}
+
+		if(!(fighter1.getPriority()==fighter2.getPriority())) {
+			if(fighter1.getSpe()>fighter2.getSpe()) {
+				fighter1.setPriority(fighter1.getPriority()+1);
+			}
+			else {
+				fighter2.setPriority(fighter2.getPriority()+1);
+			}
+		}
+		else {
+			int ran=(int)(Math.floor(Math.random())*100);
+			if(ran>50) {
+				fighter1.setPriority(fighter1.getPriority()+1);
+			}
+			else {
+				fighter2.setPriority(fighter2.getPriority()+1);
+			}
+		}
+		
+		//turnos...
+		if(fighter1.getPriority()>fighter2.getPriority()) { //f1 ataca antes
+			p1Attack();
+		}
+		else { //f2 ataca antes
+			p2Attack();
+		}
+	}
+		
+	public void p1Attack() {
 		dmg=0;
 		if(fighter1.getAction()>0&&fighter1.getAction()<4) { //ataca
 			
@@ -455,16 +550,18 @@ public class Battle_Controller {
 				    				url="file:src/main/resources/images/animations/fire/frame"+frame_number+".png";
 				    				limit_frame=14;
 				    				break;
+				    			case "Rayo":
+				    				url="file:src/main/resources/images/animations/thunder/frame"+frame_number+".png";
+				    				limit_frame=6;
 				    			}
 				    			File f=new File(url);
 						    	Image img_a2=new Image(f.getPath());
 						    	img_animation_P2.setImage(img_a2);
-						    	System.out.println("imprimo un frame nº: "+frame_number);
+						    	
 						    	frame_number++;
 						    	
 						    	if(frame_number>limit_frame) {
 						    		img_animation_P2.setImage(null);
-						    		System.out.println("he acabado");
 						    		cancel();
 						    		frame_number=0;
 						    		limit_frame=0;
@@ -475,6 +572,7 @@ public class Battle_Controller {
 									
 									//calcular crítico...
 									if(calculateCriticPercent(fighter1)>=(int)Math.floor(Math.random()*(100-0+0))) { //meto crítico
+										playEffect(critic);
 										dmg*=1.5;
 										are_terminal.setText(are_terminal.getText()+"\n¡"+fighter1.getName()+" ha acertado un golpe crítico!");
 										are_terminal.end();
@@ -496,7 +594,6 @@ public class Battle_Controller {
 									are_terminal.end();
 												
 									fighter2.setHp_percentage((fighter2.getHp_current()*100)/fighter2.getHp_total());
-									System.out.println(fighter2.getHp_percentage());
 									if(fighter2.getHp_percentage()<=0.0){
 										fighter2.setHp_percentage(0.001);
 									}
@@ -526,7 +623,7 @@ public class Battle_Controller {
 					    						try {
 					    							pb2.setProgress(pb2.getProgress()-0.0005);
 												} catch (Exception e) {
-													System.out.println("fin por catch");
+													
 													finishBattle();
 													
 												}
@@ -563,7 +660,7 @@ public class Battle_Controller {
 															new Timer().schedule(new TimerTask() {
 													    		@Override
 															    public void run() {
-													    			System.out.println("espero 1 segundo y desgarro");
+													    			
 													    			switch(a.getExtra().getId()) {
 													    			case 13:
 													    				perToEdit=0.9;
@@ -607,7 +704,7 @@ public class Battle_Controller {
 													    						try {
 													    							pb2.setProgress(pb2.getProgress()-0.0005);
 																				} catch (Exception e) {
-																					System.out.println("fin por catch");
+																					
 																					finishBattle();
 																					
 																				}
@@ -742,6 +839,89 @@ public class Battle_Controller {
 															},1000); //esperar 1 sec
 														}
 														
+														else if(a.getExtra().getId()==35) { //sacrifice
+															//meter pausa y efecto sonoro...
+															new Timer().schedule(new TimerTask() {
+													    		@Override
+															    public void run() {
+													    			
+													    			fighter1.setHp_current(1);
+													    			
+													    			fighter1.setHp_percentage((fighter1.getHp_current()*100)/fighter1.getHp_total());
+													    			if(fighter1.getHp_percentage()<=0.0){
+													    				fighter1.setHp_percentage(0.01);
+													    			}
+													    			
+													    			lab_P1_hp.setVisible(false);
+													    			playEffect(tear);
+													    			new Timer().schedule(new TimerTask() {
+													    				public void run() {
+													    					if(pb1.getProgress()>=0.75) {	
+													    						pb1.setStyle("-fx-accent: green;");
+													    					}
+													    					
+													    					else if(pb1.getProgress()>=0.5) {
+													    						pb1.setStyle("-fx-accent: yellow;");
+													    					}
+													    					
+													    					else if(pb1.getProgress()>=0.25) {
+													    						pb1.setStyle("-fx-accent: orange;");
+													    					}
+													    					
+													    					else {
+													    						pb1.setStyle("-fx-accent: red;");
+													    					}
+													    					
+													    					if(!(pb1.getProgress()<=0.0)) {
+													    						try {
+													    							pb1.setProgress(pb1.getProgress()-0.0005);
+																				} catch (Exception e) {
+																					
+																					finishBattle(); //error
+																					
+																				}
+													    						
+													    					}
+													    					else {
+													    						finishBattle();
+													    					}
+													    					
+													    					
+													    					if(pb1.getProgress()<=0.01) {
+													    						cancel();
+													    						Platform.runLater(new Runnable() {
+													    							@Override
+													    							public void run() {
+													    								are_terminal.setText(are_terminal.getText()+
+													    										"\n¡"+fighter1.getName()+" ha sido gravemente herido!");
+													    								are_terminal.end();
+													    								
+													    								lab_P1_hp.setText(1+" %");
+													    								lab_P1_hp.setVisible(true);
+													    								
+													    								if(fighter1.getPriority()>fighter2.getPriority()) {
+													    									if(fighter2.getHp_current()<=0
+													    											|fighter2.getHp_percentage()<=0.0
+													    											|lab_P2_hp.getText().matches("0 %")
+													    											|pb2.getProgress()<=0.0) {
+													    										finishBattle();
+													    									}
+													    									else {
+													    										p2Attack();
+													    									}
+													    								}
+													    								else {
+													    									turn();
+													    								}
+													    							}
+													    						});	
+													    					}
+													    				}
+													    			},0,1);
+													    		}
+															},1000); //esperar 1 sec desgarro...
+														}
+														
 														else {
 															if(fighter1.getPriority()>fighter2.getPriority()) { //F1 GANA
 																if(fighter2.getHp_current()<=0
@@ -793,7 +973,7 @@ public class Battle_Controller {
 		}
 	}
 	
-	private void p2Attack() {
+	public void p2Attack() {
 		dmg=0;
 		if(fighter2.getAction()>0&&fighter2.getAction()<4) { //ataca
 			
@@ -856,17 +1036,18 @@ public class Battle_Controller {
 				    				url="file:src/main/resources/images/animations/fire/frame"+frame_number+".png";
 				    				limit_frame=14;
 				    				break;
+				    			case "Rayo":
+				    				url="file:src/main/resources/images/animations/thunder/frame"+frame_number+".png";
+				    				limit_frame=6;
 				    			}
 				    			
 				    			File f=new File(url);
 						    	Image img_a2=new Image(f.getPath());
 						    	img_animation_P1.setImage(img_a2);
-						    	System.out.println("imprimo un frame nº: "+frame_number);
 						    	frame_number++;
 						    	
 						    	if(frame_number>limit_frame) {
 						    		img_animation_P1.setImage(null);
-						    		System.out.println("he acabado");
 						    		cancel();
 						    		frame_number=0;
 						    		limit_frame=0;
@@ -877,6 +1058,7 @@ public class Battle_Controller {
 									
 									//calcular crítico...
 									if(calculateCriticPercent(fighter2)>=(int)Math.floor(Math.random()*(100-0+0))) { //meto crítico
+										playEffect(critic);
 										dmg*=1.5;
 										are_terminal.setText(are_terminal.getText()+"\n¡"+fighter2.getName()+" ha acertado un golpe crítico!");
 										are_terminal.end();
@@ -898,7 +1080,7 @@ public class Battle_Controller {
 									are_terminal.end();
 												
 									fighter1.setHp_percentage((fighter1.getHp_current()*100)/fighter1.getHp_total());
-									System.out.println(fighter1.getHp_percentage());
+									
 									if(fighter1.getHp_percentage()<=0.0){
 										fighter1.setHp_percentage(0.001);
 									}
@@ -930,7 +1112,7 @@ public class Battle_Controller {
 								    			}
 											} catch (Exception e) {
 												finishBattle();
-												System.out.println("fin");
+										
 											}
 							    				
 											if(pb1.getProgress()<=fighter1.getHp_percentage()/100) {	
@@ -961,7 +1143,7 @@ public class Battle_Controller {
 															new Timer().schedule(new TimerTask() {
 													    		@Override
 															    public void run() {
-													    			System.out.println("espero 1 segundo y desgarro");
+													    			
 													    			switch(a2.getExtra().getId()) {
 													    			case 13:
 													    				perToEdit=0.9;
@@ -1007,7 +1189,7 @@ public class Battle_Controller {
 																    			}
 																			} catch (Exception e) {
 																				finishBattle();
-																				System.out.println("fin");
+																			
 																			}
 													    					
 													    					if(pb1.getProgress()<=fighter1.getHp_percentage()/100) {
@@ -1023,6 +1205,83 @@ public class Battle_Controller {
 													    								
 													    								lab_P1_hp.setText((int)fighter1.getHp_percentage()+" %");
 													    								lab_P1_hp.setVisible(true);
+													    								
+													    								if(fighter2.getPriority()>fighter1.getPriority()) {
+													    									if(fighter1.getHp_current()<=0
+													    											|fighter1.getHp_percentage()<=0.0
+													    											|lab_P1_hp.getText().matches("0 %")
+													    											|pb1.getProgress()<=0.0) {
+													    										finishBattle();
+													    									}
+													    									else {
+													    										p1Attack();
+													    									}
+													    								}
+													    								else {
+													    									turn();
+													    								}
+													    							}
+													    						});	
+													    					}
+													    				}
+													    			},0,1);
+													    		}
+															},1000); //esperar 1 sec desgarro...	
+														}
+														
+														else if(a2.getExtra().getId()==35) { //sacrifice.../
+															//meter pausa y efecto sonoro...
+															new Timer().schedule(new TimerTask() {
+													    		@Override
+															    public void run() {
+													    			
+													    			fighter2.setHp_current(1);
+													    			
+													    			fighter2.setHp_percentage((fighter2.getHp_current()*100)/fighter2.getHp_total());
+													    			if(fighter2.getHp_percentage()<=0.0){
+													    				fighter2.setHp_percentage(0.01);
+													    			}
+													    			
+													    			lab_P2_hp.setVisible(false);
+													    			playEffect(tear);
+													    			new Timer().schedule(new TimerTask() {
+													    				public void run() {
+													    					if(pb2.getProgress()>=0.75) {	
+													    						pb2.setStyle("-fx-accent: green;");
+													    					}
+													    					
+													    					else if(pb2.getProgress()>=0.5) {
+													    						pb2.setStyle("-fx-accent: yellow;");
+													    					}
+													    					
+													    					else if(pb2.getProgress()>=0.25) {
+													    						pb2.setStyle("-fx-accent: orange;");
+													    					}
+													    					
+													    					else {
+													    						pb2.setStyle("-fx-accent: red;");
+													    					}
+													    					
+													    					try {
+															    				if(pb2.getProgress()!=0.0) {
+																    				pb2.setProgress(pb2.getProgress()-0.0005);
+																    			}
+																			} catch (Exception e) {
+																				finishBattle();
+																			
+																			}
+													    					
+													    					if(pb2.getProgress()<=0.01) {
+													    						cancel();
+													    						Platform.runLater(new Runnable() {
+													    							@Override
+													    							public void run() {
+													    								are_terminal.setText(are_terminal.getText()+
+													    										"\n¡"+fighter2.getName()+" ha sido gravemente herido!");
+													    								are_terminal.end();
+													    								
+													    								lab_P2_hp.setText(1+" %");
+													    								lab_P2_hp.setVisible(true);
 													    								
 													    								if(fighter2.getPriority()>fighter1.getPriority()) {
 													    									if(fighter1.getHp_current()<=0
@@ -1188,82 +1447,61 @@ public class Battle_Controller {
 		}
 	}
 	
-	public void finishBattle() {
-		clip.stop();
+	
+	public int calculateCriticPercent(Fighter f) {
+		int result=(f.getSpe()/13)*3;
+		return result;
 	}
-		
-	public void setController(Fighter fighter1, Fighter fighter2) {
-		
-		this.dad=dad;
-		pan_blacK_effect.setVisible(false);
-		pan_serpentBack.setVisible(false);
-		this.fighter1=fighter1;
-		this.fighter2=fighter2;
-		
-		this.lab_P1_name.setText(fighter1.getName());
-		this.lab_P2_name.setText(fighter2.getName());
-		this.lab_P1_ene.setText(fighter1.getEnergy_ini()+"");
-		this.lab_P2_ene.setText(fighter2.getEnergy_ini()+"");
-		
-		File f1=new File("file:"+fighter1.getPhoto_card());
-		Image img1=new Image(f1.getPath());
-		img_card_P1.setImage(img1);
-		
-		File f2=new File("file:"+fighter2.getPhoto_card());
-		Image img2=new Image(f2.getPath());
-		img_card_P2.setImage(img2);
-		
-		this.lab_P1_hp.setText("100 %");
-		this.lab_P2_hp.setText("100 %");
-		pb1.setProgress(1.0);
-		pb2.setProgress(1.0);
-		pb1.setStyle("-fx-accent: green;");
-		pb2.setStyle("-fx-accent: green;");
-		
-		btn_P1_atk1.setText(fighter1.getA1().getName());
-		btn_P1_atk2.setText(fighter1.getA2().getName());
-		btn_P1_atk3.setText(fighter1.getA3().getName());
-		
-		btn_P1_block.setTextFill(Color.WHITE);
-		btn_P1_evade.setTextFill(Color.WHITE);
-		btn_P1_atk1.setTextFill(Color.WHITE);
-		btn_P1_atk2.setTextFill(Color.WHITE);
-		btn_P1_atk3.setTextFill(Color.WHITE);
-		
-		are_terminal.setStyle("-fx-text-fill:red");
-		
-		gri_action_buttons.setDisable(true);
-		gri_action_buttons.setVisible(false);
-		
-		are_Info.setVisible(false);
-		are_info_p1.setVisible(false);
-		are_info_p2.setVisible(false);
-		
-		if(!fighter2.getOst().matches("no_resource")) {
-			File ost=new File(fighter2.getOst());
-			clip=null;
-			if(ost!=null) {
-				AudioInputStream audioInputStream = null;
-				try {
-					
-					audioInputStream = AudioSystem.getAudioInputStream(ost);
-					clip = AudioSystem.getClip();
-					clip.open(audioInputStream);
-					clip.start();
-					clip.loop(Clip.LOOP_CONTINUOUSLY);
-					
-				} 
-				
-				catch (UnsupportedAudioFileException | IOException e2) {
-					// TODO Auto-generated catch block
-					e2.printStackTrace();
-				}
-				catch (LineUnavailableException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-			}
+	
+	public void playEffect(File f){
+		AudioInputStream audioInputStream = null;
+		try {
+			audioInputStream = AudioSystem.getAudioInputStream(f);
+			Clip clip= null;
+			clip = AudioSystem.getClip();
+			clip.open(audioInputStream);
+			clip.start();
+		} catch (UnsupportedAudioFileException | IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
+		catch (LineUnavailableException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void playAnimation(String animation){
+		switch(animation) {
+		case "Base":
+			sound_animation=new File("src/main/resources/audio/effects/base_animation.wav");
+			break;
+		case "Fuego":
+			sound_animation=new File("src/main/resources/audio/effects/fire_animation.wav");
+			break;
+		case "Rayo":
+			sound_animation=new File("src/main/resources/audio/effects/thunder_animation.wav");
+			break;
+			
+		}
+		
+		AudioInputStream audioInputStream = null;
+		try {
+			audioInputStream = AudioSystem.getAudioInputStream(sound_animation);
+			Clip clip= null;
+			clip = AudioSystem.getClip();
+			clip.open(audioInputStream);
+			clip.start();
+		} catch (UnsupportedAudioFileException | IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		catch (LineUnavailableException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	
 	@FXML
@@ -1318,6 +1556,7 @@ public class Battle_Controller {
 		}
 		
 	}
+	
 	@FXML
 	public void showInfoA2() {
 		try {
@@ -1341,6 +1580,7 @@ public class Battle_Controller {
 			closeInfos();
 		}
 	}
+	
 	@FXML
 	public void showInfoA3() {
 		try {
@@ -1375,6 +1615,7 @@ public class Battle_Controller {
 			closeInfos();
 		}
 	}
+	
 	@FXML
 	public void showInfoEvade() {
 		try {
@@ -1762,11 +2003,38 @@ public class Battle_Controller {
 				
 				are_terminal.setText(are_terminal.getText()+"\n¡Las estadísticas de "+atacante.getName()
 				+"\n han sido aumentadas en un 30 %!");
-		are_terminal.end();
+				are_terminal.end();
 			}
 			
+			break;	
+		case 36:
+			int prob1=(int)(Math.floor(Math.random()*100));
+			if(prob1<=33) {
+				atacante.setEvade(true);
+				are_terminal.setText(are_terminal.getText()+"\n¡"+atacante.getName()+" ha atacado y ha tomado"
+						+ "\nposición evasiva!");
+				are_terminal.end();
+			}
+			break;
+		case 37:
+			int prob2=(int)(Math.floor(Math.random()*100));
+			if(prob2<=50) {
+				atacante.setEvade(true);
+				are_terminal.setText(are_terminal.getText()+"\n¡"+atacante.getName()+" ha atacado y ha tomado"
+						+ "\nposición evasiva!");
+				are_terminal.end();
+			}
+			break;
+		case 38:
+			atacante.setEvade(true);
+			are_terminal.setText(are_terminal.getText()+"\n¡"+atacante.getName()+" ha atacado y ha tomado"
+					+ "\nposición evasiva!");
+			are_terminal.end();
 			break;
 		}	
 	}
 	
+	public void finishBattle() {
+		clip.stop();
+	}
 }

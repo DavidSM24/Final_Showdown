@@ -36,7 +36,6 @@ public class Fighter extends Character{
 		this.hp_percentage=1.0;
 		this.energy=0;
 		this.energy_ini=c.getEnergy_ini();
-		System.out.println(c.getEnergy_ini());
 		this.energy_recover=c.getEnergy_recover();
 		this.atk=c.getAtk();
 		this.def=c.getDef();
