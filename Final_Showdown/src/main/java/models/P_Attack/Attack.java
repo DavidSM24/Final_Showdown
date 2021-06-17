@@ -12,8 +12,10 @@ public class Attack{
 	private Extra extra;
 	private String photo;
 	private String animation;
+	private String media;
+	private int id_user;
 
-	public Attack(int id,String name, int power, int cost, int hit, Extra extra,String photo, String animation) {
+	public Attack(int id,String name, int power, int cost, int hit, Extra extra,String photo, String animation, String media, int id_user) {
 		super();
 		this.id=id;
 		this.name = name;
@@ -23,10 +25,12 @@ public class Attack{
 		this.extra=extra;
 		this.photo=photo;
 		this.animation=animation;
+		this.media=media;
+		this.id_user=id_user;
 	}
 
 	public Attack() {
-		this(0,"",0,0,0,null,"","");
+		this(0,"",0,0,0,null,"","","",-1);
 	}
 
 	public int getId() {
@@ -93,17 +97,25 @@ public class Attack{
 		this.animation = animation;
 	}
 
-	@Override
-	public String toString() {
-		return this.name;
+	public String getMedia() {
+		return media;
+	}
+
+	public void setMedia(String media) {
+		this.media = media;
+	}
+
+	public int getId_user() {
+		return id_user;
+	}
+
+	public void setId_user(int id_user) {
+		this.id_user = id_user;
 	}
 
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + id;
-		return result;
+	public String toString() {
+		return this.name;
 	}
 
 	@Override

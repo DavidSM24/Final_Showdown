@@ -153,6 +153,10 @@ public class Character_Creation_Controller implements ICharacter_Creation_Contro
 			
 		}
 		if(chara!=null) {
+			btn_create.setText("Editar");
+			btn_create2.setText("Editar");
+			btn_create3.setText("Editar");
+			
 			c=chara;
 			are_description.setText(chara.getDescription());
 			txt_name.setText(chara.getName());
@@ -612,7 +616,6 @@ public class Character_Creation_Controller implements ICharacter_Creation_Contro
 	}
 
 	public void generateCharacter() {
-		int newId=CharacterDAO.getNewId();
 		
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setHeaderText(null);
@@ -624,7 +627,7 @@ public class Character_Creation_Controller implements ICharacter_Creation_Contro
 			if(c==null) { // insert
 				c=new Character();
 
-				c.setId(newId);
+				c.setId(CharacterDAO.getNewId());
 				c.setName(txt_name.getText());
 				c.setUniverse(txt_universe.getText());
 				c.setDescription(are_description.getText());
@@ -639,6 +642,7 @@ public class Character_Creation_Controller implements ICharacter_Creation_Contro
 				c.setA2(com_att_2.getSelectionModel().getSelectedItem());
 				c.setA3(com_att_3.getSelectionModel().getSelectedItem());
 				c.setRol(com_rol.getSelectionModel().getSelectedItem());
+				c.setId_user(PrimaryController.ss.getId_user());
 				
 				//face
 				if(!txt_image_presentation.getText().matches("")) {

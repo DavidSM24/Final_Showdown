@@ -2,6 +2,7 @@ package Final_Showdown;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -12,6 +13,7 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
+import P_Game.Scenary;
 import interfaces.IBattler_Controller;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -29,6 +31,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import models.P_Attack.Attack;
@@ -37,8 +42,17 @@ import models.P_Character.Fighter;
 public class Battle_Controller implements IBattler_Controller{
 	//variables
 	
+	static long duration=0;
 	
-	int turno=1;
+	static Timer timer=null;
+	
+	static MediaPlayer mediaPlayer=null;
+	
+	static Thread main=null;
+	
+	static int turn=0;
+	
+	boolean multiplayer=false;
 	
 	PrimaryController dad;
 	private boolean firstTurn=true;
@@ -60,7 +74,7 @@ public class Battle_Controller implements IBattler_Controller{
 	int frame_number=0;
 	int limit_frame=0;
 	double perToEdit=0.0;
-	Clip clip=null;
+	static Clip clip=null;
 	
 	//buttons
 	@FXML
@@ -73,6 +87,20 @@ public class Battle_Controller implements IBattler_Controller{
 	protected Button btn_P1_evade;
 	@FXML
 	protected Button btn_P1_block;
+	
+	@FXML
+	protected Button btn_P2_atk1;
+	@FXML
+	protected Button btn_P2_atk2;
+	@FXML
+	protected Button btn_P2_atk3;
+	@FXML
+	protected Button btn_P2_evade;
+	@FXML
+	protected Button btn_P2_block;
+	
+	@FXML
+	protected Button btn_surrender;
 	
 	//texts
 	@FXML
@@ -101,9 +129,15 @@ public class Battle_Controller implements IBattler_Controller{
 	@FXML
 	public GridPane gri_action_buttons;
 	@FXML
+	public GridPane gri_action_P2_buttons;
+	@FXML
 	public ProgressBar pb1;
 	@FXML
 	public ProgressBar pb2;
+	@FXML
+	public ImageView img_face_P1;
+	@FXML
+	public ImageView img_face_P2;
 	@FXML
 	public ImageView img_card_P1;
 	@FXML
@@ -114,20 +148,38 @@ public class Battle_Controller implements IBattler_Controller{
 	public ImageView img_animation_P2;
 	@FXML
 	public ImageView img_attack_photo;
+	@FXML
+	public ImageView img_scenary;
+	@FXML
 	public Pane pan_blacK_effect;
 	@FXML
 	Pane pan_serpentBack;
 	@FXML 
 	Pane pan_shadow_effect;
-	
+	@FXML
+	Pane pan_info_P1;
+	@FXML 
+	Pane pan_info_P2;
+	@FXML 
+	Pane pan_video;
+	@FXML
+	MediaView mediaview = new MediaView(null);
 	
 	//methods
 	
-	public void setController(Fighter fighter1, Fighter fighter2) {
+	public void setController(Fighter fighter1, Fighter fighter2, Scenary scenary, boolean multiplayer) {	
+		
+		this.multiplayer=multiplayer;		
+		
+		File f0=new File("file:"+scenary.getResource());
+		Image img0=new Image(f0.getPath());
+		img_scenary.setImage(img0);
 		
 		this.dad=dad;
+		btn_surrender.setVisible(false);
 		pan_blacK_effect.setVisible(false);
 		pan_serpentBack.setVisible(false);
+		pan_video.setVisible(false);
 		this.fighter1=fighter1;
 		this.fighter2=fighter2;
 		
@@ -144,6 +196,15 @@ public class Battle_Controller implements IBattler_Controller{
 		Image img2=new Image(f2.getPath());
 		img_card_P2.setImage(img2);
 		
+		File f3=new File("file:"+fighter1.getPhoto_face());
+		Image img3=new Image(f3.getPath());
+		img_face_P1.setImage(img3);
+		System.out.println(f3.getPath());
+		
+		File f4=new File("file:"+fighter2.getPhoto_face());
+		Image img4=new Image(f4.getPath());
+		img_face_P2.setImage(img4);
+		
 		this.lab_P1_hp.setText("100 %");
 		this.lab_P2_hp.setText("100 %");
 		pb1.setProgress(1.0);
@@ -154,6 +215,12 @@ public class Battle_Controller implements IBattler_Controller{
 		btn_P1_atk1.setText(fighter1.getA1().getName());
 		btn_P1_atk2.setText(fighter1.getA2().getName());
 		btn_P1_atk3.setText(fighter1.getA3().getName());
+		
+		if(multiplayer) {
+			btn_P2_atk1.setText(fighter2.getA1().getName());
+			btn_P2_atk2.setText(fighter2.getA2().getName());
+			btn_P2_atk3.setText(fighter2.getA3().getName());
+		}
 		
 		btn_P1_block.setTextFill(Color.WHITE);
 		btn_P1_evade.setTextFill(Color.WHITE);
@@ -166,9 +233,11 @@ public class Battle_Controller implements IBattler_Controller{
 		gri_action_buttons.setDisable(true);
 		gri_action_buttons.setVisible(false);
 		
+		gri_action_P2_buttons.setVisible(false);
+		
 		are_Info.setVisible(false);
-		are_info_p1.setVisible(false);
-		are_info_p2.setVisible(false);
+		pan_info_P1.setVisible(false);
+		pan_info_P2.setVisible(false);
 		
 		if(!fighter2.getOst().matches("no_resource")) {
 			File ost=new File(fighter2.getOst());
@@ -212,9 +281,10 @@ public class Battle_Controller implements IBattler_Controller{
 		}
 	}
 	
-	public void turn() { //se reinician los turnos...
-		System.out.println("\n"+turno);
-		turno++;
+	public void turn() { //se reinician los turnos...;
+		System.out.println(turn);
+		turn++;
+		
 		if(fighter1.getHp_current()>0&&fighter2.getHp_current()>0) { //seguir jugando
 			if(firstTurn) {
 				fighter1.setEnergy(fighter1.getEnergy_ini());
@@ -223,7 +293,6 @@ public class Battle_Controller implements IBattler_Controller{
 				are_terminal.setText(are_terminal.getText()+"\nLos contrincantes están listos para luchar..."
 						+ "\n\n--------------------Elige una opción.---------------------");
 				are_terminal.end();
-				gri_action_buttons.setDisable(false);
 				
 				if(fighter1.getEnergy()>=fighter1.getA1().getCost()) {
 					btn_P1_atk1.setDisable(false);
@@ -245,10 +314,35 @@ public class Battle_Controller implements IBattler_Controller{
 					btn_P1_atk3.setDisable(true);
 				}
 				
+				if(multiplayer) {
+					gri_action_P2_buttons.setDisable(false);
+					
+					if(fighter2.getEnergy()>=fighter2.getA1().getCost()) {
+						btn_P2_atk1.setDisable(false);
+					}
+					else {
+						btn_P2_atk1.setDisable(true);
+					}
+					
+					if(fighter2.getEnergy()>=fighter2.getA2().getCost()) {
+						btn_P2_atk2.setDisable(false);
+					}
+					else {
+						btn_P2_atk2.setDisable(true);
+					}
+					if(fighter2.getEnergy()>=fighter2.getA3().getCost()) {
+						btn_P2_atk3.setDisable(false);
+					}
+					else {
+						btn_P2_atk3.setDisable(true);
+					}
+				}
+				gri_action_buttons.setDisable(false);
 				gri_action_buttons.setVisible(true);
+				btn_surrender.setVisible(true);
 				firstTurn=false;
 			}
-			else {
+			else { //2º o mas turno
 				
 				//recuperar energía
 				fighter1.setBlock(false);
@@ -285,8 +379,33 @@ public class Battle_Controller implements IBattler_Controller{
 				else {
 					btn_P1_atk3.setDisable(true);
 				}
+				
+				if(multiplayer) {
+					
+					if(fighter2.getEnergy()>=fighter2.getA1().getCost()) {
+						btn_P2_atk1.setDisable(false);
+					}
+					else {
+						btn_P2_atk1.setDisable(true);
+					}
+					
+					if(fighter2.getEnergy()>=fighter2.getA2().getCost()) {
+						btn_P2_atk2.setDisable(false);
+					}
+					else {
+						btn_P2_atk2.setDisable(true);
+					}
+					if(fighter2.getEnergy()>=fighter2.getA3().getCost()) {
+						btn_P2_atk3.setDisable(false);
+					}
+					else {
+						btn_P2_atk3.setDisable(true);
+					}
+				}
+				
 				gri_action_buttons.setDisable(false);
 				gri_action_buttons.setVisible(true);
+				btn_surrender.setVisible(true);
 			}
 			
 			
@@ -300,33 +419,104 @@ public class Battle_Controller implements IBattler_Controller{
 	public void useAttack1() {
 		fighter1.setAction(1);
 		a=fighter1.getA1();
-		action(IAChoose());
+		if(multiplayer) {
+			gri_action_buttons.setVisible(false);
+			
+			gri_action_P2_buttons.setVisible(true);
+		}
+		else {
+			action(IAChoose());
+		}
+		
 	}
 	
 	@FXML
 	public void useAttack2() {
 		fighter1.setAction(2);
-		a=fighter1.getA2();
-		action(IAChoose());
+		a=fighter1.getA2();		
+		if(multiplayer) {
+			gri_action_buttons.setVisible(false);
+			
+			gri_action_P2_buttons.setVisible(true);
+		}
+		else {
+			action(IAChoose());
+		}
 	}
 	
 	@FXML
 	public void useAttack3() {
 		fighter1.setAction(3);
-		a=fighter1.getA3();
-		action(IAChoose());
+		a=fighter1.getA3();		
+		if(multiplayer) {
+			gri_action_buttons.setVisible(false);
+			
+			gri_action_P2_buttons.setVisible(true);
+		}
+		else {
+			action(IAChoose());
+		}
 	}
 	
 	@FXML
 	public void useBlock() {
 		fighter1.setAction(4);
-		action(IAChoose());
+		
+		if(multiplayer) {
+			gri_action_buttons.setVisible(false);
+			
+			gri_action_P2_buttons.setVisible(true);
+		}
+		else {
+			action(IAChoose());
+		}
 	}
 	
 	@FXML
 	public void useEvade() {
 		fighter1.setAction(5);
-		action(IAChoose());
+		if(multiplayer) {
+			gri_action_buttons.setVisible(false);
+			
+			gri_action_P2_buttons.setVisible(true);
+		}
+		else {
+			action(IAChoose());
+		}
+	}
+	
+	@FXML
+	public void P2_use_Attack1() {
+		fighter2.setAction(1);
+		a2=fighter2.getA1();
+		
+		action(1);
+	}
+	
+	@FXML
+	public void P2_use_Attack2() {
+		fighter2.setAction(2);
+		a2=fighter2.getA2();
+		action(2);
+	}
+	
+	@FXML
+	public void P2_use_Attack3() {
+		fighter2.setAction(3);
+		a2=fighter2.getA3();
+		action(3);
+	}
+	
+	@FXML
+	public void P2_use_Block() {
+		fighter2.setAction(4);
+		action(4);
+	}
+
+	@FXML
+	public void P2_use_Evade() {
+		fighter2.setAction(5);
+		action(5);
 	}
 	
 	public int IAChoose() { //IA elige un movimiento y se procede al combate...
@@ -417,9 +607,11 @@ public class Battle_Controller implements IBattler_Controller{
 	}
 	
 	public void action(int actionP2) { //se procede al combate
+		btn_surrender.setVisible(false);
 		
 		gri_action_buttons.setVisible(false);
-		gri_action_buttons.setDisable(true);
+		gri_action_P2_buttons.setVisible(false);
+		
 		closeInfos();
 		
 		switch(fighter1.getAction()) {
@@ -485,7 +677,7 @@ public class Battle_Controller implements IBattler_Controller{
 		}
 		else { //f2 ataca antes
 			p2Attack();
-		}
+		}	
 	}
 		
 	public void p1Attack() {
@@ -514,6 +706,7 @@ public class Battle_Controller implements IBattler_Controller{
 			
 			
 			if(acierto) { //acierta
+			
 				pan_blacK_effect.setVisible(true);
 				pan_serpentBack.setVisible(true);
 				
@@ -525,19 +718,46 @@ public class Battle_Controller implements IBattler_Controller{
 				pan_shadow_effect.setVisible(true);
 				img_attack_photo.setImage(img2);
 				
-				new Timer().schedule(new TimerTask() {
-				    @Override
-				    public void run() {
+				new Timer().schedule(new TimerTask() { //empieza el conteo de la imagen
+				    //despues de esperar unos segundos se ejecuta lo de abajo
+					
+					@Override					
+					public void run() {
 				        //***Aquí agregamos el proceso a ejecutar.
 				    	img_attack_photo.setImage(null);
 				    	pan_shadow_effect.setVisible(false);
 				    	pan_serpentBack.setVisible(false);
 				    	pan_blacK_effect.setVisible(false);
+				    	
+				    	//aqui va lo del video... //////////////////////////////////////////////////////
+				    	
+				    	if(!a.getMedia().matches("no_resource")) {
+				    		File filestring = new File(a.getMedia());
+						    Media file = new Media(filestring.toURI().toString());
+						    MediaPlayer mediaPlayer = new MediaPlayer(file);
+						    	
+					    	reproduceMedia(a.getMedia());
+					    	try {
+								main=Thread.currentThread();
+
+					    		synchronized (main) {
+									main.wait();
+								}
+					    		pan_video.setVisible(false);
+							
+					    	} catch (InterruptedException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+				    	}
+				    	
+				    	////////////////////////////////////////////////////////////////////////////
+				    	
 				    	playAnimation(a.getAnimation());
 				    	int n=0;
 				    	
 				    	
-				    	new Timer().schedule(new TimerTask() {
+				    	new Timer().schedule(new TimerTask() {//secuencia de milisegundos para animacion
 				    		@Override
 						    public void run() {
 				    			String url="";
@@ -559,7 +779,6 @@ public class Battle_Controller implements IBattler_Controller{
 						    	img_animation_P2.setImage(img_a2);
 						    	
 						    	frame_number++;
-						    	
 						    	if(frame_number>limit_frame) {
 						    		img_animation_P2.setImage(null);
 						    		cancel();
@@ -600,7 +819,7 @@ public class Battle_Controller implements IBattler_Controller{
 									
 									//quitar hp:
 					    			lab_P2_hp.setVisible(false);
-									new Timer().schedule(new TimerTask() {
+									new Timer().schedule(new TimerTask() { //secuencia para hpbarrier
 							    		@Override
 									    public void run() {
 							    			if(pb2.getProgress()>=0.75) {	
@@ -1018,9 +1237,33 @@ public class Battle_Controller implements IBattler_Controller{
 				    	pan_shadow_effect.setVisible(false);
 				    	pan_serpentBack.setVisible(false);
 				    	pan_blacK_effect.setVisible(false);
+				    	
+				    	//aqui va lo de media////////////////////////////////////////////////////
+				    	
+				    	if(!a2.getMedia().matches("no_resource")) {
+				    		File filestring = new File(a2.getMedia());
+						    Media file = new Media(filestring.toURI().toString());
+						    MediaPlayer mediaPlayer = new MediaPlayer(file);
+						    	
+					    	reproduceMedia(a2.getMedia());
+					    	try {
+								main=Thread.currentThread();
+
+					    		synchronized (main) {
+									main.wait();
+								}
+					    		pan_video.setVisible(false);
+							
+					    	} catch (InterruptedException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+				    	}
+				    	
+				    	/////////////////////////////////////////////////////////
+				    	
 				    	playAnimation(a2.getAnimation());
 				    	int n=0;
-				    	
 				    	
 				    	new Timer().schedule(new TimerTask() {
 				    		@Override
@@ -1510,8 +1753,9 @@ public class Battle_Controller implements IBattler_Controller{
 			are_info_p1.setText("Recuperación de Energía : "+fighter1.getEnergy_recover()
 					+"\nAtaque : "+fighter1.getAtk()+" ("+fighter1.getAtkState()+")"
 					+"\nDefensa : "+fighter1.getDef()+" ("+fighter1.getDefState()+")"
-					+"\nVelocidad: "+fighter1.getSpe()+" ("+fighter1.getSpeState()+")");
-			are_info_p1.setVisible(true);
+					+"\nVelocidad : "+fighter1.getSpe()+" ("+fighter1.getSpeState()+")"
+					+"\nRol : "+fighter1.getRol().getName());
+			pan_info_P1.setVisible(true);
 		}
 		catch (Exception e) {
 			closeInfos();
@@ -1524,8 +1768,9 @@ public class Battle_Controller implements IBattler_Controller{
 			are_info_p2.setText("Recuperación de Energía : "+fighter2.getEnergy_recover()
 					+"\nAtaque : "+fighter2.getAtk()+" ("+fighter2.getAtkState()+")"
 					+"\nDefensa : "+fighter2.getDef()+" ("+fighter2.getDefState()+")"
-					+"\nVelocidad: "+fighter2.getSpe()+" ("+fighter2.getSpeState()+")");
-			are_info_p2.setVisible(true);
+					+"\nVelocidad: "+fighter2.getSpe()+" ("+fighter2.getSpeState()+")"
+					+"\nRol : "+fighter2.getRol().getName());
+			pan_info_P2.setVisible(true);
 		}
 		catch (Exception e) {
 			closeInfos();
@@ -1605,6 +1850,78 @@ public class Battle_Controller implements IBattler_Controller{
 	}
 	
 	@FXML
+	public void p2_showInfoA1() {
+		try {
+			String f="";
+			if(fighter2.getA1().getExtra().getId()!=34) {
+				f="Poder : "+fighter2.getA1().getPower()
+						+"\nCoste : "+fighter2.getA1().getCost()
+						+"\nAcierto : "+fighter2.getA1().getHit_rate()+" %"
+						+"\n"+fighter2.getA1().getExtra().getDescription();
+			}
+			else {
+				f="Poder : "+fighter2.getA1().getPower()
+						+"\nCoste : "+fighter2.getA1().getCost()
+						+"\nAcierto : "+fighter2.getA1().getHit_rate()+" %"
+						+"\nJuego Final, puede pasar cualquier cosa...";
+			}
+			are_Info.setText(f);
+			are_Info.setVisible(true);
+		}
+		catch (Exception e) {
+			closeInfos();
+		}
+		
+	}
+	
+	@FXML
+	public void p2_showInfoA2() {
+		try {
+			String f="";
+			if(fighter2.getA2().getExtra().getId()!=34) {
+				f="Poder : "+fighter2.getA2().getPower()
+						+"\nCoste : "+fighter2.getA2().getCost()
+						+"\nAcierto : "+fighter2.getA2().getHit_rate()+" %"
+						+"\n"+fighter2.getA2().getExtra().getDescription();
+			}
+			else {
+				f="Poder : "+fighter2.getA2().getPower()
+						+"\nCoste : "+fighter2.getA2().getCost()
+						+"\nAcierto : "+fighter2.getA2().getHit_rate()+" %"
+						+"\nJuego Final, puede pasar cualquier cosa...";
+			}
+			are_Info.setText(f);
+			are_Info.setVisible(true);
+		}
+		catch (Exception e) {
+			closeInfos();
+		}
+	}
+	
+	@FXML
+	public void p2_showInfoA3() {
+		try {
+			String f="";
+			if(fighter1.getA3().getExtra().getId()!=34) {
+				f="Poder : "+fighter2.getA3().getPower()
+						+"\nCoste : "+fighter2.getA3().getCost()
+						+"\nAcierto : "+fighter2.getA3().getHit_rate()+" %"
+						+"\n"+fighter2.getA3().getExtra().getDescription();
+			}
+			else {
+				f="Poder : "+fighter2.getA3().getPower()
+						+"\nCoste : "+fighter2.getA3().getCost()
+						+"\nAcierto : "+fighter2.getA3().getHit_rate()+" %"
+						+"\nJuego Final, puede pasar cualquier cosa...";
+			}
+			are_Info.setText(f);
+			are_Info.setVisible(true);
+		} catch (Exception e) {
+			closeInfos();
+		}
+	}
+	
+	@FXML
 	public void showInfoBlock() {
 		try {
 			are_Info.setText("Tomas posición defensiva y te preaparas para bloquear un ataque."
@@ -1632,8 +1949,8 @@ public class Battle_Controller implements IBattler_Controller{
 	public void closeInfos() {
 		try {
 			are_Info.setVisible(false);
-			are_info_p1.setVisible(false);
-			are_info_p2.setVisible(false);
+			pan_info_P1.setVisible(false);
+			pan_info_P2.setVisible(false);
 		} catch (Exception e) {
 			
 		}
@@ -2034,7 +2351,68 @@ public class Battle_Controller implements IBattler_Controller{
 		}	
 	}
 	
+	@FXML
 	public void finishBattle() {
+		gri_action_buttons.setVisible(false);
+		gri_action_buttons.setDisable(true);
+		btn_surrender.setVisible(false);
 		clip.stop();
+		
+	}
+	
+	public void reproduceMedia(String url) {
+		
+		
+		File filestring = new File(url);
+	    Media file = new Media(filestring.toURI().toString());  
+	    mediaPlayer = new MediaPlayer(file);
+	    mediaview.setMediaPlayer(mediaPlayer);
+	    
+	    mediaPlayer.setOnReady(new Runnable() {
+	    	
+	        @Override
+	        public void run() {
+
+	            
+	            duration=(long) file.getDuration().toMillis();	
+	            System.out.println("duracion en hilo de player= "+duration);
+	        }
+	    });
+	    
+	    mediaPlayer.play();
+	    pan_video.setVisible(true);
+	    
+	    new Timer().schedule(new TimerTask() { //empieza el conteo de la imagen
+		    //despues de esperar unos segundos se ejecuta lo de abajo
+			
+			@Override					
+			public void run() {
+				timer=new Timer();
+				timer.schedule(new TimerTask() { //empieza el conteo de la imagen
+				    //despues de esperar unos segundos se ejecuta lo de abajo
+					
+					
+					@Override					
+					public void run() {
+						mediaPlayer.stop();
+						
+						synchronized (main) {
+							main.notify();
+						}
+					}
+				},duration);
+			}
+	    },500);  
+	    	
+	}
+	
+	@FXML
+	public void skip() {
+		mediaPlayer.stop();
+		synchronized (main) {
+			main.notify();
+		}
+		
+		timer.cancel();
 	}
 }

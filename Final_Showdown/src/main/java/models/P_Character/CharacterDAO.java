@@ -21,23 +21,26 @@ public class CharacterDAO {
 	
 	private static final String GETALL= "SELECT id, name AS Nombre, universe AS Universo, description AS Descripcion, bando, hp as HP, "
 			+ "energy_ini AS \"Energia Inicial\", energy_restore as Restauracion, atk, def, spe, id_attack_1 as A1 , "
-			+ "id_attack_2 as A2, id_attack_3 as A3, id_rol as Rol, photo_face as Face, photo_card as Carta , ost "
-			+ "from chara;";
+			+ "id_attack_2 as A2, id_attack_3 as A3, id_rol as Rol, photo_face as Face, photo_card as Carta , ost, id_user "
+			+ "from chara WHERE id_user=";
 	
 	private final static String INSERT_UPDATE="INSERT INTO chara (id, name, universe, description, bando, hp, energy_ini, energy_restore, atk, "
-			+ "def, spe, id_attack_1, id_attack_2, id_attack_3, id_rol, photo_face, photo_card, ost) "
-			+ "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) "
+			+ "def, spe, id_attack_1, id_attack_2, id_attack_3, id_rol, photo_face, photo_card, ost, id_user) "
+			+ "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) "
 			+ "ON DUPLICATE KEY UPDATE name=?,universe=?,description=?,bando=?,hp=?,energy_ini=?,energy_restore=?,atk=?,def=?,spe=?,id_attack_1=?, "
-			+ "id_attack_2=?,id_attack_3=?, id_rol=?,photo_face=?,photo_card=?, ost=?";
+			+ "id_attack_2=?,id_attack_3=?, id_rol=?,photo_face=?,photo_card=?, ost=?,id_user=?";
 	
 	private final static String DELETE ="DELETE FROM chara WHERE id=?";
 	
-	public static void loadAllCharacters() {
+	private final static String NEWID ="SELECT (MAX(id)+1) FROM  chara;";
+	
+	public static void loadCharacters(int id) {
 		Connection con = Conexion.getConexion();
 		if (con != null) {
 			try {
+				charas=FXCollections.observableArrayList();	
 				Statement st = con.createStatement();
-				ResultSet rs= st.executeQuery(GETALL);
+				ResultSet rs= st.executeQuery(GETALL+id+";");
 				while(rs.next()) {
 					//es que hay al menos un resultado
 					Attack a1=AttackDAO.getAttackById(rs.getInt("A1"));
@@ -64,6 +67,7 @@ public class CharacterDAO {
 					aux.setPhoto_face(rs.getString("Face"));
 					aux.setPhoto_card(rs.getString("Carta"));
 					aux.setOst(rs.getString("ost"));
+					aux.setId_user(rs.getInt("id_user"));
 
 					charas.add(aux);
 				}
@@ -102,24 +106,26 @@ public class CharacterDAO {
 						q.setString(16, c.getPhoto_face());
 						q.setString(17, c.getPhoto_card());
 						q.setString(18, c.getOst());
+						q.setInt(19, c.getId_user());
 						
-						q.setString(19, c.getName()); 
-						q.setString(20, c.getUniverse());
-						q.setString(21, c.getDescription());
-						q.setString(22, c.getBand());
-						q.setInt(23, c.getHp()); 
-						q.setInt(24, c.getEnergy_ini());
-						q.setInt(25, c.getEnergy_recover());
-						q.setInt(26, c.getAtk());
-						q.setInt(27, c.getDef());
-						q.setInt(28, c.getSpe());
-						q.setInt(29, c.getA1().getId());
-						q.setInt(30, c.getA2().getId());
-						q.setInt(31, c.getA3().getId());
-						q.setInt(32, c.getRol().getId());
-						q.setString(33, c.getPhoto_face());
-						q.setString(34, c.getPhoto_card());
-						q.setString(35, c.getOst());
+						q.setString(20, c.getName()); 
+						q.setString(21, c.getUniverse());
+						q.setString(22, c.getDescription());
+						q.setString(23, c.getBand());
+						q.setInt(24, c.getHp()); 
+						q.setInt(25, c.getEnergy_ini());
+						q.setInt(26, c.getEnergy_recover());
+						q.setInt(27, c.getAtk());
+						q.setInt(28, c.getDef());
+						q.setInt(29, c.getSpe());
+						q.setInt(30, c.getA1().getId());
+						q.setInt(31, c.getA2().getId());
+						q.setInt(32, c.getA3().getId());
+						q.setInt(33, c.getRol().getId());
+						q.setString(34, c.getPhoto_face());
+						q.setString(35, c.getPhoto_card());
+						q.setString(36, c.getOst());
+						q.setInt(37, c.getId_user());
 						
 						rs =q.executeUpdate();	
 						if(charas.contains(c)) {
@@ -251,17 +257,20 @@ public class CharacterDAO {
 	public static int getNewId() {
 		//calcula el id mas alto de todos y suma 1
 		int result=-1;
-		if(charas!=null&&charas.size()>0) {
-			for(Character c: charas) {
-				if(c.getId()>result) {
-					result=c.getId();
+		Connection con = Conexion.getConexion();
+		if (con != null) {
+			try {
+				
+				Statement st = con.createStatement();
+				ResultSet rs= st.executeQuery(NEWID);
+				while(rs.next()) {
+					return (rs.getInt("(MAX(id)+1)"));
 				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return result;
 			}
-			
-			result++;
-		}
-		else{
-			return 0;
 		}
 		return result;
 	}

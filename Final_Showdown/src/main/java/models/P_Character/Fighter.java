@@ -19,6 +19,7 @@ public class Fighter extends Character{
 	private Attack a2;
 	private Attack a3;
 	private Rol rol;
+	private String photo_face;
 	private String photo_card;
 	private String ost;
 	private int action;
@@ -44,6 +45,7 @@ public class Fighter extends Character{
 		this.a2=c.getA2();
 		this.a3=c.getA3();
 		this.rol=c.getRol();
+		this.photo_face=c.getPhoto_face();
 		this.photo_card=c.getPhoto_card();
 		this.ost=c.getOst();
 		this.AtkState=0;
@@ -170,6 +172,14 @@ public class Fighter extends Character{
 
 	public void setRol(Rol rol) {
 		this.rol = rol;
+	}
+
+	public String getPhoto_face() {
+		return photo_face;
+	}
+
+	public void setPhoto_face(String photo_face) {
+		this.photo_face = photo_face;
 	}
 
 	public String getPhoto_card() {

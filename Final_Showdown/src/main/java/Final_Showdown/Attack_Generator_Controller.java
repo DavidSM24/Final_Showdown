@@ -17,6 +17,9 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -38,9 +41,13 @@ public class Attack_Generator_Controller implements IAttack_Generator_Controller
 	@FXML
 	protected Button btn_save;
 	@FXML
+	protected Button btn_save2;
+	@FXML
 	protected Button btn_exit;
 	@FXML
 	protected Button btn_import_image;
+	@FXML
+	protected Button btn_import_media;
 	
 	//texts
 	@FXML
@@ -53,6 +60,8 @@ public class Attack_Generator_Controller implements IAttack_Generator_Controller
 	protected TextField txt_hit; 
 	@FXML
 	protected TextField txt_photo;
+	@FXML
+	protected TextField txt_media;
 	@FXML
 	protected TextArea are_des;
 	
@@ -67,6 +76,8 @@ public class Attack_Generator_Controller implements IAttack_Generator_Controller
 	protected Tab tab1;
 	@FXML
 	protected Tab tab2;
+	@FXML
+	protected MediaView media_view;
 	
 	//methods
 	
@@ -85,6 +96,9 @@ public class Attack_Generator_Controller implements IAttack_Generator_Controller
 		
 		this.a=a;
 		if(this.a!=null) {
+			btn_save.setText("Editar");
+			btn_save2.setText("Editar");
+			
 			txt_name.setText(a.getName());
 			txt_power.setText(a.getPower()+"");
 			txt_cost.setText(a.getCost()+"");
@@ -102,6 +116,14 @@ public class Attack_Generator_Controller implements IAttack_Generator_Controller
 				txt_photo.setText(a.getPhoto());
 			}
 			
+			if(!a.getMedia().matches("no_resource")) {
+				File filestring=new File(a.getMedia());
+				Media media= new Media(filestring.toURI().toString());
+				MediaPlayer player=new MediaPlayer(media);
+				media_view.setMediaPlayer(player);
+				txt_media.setText(a.getMedia());
+			}
+			
 			com_animation.setValue(a.getAnimation());
 		}
 	}
@@ -109,6 +131,8 @@ public class Attack_Generator_Controller implements IAttack_Generator_Controller
 	@FXML
 	public void save() {
 		File image=new File(txt_photo.getText());
+		File aux=new File(txt_media.getText());
+		
 		if(
 				this.txt_name.getText().equals("")
 				||this.txt_power.getText().equals("")
@@ -123,7 +147,11 @@ public class Attack_Generator_Controller implements IAttack_Generator_Controller
 						!this.txt_photo.getText().matches(".+\\.png")
 						&&
 						!this.txt_photo.getText().matches("")
-				)) {
+				)
+				||(
+						!this.txt_media.getText().matches(".+\\.mp4")
+						&&
+						!this.txt_media.getText().matches(""))) {
 			Alert alert=new Alert(AlertType.INFORMATION);
     		alert.setHeaderText(null);
     		alert.setTitle("Información");
@@ -136,6 +164,14 @@ public class Attack_Generator_Controller implements IAttack_Generator_Controller
 						&&
 					!this.txt_photo.getText().matches("")) {
     			f+="\n -El archivo solicitado para la imagen no es ni png ni jpg.";
+    		}
+    		
+    		if(
+    				!this.txt_media.getText().matches(".+\\.mp4")
+    				&&
+    				!this.txt_media.getText().matches("")
+    				) {
+    			f+="\n -El archivo solicitado para la media no es mp4.";
     		}
     		
     		if(this.txt_name.getText().matches("")) {
@@ -171,8 +207,15 @@ public class Attack_Generator_Controller implements IAttack_Generator_Controller
     		alert.showAndWait();
 		}
 		
+		else if(!txt_media.getText().matches("")&&!aux.exists()) {
+			Alert alert=new Alert(AlertType.INFORMATION);
+    		alert.setHeaderText(null);
+    		alert.setTitle("Información");
+    		alert.setContentText(" -El recurso para la media seleccionado no existe.");
+    		alert.showAndWait();
+		}
+		
 		else { //se añade correctamente
-			int newId=AttackDAO.getNewId();
 			
 			if(txt_photo.getText().matches("")) { //pregunto si generar con predet
 				Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -189,14 +232,16 @@ public class Attack_Generator_Controller implements IAttack_Generator_Controller
 						
 						a=new Attack();
 
-						a.setId(newId);
+						a.setId(AttackDAO.getNewId());
 						a.setName(txt_name.getText());
 						a.setPower(Integer.parseInt(txt_power.getText()));
 						a.setCost(Integer.parseInt(txt_cost.getText()));
 						a.setHit_rate(Integer.parseInt(txt_hit.getText()));
 						a.setExtra(com_extras.getSelectionModel().getSelectedItem());
 						a.setAnimation(com_animation.getSelectionModel().getSelectedItem());
-
+						a.setId_user(PrimaryController.ss.getId_user());
+						
+						//photo
 						if(!txt_photo.getText().matches("")) {
 							String realaddress= "src/main/resources/images/attacks/a"+a.getId()+".jpg";
 							a.setPhoto(realaddress);
@@ -205,6 +250,18 @@ public class Attack_Generator_Controller implements IAttack_Generator_Controller
 						else {
 							a.setPhoto("src/main/resources/images/attacks/adefault.jpg");
 						}
+						
+						
+						//media
+						if(!txt_media.getText().matches("")) { //con ost
+							String realaddress= "src/main/resources/media/attacks/animations_media/am"+a.getId()+".mp4";
+							a.setMedia(realaddress);
+							FileUtilities.saveImage(txt_media.getText(),realaddress);
+						}
+						else { //sin media
+							a.setMedia("no_resource");
+						}
+						
 						AttackDAO.guardar(a);
 						
 						Alert alert4=new Alert(AlertType.INFORMATION);
@@ -234,6 +291,7 @@ public class Attack_Generator_Controller implements IAttack_Generator_Controller
 							
 							a.setAnimation(com_animation.getSelectionModel().getSelectedItem());
 							
+							//photo
 							if(!txt_photo.getText().equals(a.getPhoto())){
 								
 								if(txt_photo.getText().matches("")) { //si es default...
@@ -258,7 +316,37 @@ public class Attack_Generator_Controller implements IAttack_Generator_Controller
 									}
 								}
 							}
-								
+							
+							//media
+							if(!txt_media.getText().equals(a.getMedia())) {
+								if(txt_media.getText().matches("")) { //si no quiero media
+									if(!a.getMedia().matches("no_resource")) { //si tenia media, elimino
+										FileUtilities.removeFile(a.getMedia());
+										a.setMedia("no_resource");
+										System.out.println("entro?");
+									}
+									else { //antes no tenía ost tampoco...
+										if(!a.getMedia().matches("no_resource")) {
+											FileUtilities.removeFile(a.getMedia());
+											
+										}
+										a.setMedia("no_resource");
+									}	
+								}
+								else { //si quiero ost
+									if(a.getMedia().matches("no_resource")) { //la tenia default
+										String realaddress= "src/main/resources/media/attacks/animations_media/am"+a.getId()+".mp4";
+										a.setMedia(realaddress);
+										FileUtilities.saveImage(txt_media.getText(),realaddress);
+									}
+									else { //no la tenia a default... hay que eliminar/sobreescrivir!!
+										String realaddress= "src/main/resources/media/attacks/animations_media/am"+a.getId()+".mp4";
+										a.setMedia(realaddress);
+										FileUtilities.saveImage(txt_media.getText(),realaddress);
+									}
+								}
+							}
+							
 							AttackDAO.guardar(a);
 
 							Alert alert4=new Alert(AlertType.INFORMATION);
@@ -295,14 +383,16 @@ public class Attack_Generator_Controller implements IAttack_Generator_Controller
 				    
 					if(a==null) {
 						a=new Attack();
-						a.setId(newId);
+						a.setId(AttackDAO.getNewId());
 						a.setName(txt_name.getText());
 						a.setPower(Integer.parseInt(txt_power.getText()));
 						a.setCost(Integer.parseInt(txt_cost.getText()));
 						a.setHit_rate(Integer.parseInt(txt_hit.getText()));
 						a.setExtra(com_extras.getSelectionModel().getSelectedItem());
 						a.setAnimation(com_animation.getSelectionModel().getSelectedItem());
-
+						a.setId_user(PrimaryController.ss.getId_user());
+						
+						//photo
 						if(!txt_photo.getText().matches("")) {
 							String realaddress= "src/main/resources/images/attacks/a"+a.getId()+".jpg";
 							a.setPhoto(realaddress);
@@ -311,10 +401,18 @@ public class Attack_Generator_Controller implements IAttack_Generator_Controller
 						else {
 							a.setPhoto("src/main/resources/images/attacks/adefault.jpg");
 						}
+						
+						//media
+						if(!txt_media.getText().matches("")) { //con ost
+							String realaddress= "src/main/resources/media/attacks/animations_media/am"+a.getId()+".mp4";
+							a.setMedia(realaddress);
+							FileUtilities.saveImage(txt_media.getText(),realaddress);
+						}
+						else { //sin media
+							a.setMedia("no_resource");
+						}
 						AttackDAO.guardar(a);
-						
 
-						
 						Alert alert4=new Alert(AlertType.INFORMATION);
 			    		alert4.setHeaderText(null);
 			    		alert4.setTitle("Información");
@@ -340,7 +438,8 @@ public class Attack_Generator_Controller implements IAttack_Generator_Controller
 							a.setHit_rate(Integer.parseInt(txt_hit.getText()));
 							a.setExtra(com_extras.getSelectionModel().getSelectedItem());
 							a.setAnimation(com_animation.getSelectionModel().getSelectedItem());
-										
+							
+							//photo
 							if(!txt_photo.getText().equals(a.getPhoto())){
 
 								if(txt_photo.getText().matches("")) { //si es default...
@@ -362,6 +461,36 @@ public class Attack_Generator_Controller implements IAttack_Generator_Controller
 										String realaddress= "src/main/resources/images/attacks/a"+a.getId()+".jpg";
 										a.setPhoto(realaddress);
 										FileUtilities.saveImage(txt_photo.getText(),realaddress);
+									}
+								}
+							}
+							
+							//media
+							
+							if(!txt_media.getText().equals(a.getMedia())) {
+								if(txt_media.getText().matches("")) { //si no quiero ost
+									if(!a.getMedia().matches("no_resource")) { //si tenia ost
+										FileUtilities.removeFile(a.getMedia());
+										a.setMedia("no_resource");
+									}
+									else { //antes no tenía ost tampoco...
+										if(!a.getMedia().matches("no_resource")) {
+											FileUtilities.removeFile(a.getMedia());
+											
+										}
+										a.setMedia("no_resource");
+									}	
+								}
+								else { //si quiero ost
+									if(a.getMedia().matches("no_resource")) { //la tenia default
+										String realaddress= "src/main/resources/media/attacks/animations_media/am"+a.getId()+".mp4";
+										a.setMedia(realaddress);
+										FileUtilities.saveImage(txt_media.getText(),realaddress);
+									}
+									else { //no la tenia a default... hay que eliminar/sobreescrivir!!
+										String realaddress= "src/main/resources/media/attacks/animations_media/am"+a.getId()+".mp4";
+										a.setMedia(realaddress);
+										FileUtilities.saveImage(txt_media.getText(),realaddress);
 									}
 								}
 							}
@@ -410,6 +539,30 @@ public class Attack_Generator_Controller implements IAttack_Generator_Controller
 	    		alert.setHeaderText(null);
 	    		alert.setTitle("Información");
 	    		alert.setContentText("Formato incorrecto: Debe elegir un tipo de archivo jpg o png.");
+	    		alert.showAndWait();
+			}
+		}catch (Exception e) {
+			// TODO: handle exception;
+		}		
+	}
+	
+	@FXML
+	public void set_Media() {
+		File file=null;
+		FileChooser filechooser= new FileChooser();
+		filechooser.setTitle("Selecionar media...");
+		try {
+			file=filechooser.showOpenDialog(null);
+			if(file!=null&&file.getPath().matches(".+\\.mp4")) {
+				Media media=new Media(file.toURI().toString());
+				MediaPlayer mediaPlayer = new MediaPlayer(media);
+				media_view.setMediaPlayer(mediaPlayer);
+				txt_media.setText(file.getPath());
+			}else { //extension incorrecta
+				Alert alert=new Alert(AlertType.INFORMATION);
+	    		alert.setHeaderText(null);
+	    		alert.setTitle("Información");
+	    		alert.setContentText("Formato incorrecto: Debe elegir un tipo de archivo mp4.");
 	    		alert.showAndWait();
 			}
 		}catch (Exception e) {

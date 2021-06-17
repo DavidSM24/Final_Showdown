@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressBar?>
@@ -11,17 +12,27 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.media.MediaView?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-image: url('file:src/main/resources/images/battler_back.jpg');" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Final_Showdown.Battle_Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Final_Showdown.Battle_Controller">
    <children>
+      <GridPane layoutY="-21.0" prefHeight="421.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <columnConstraints>
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <ImageView fx:id="img_scenary" fitHeight="400.0" fitWidth="600.0" pickOnBounds="true" />
+         </children>
+      </GridPane>
+      <Button fx:id="btn_surrender" layoutX="535.0" layoutY="3.0" mnemonicParsing="false" onAction="#finishBattle" text="Rendirse" />
       <ProgressBar fx:id="pb1" layoutX="86.0" layoutY="57.0" prefWidth="200.0" progress="0.0" AnchorPane.bottomAnchor="325.0" AnchorPane.leftAnchor="86.0" AnchorPane.rightAnchor="314.0" AnchorPane.topAnchor="57.0" />
       <ProgressBar fx:id="pb2" layoutX="314.0" layoutY="57.0" prefWidth="200.0" progress="0.0" AnchorPane.bottomAnchor="325.0" AnchorPane.leftAnchor="314.0" AnchorPane.rightAnchor="86.0" AnchorPane.topAnchor="57.0" />
       <TextArea fx:id="are_terminal" editable="false" layoutX="141.0" layoutY="312.0" prefHeight="67.0" prefWidth="318.0" style="-fx-background-color: black; -fx-border-color: black;" />
       <Pane layoutX="141.0" layoutY="312.0" opacity="0.75" prefHeight="67.0" prefWidth="305.0" style="-fx-background-color: black;" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="150.0" layoutX="85.0" layoutY="102.0" stroke="BLACK" strokeType="INSIDE" width="202.0" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1f93ff00" height="150.0" layoutX="313.0" layoutY="102.0" stroke="BLACK" strokeType="INSIDE" width="202.0" />
       <Label fx:id="lab_P1_hp" layoutX="172.0" layoutY="57.0" text="Label" />
       <Label fx:id="lab_P2_hp" layoutX="400.0" layoutY="57.0" text="Label" />
       <GridPane layoutX="86.0" layoutY="101.0" prefHeight="150.0" prefWidth="200.0">
@@ -32,7 +43,6 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Pane prefHeight="217.0" prefWidth="200.0" style="-fx-background-image: url('file:src/main/resources/images/backbattler.jpg');" />
             <ImageView fx:id="img_card_P1" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
             <ImageView fx:id="img_animation_P1" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
          </children>
@@ -45,9 +55,27 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Pane prefHeight="200.0" prefWidth="200.0" style="-fx-background-image: url('file:src/main/resources/images/backbattler.jpg');" />
             <ImageView fx:id="img_card_P2" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
             <ImageView fx:id="img_animation_P2" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+         </children>
+      </GridPane>
+      <GridPane fx:id="gri_action_P2_buttons" layoutX="28.0" layoutY="270.0" prefHeight="30.0" prefWidth="543.0">
+         <columnConstraints>
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <Button fx:id="btn_P2_block" mnemonicParsing="false" onMouseEntered="#showInfoBlock" onMouseExited="#closeInfos" onMouseReleased="#P2_use_Block" style="-fx-border-color: white; -fx-background-color: #FF3333;" text="Bloqueo" />
+            <Button fx:id="btn_P2_atk1" mnemonicParsing="false" onMouseEntered="#p2_showInfoA1" onMouseExited="#closeInfos" onMouseReleased="#P2_use_Attack1" style="-fx-background-color: #FF3333; -fx-border-color: white;" text="Ataque 1" GridPane.columnIndex="1" />
+            <Button fx:id="btn_P2_atk2" mnemonicParsing="false" onMouseEntered="#p2_showInfoA2" onMouseExited="#closeInfos" onMouseReleased="#P2_use_Attack2" style="-fx-background-color: #FF3333; -fx-border-color: white;" text="Ataque 2" GridPane.columnIndex="2" />
+            <Button fx:id="btn_P2_atk3" mnemonicParsing="false" onMouseEntered="#p2_showInfoA3" onMouseExited="#closeInfos" onMouseReleased="#P2_use_Attack3" style="-fx-background-color: #FF3333; -fx-border-color: white;" text="Ataque 3" GridPane.columnIndex="3" />
+            <Button fx:id="btn_P2_evade" mnemonicParsing="false" onMouseEntered="#showInfoEvade" onMouseExited="#closeInfos" onMouseReleased="#P2_use_Evade" style="-fx-background-color: #FF3333; -fx-border-color: white;" text="Evasión" GridPane.columnIndex="4" />
          </children>
       </GridPane>
       <GridPane fx:id="gri_action_buttons" layoutX="28.0" layoutY="270.0" prefHeight="30.0" prefWidth="543.0">
@@ -66,7 +94,7 @@
             <Button fx:id="btn_P1_atk1" mnemonicParsing="false" onKeyReleased="#useAttack1" onMouseEntered="#showInfoA1" onMouseExited="#closeInfos" onMouseReleased="#useAttack1" style="-fx-background-color: #29B971; -fx-border-color: white;" text="Ataque 1" GridPane.columnIndex="1" />
             <Button fx:id="btn_P1_atk2" mnemonicParsing="false" onMouseEntered="#showInfoA2" onMouseExited="#closeInfos" onMouseReleased="#useAttack2" style="-fx-background-color: #29B971; -fx-border-color: white;" text="Ataque 2" GridPane.columnIndex="2" />
             <Button fx:id="btn_P1_atk3" mnemonicParsing="false" onMouseEntered="#showInfoA3" onMouseExited="#closeInfos" onMouseReleased="#useAttack3" style="-fx-background-color: #29B971; -fx-border-color: white;" text="Ataque 3" GridPane.columnIndex="3" />
-            <Button fx:id="btn_P1_evade" mnemonicParsing="false" onAction="#useEvade" onMouseEntered="#showInfoEvade" onMouseExited="#closeInfos" onMouseReleased="#useEvade" style="-fx-background-color: #29B971; -fx-border-color: white;" text="Evasión" GridPane.columnIndex="4" />
+            <Button fx:id="btn_P1_evade" mnemonicParsing="false" onMouseEntered="#showInfoEvade" onMouseExited="#closeInfos" onMouseReleased="#useEvade" style="-fx-background-color: #29B971; -fx-border-color: white;" text="Evasión" GridPane.columnIndex="4" />
          </children>
       </GridPane>
       <TextArea fx:id="are_Info" editable="false" layoutX="90.0" layoutY="188.0" prefHeight="81.0" prefWidth="419.0" />
@@ -132,10 +160,40 @@
             </Label>
          </children>
       </GridPane>
-      <TextArea fx:id="are_info_p2" editable="false" layoutX="314.0" layoutY="50.0" prefHeight="81.0" prefWidth="200.0" />
-      <TextArea fx:id="are_info_p1" editable="false" layoutX="86.0" layoutY="50.0" prefHeight="81.0" prefWidth="200.0" />
-      <Pane fx:id="pan_blacK_effect" layoutX="-55.0" layoutY="50.0" opacity="0.85" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: black;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <Pane fx:id="pan_serpentBack" layoutY="83.0" prefHeight="235.0" prefWidth="602.0" style="-fx-background-image: url('file:src/main/resources/images/serpentback.png');">
+      <Pane fx:id="pan_info_P1" layoutX="86.0" layoutY="50.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;">
+         <children>
+            <GridPane layoutX="-1.0" layoutY="3.0" prefHeight="96.0" prefWidth="200.0">
+              <columnConstraints>
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <ImageView fx:id="img_face_P1" fitHeight="96.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" />
+               </children>
+            </GridPane>
+            <TextArea fx:id="are_info_p1" editable="false" layoutY="104.0" prefHeight="96.0" prefWidth="200.0" />
+         </children>
+      </Pane>
+      <Pane fx:id="pan_info_P2" layoutX="314.0" layoutY="50.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;">
+         <children>
+            <GridPane layoutX="1.0" layoutY="3.0" prefHeight="96.0" prefWidth="200.0" style="-fx-background-radius: 5;">
+               <columnConstraints>
+                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <ImageView fx:id="img_face_P2" fitHeight="96.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" />
+               </children>
+            </GridPane>
+            <TextArea fx:id="are_info_p2" editable="false" layoutY="104.0" prefHeight="96.0" prefWidth="200.0" />
+         </children>
+      </Pane>
+      <Pane fx:id="pan_blacK_effect" layoutX="-55.0" layoutY="50.0" opacity="0.9" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: black;" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <Pane fx:id="pan_serpentBack" layoutY="83.0" prefHeight="235.0" prefWidth="602.0" style="-fx-background-image: url('file:src/main/resources/images/serpentback.png');" visible="false">
          <children>
             <GridPane layoutX="201.0" layoutY="43.0" prefHeight="150.0" prefWidth="200.0">
               <columnConstraints>
@@ -151,6 +209,26 @@
                      </image>
                   </ImageView>
                   <Pane fx:id="pan_shadow_effect" prefHeight="150.0" prefWidth="200.0" style="-fx-background-image: url('file:src/main/resources/images/shadow_effect.png');" />
+               </children>
+            </GridPane>
+         </children>
+      </Pane>
+      <Pane fx:id="pan_video" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: black;">
+         <children>
+            <GridPane prefHeight="400.0" prefWidth="600.0">
+              <columnConstraints>
+                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <MediaView fx:id="mediaview" fitHeight="400.0" fitWidth="600.0" />
+                  <Button mnemonicParsing="false" onAction="#skip" text="Skip" GridPane.halignment="RIGHT" GridPane.valignment="TOP">
+                     <GridPane.margin>
+                        <Insets right="5.0" top="5.0" />
+                     </GridPane.margin>
+                  </Button>
                </children>
             </GridPane>
          </children>

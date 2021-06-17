@@ -20,7 +20,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import utils.Conexion;
 
-public class ExtraDAO{
+public class ExtraDAO {
 	
 	public static ObservableList<Extra> extras= FXCollections.observableArrayList();
 	

@@ -12,24 +12,29 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import models.P_Character.Character;
 import utils.Conexion;
+import utils.FileUtilities;
 
 public class AttackDAO extends Attack{
-	private static final String GETALL= "SELECT id,name,power,cost,hit_rate,id_extra,photo,animation FROM attack;";
+
+	private static final String GETALL= "SELECT id,name,power,cost,hit_rate,id_extra,photo,animation,media, id_user FROM attack WHERE id_user IN (0,";
 	
-	private final static String INSERT_UPDATE="INSERT INTO attack (id, name, power,cost,hit_rate,id_extra,photo,animation) "
-		+ "VALUES (?,?,?,?,?,?,?,?) "
-		+ "ON DUPLICATE KEY UPDATE name=?,power=?,cost=?,hit_rate=?,id_extra=?,photo=?,animation=?";
+	private final static String INSERT_UPDATE="INSERT INTO attack (id, name, power,cost,hit_rate,id_extra,photo,animation,media, id_user) "
+		+ "VALUES (?,?,?,?,?,?,?,?,?,?) "
+		+ "ON DUPLICATE KEY UPDATE name=?,power=?,cost=?,hit_rate=?,id_extra=?,photo=?,animation=?,media=?,id_user=?";
 	
 	private final static String DELETE ="DELETE FROM attack WHERE id=?";
 	
-	public static ObservableList<Attack> attacks=FXCollections.observableArrayList();
+	private final static String NEWID ="SELECT (MAX(id)+1) FROM attack;";
 	
-	public static void loadAllAttacks() {
+	public static ObservableList<Attack> attacks=FXCollections.observableArrayList();
+		
+	public static void loadAttacks(int id) {
 		Connection con = Conexion.getConexion();
 		if (con != null) {
 			try {
+				attacks=FXCollections.observableArrayList();
 				Statement st = con.createStatement();
-				ResultSet rs= st.executeQuery(GETALL);
+				ResultSet rs= st.executeQuery(GETALL+id+");");
 				while(rs.next()) {
 					//es que hay al menos un resultado
 					Extra e=ExtraDAO.getExtraById(rs.getInt("id_extra"));
@@ -42,8 +47,9 @@ public class AttackDAO extends Attack{
 					aux.setExtra(e);
 					aux.setPhoto(rs.getString("photo"));
 					aux.setAnimation(rs.getString("animation"));
-					
-					
+					aux.setMedia(rs.getString("media"));
+					aux.setId_user(rs.getInt("id_user"));
+						
 					attacks.add(aux);
 				}
 			} catch (SQLException e) {
@@ -112,14 +118,18 @@ public class AttackDAO extends Attack{
 				q.setInt(6, a.getExtra().getId());
 				q.setString(7, a.getPhoto());
 				q.setString(8, a.getAnimation());
+				q.setString(9, a.getMedia());
+				q.setInt(10, a.getId_user());
 				
-				q.setString(9, a.getName());
-				q.setInt(10, a.getPower());
-				q.setInt(11, a.getCost());
-				q.setInt(12, a.getHit_rate());
-				q.setInt(13, a.getExtra().getId());
-				q.setString(14, a.getPhoto());
-				q.setString(15, a.getAnimation());
+				q.setString(11, a.getName());
+				q.setInt(12, a.getPower());
+				q.setInt(13, a.getCost());
+				q.setInt(14, a.getHit_rate());
+				q.setInt(15, a.getExtra().getId());
+				q.setString(16, a.getPhoto());
+				q.setString(17, a.getAnimation());
+				q.setString(18, a.getMedia());
+				q.setInt(19, a.getId_user());
 				
 				rs =q.executeUpdate();	
 				if(attacks.contains(a)) {
@@ -142,9 +152,20 @@ public class AttackDAO extends Attack{
 		
 		if (con != null) {
 			try {
+				
+				if(!a.getPhoto().matches("src/main/resources/images/attacks/adefault.jpg")) {
+					FileUtilities.removeFile(a.getPhoto());
+				}
+				
+				if(!a.getMedia().matches("no_resource")) {
+					FileUtilities.removeFile(a.getMedia());
+					System.out.println("entro?");
+				}
+				
 				PreparedStatement q=con.prepareStatement(DELETE);
 				q.setInt(1, a.getId());
 				rs =q.executeUpdate();
+				
 				attacks.remove(a);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -156,17 +177,20 @@ public class AttackDAO extends Attack{
 	public static int getNewId() {
 		//calcula el id mas alto de todos y suma 1
 		int result=-1;
-		if(attacks!=null&&attacks.size()>0) {
-			for(Attack a: attacks) {
-				if(a.getId()>result) {
-					result=a.getId();
+		Connection con = Conexion.getConexion();
+		if (con != null) {
+			try {
+				
+				Statement st = con.createStatement();
+				ResultSet rs= st.executeQuery(NEWID);
+				while(rs.next()) {
+					return (rs.getInt("(MAX(id)+1)"));
 				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return result;
 			}
-			
-			result++;
-		}
-		else{
-			return 0;
 		}
 		return result;
 	}

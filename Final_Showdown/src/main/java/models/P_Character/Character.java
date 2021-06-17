@@ -21,9 +21,10 @@ public class Character {
 	private String photo_face;
 	private String photo_card;
 	private String ost;
+	private int id_user;
 	
 	public Character(int id, String universe, String name, String description, String band, int hp, int energy_ini, int energy_recover, int atk, int def, int spe, Attack a1, Attack a2, Attack a3,
-			Rol rol, String photo_face, String photo_card, String ost) {
+			Rol rol, String photo_face, String photo_card, String ost, int id_user) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -43,10 +44,11 @@ public class Character {
 		this.photo_face=photo_face;
 		this.photo_card=photo_card;
 		this.ost=ost;
+		this.id_user=id_user;
 	}
 
 	public Character() {
-		this(0,"","","","",0,0,0,0,0,0,null,null,null,null,"","","");
+		this(0,"","","","",0,0,0,0,0,0,null,null,null,null,"","","",-1);
 	}
 
 	public int getId() {
@@ -193,17 +195,17 @@ public class Character {
 		this.ost = ost;
 	}
 
-	@Override
-	public String toString() {
-		return name+" ("+universe+")";
+	public int getId_user() {
+		return id_user;
+	}
+
+	public void setId_user(int id_user) {
+		this.id_user = id_user;
 	}
 
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + id;
-		return result;
+	public String toString() {
+		return name+" ("+universe+")";
 	}
 
 	@Override

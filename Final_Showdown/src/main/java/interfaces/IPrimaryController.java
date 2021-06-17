@@ -1,9 +1,10 @@
 package interfaces;
 
 import Final_Showdown.PrimaryController;
+import P_Game.Sesion;
 
 public interface IPrimaryController {
-	public void setController (PrimaryController me);
+	public void setController (PrimaryController me, Sesion ss);
 	public void battle();
 	public void changeRandom_1();
 	public void changeRandom_2();

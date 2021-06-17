@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.media.MediaView?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Text?>
@@ -66,14 +67,13 @@
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
                   <Line endX="499.29290771484375" endY="-3.0517578125E-5" layoutX="100.0" layoutY="311.0" startX="-100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="155.0" layoutX="187.0" layoutY="54.0" stroke="BLACK" strokeType="INSIDE" width="205.0" />
-                  <TextField fx:id="txt_photo" layoutX="195.0" layoutY="233.0" />
-                  <Button fx:id="btn_import_image" layoutX="356.0" layoutY="233.0" mnemonicParsing="false" onAction="#set_Attack_Image" text="Cargar..." />
-                  <ComboBox fx:id="com_animation" layoutX="266.0" layoutY="265.0" prefHeight="25.0" prefWidth="139.0" />
-                  <Label layoutX="199.0" layoutY="269.0" text="Animation" />
-                  <Button layoutX="245.0" layoutY="324.0" mnemonicParsing="false" onAction="#save" text="Crear" />
+                  <TextField fx:id="txt_photo" layoutX="46.0" layoutY="228.0" />
+                  <Button fx:id="btn_import_image" layoutX="207.0" layoutY="228.0" mnemonicParsing="false" onAction="#set_Attack_Image" text="Cargar..." />
+                  <ComboBox fx:id="com_animation" layoutX="253.0" layoutY="264.0" prefHeight="25.0" prefWidth="139.0" />
+                  <Label layoutX="186.0" layoutY="268.0" text="Animation" />
+                  <Button fx:id="btn_save2" layoutX="245.0" layoutY="324.0" mnemonicParsing="false" onAction="#save" text="Crear" />
                   <Button layoutX="295.0" layoutY="324.0" mnemonicParsing="false" onAction="#cancel" text="Cancelar" />
-                  <GridPane layoutX="190.0" layoutY="57.0" prefHeight="150.0" prefWidth="200.0">
+                  <GridPane layoutX="57.0" layoutY="60.0" prefHeight="150.0" prefWidth="200.0">
                     <columnConstraints>
                       <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
@@ -88,6 +88,21 @@
                         </ImageView>
                      </children>
                   </GridPane>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="155.0" layoutX="54.0" layoutY="57.0" stroke="BLACK" strokeType="INSIDE" width="205.0" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="TRANSPARENT" height="155.0" layoutX="344.0" layoutY="58.0" stroke="BLACK" strokeType="INSIDE" width="205.0" />
+                  <GridPane layoutX="347.0" layoutY="61.0" prefHeight="150.0" prefWidth="200.0">
+                    <columnConstraints>
+                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <MediaView fx:id="media_view" fitHeight="150.0" fitWidth="200.0" />
+                     </children>
+                  </GridPane>
+                  <TextField fx:id="txt_media" layoutX="344.0" layoutY="228.0" />
+                  <Button fx:id="btn_import_media" layoutX="506.0" layoutY="228.0" mnemonicParsing="false" onAction="#set_Media" text="Cargar..." />
                </children></AnchorPane>
         </content>
       </Tab>

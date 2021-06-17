@@ -2,12 +2,13 @@ package interfaces;
 
 import java.io.File;
 
+import P_Game.Scenary;
 import models.P_Attack.Attack;
 import models.P_Character.Fighter;
 
 public interface IBattler_Controller {
 	
-	public void setController(Fighter fighter1, Fighter fighter2);
+	public void setController(Fighter fighter1, Fighter fighter2, Scenary scenary, boolean multiplayer);
 	public void startBattle();
 	public void turn();
 	public void useAttack1();
